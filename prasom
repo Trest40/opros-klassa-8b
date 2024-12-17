@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OprosKlassa8B</title>
+</head>
+<body>
+    <h1>Опрос Класса 8Б</h1>
+    <p>Выберите победителей в каждой номинации!</p>
+
+    <!-- Номинация: Золотой мяч -->
+    <h2>1. Золотой мяч</h2>
+    <form action="https://formspree.io/f/your-endpoint" method="POST">
+        <label>
+            <input type="radio" name="golden_ball" value="Степа"> Степа
+        </label><br>
+        <label>
+            <input type="radio" name="golden_ball" value="Мирас"> Мирас
+        </label><br>
+        <label>
+            <input type="radio" name="golden_ball" value="Алижан"> Алижан
+        </label><br>
+        <label>
+            <input type="radio" name="golden_ball" value="Аднан"> Аднан
+        </label><br><br>
+
+        <!-- Номинация: Босс художки -->
+        <h2>2. Босс художки</h2>
+        <label>
+            <input type="radio" name="art_boss" value="Алиса"> Алиса
+        </label><br>
+        <label>
+            <input type="radio" name="art_boss" value="Вероника"> Вероника
+        </label><br>
+        <label>
+            <input type="radio" name="art_boss" value="Маша"> Маша
+        </label><br>
+        <label>
+            <input type="radio" name="art_boss" value="Малика"> Малика
+        </label><br><br>
+
+        <!-- Номинация: Босс опозданий -->
+        <h2>3. Босс опозданий</h2>
+        <label>
+            <input type="radio" name="late_boss" value="Даниил"> Даниил
+        </label><br>
+        <label>
+            <input type="radio" name="late_boss" value="Асель"> Асель
+        </label><br>
+        <label>
+            <input type="radio" name="late_boss" value="Ян"> Ян
+        </label><br>
+        <label>
+            <input type="radio" name="late_boss" value="Руслан"> Руслан
+        </label><br><br>
+
+        <!-- Номинация: Тестостероновые мужики -->
+        <h2>4. Тестостероновые мужики</h2>
+        <label>
+            <input type="radio" name="testosterone_men" value="Артур"> Артур
+        </label><br>
+        <label>
+            <input type="radio" name="testosterone_men" value="Ян"> Ян
+        </label><br>
+        <label>
+            <input type="radio" name="testosterone_men" value="Костя"> Костя
+        </label><br>
+        <label>
+            <input type="radio" name="testosterone_men" value="Коля"> Коля
+        </label><br><br>
+
+        <!-- Кнопка отправки -->
+        <button type="submit">Отправить голос</button>
+    </form>
+</body>
+</html>

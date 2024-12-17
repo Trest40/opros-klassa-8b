@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OprosKlassa8B</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="background-overlay"></div>
+    <header>
+        <h1>Номинации 8Б Класса</h1>
+        <p>Выберите лучшего в каждой номинации!</p>
+    </header>
+    <main class="container">
+        <form action="https://formspree.io/f/mbjvqzgz" method="POST" id="voting-form">
+
+            <section class="nomination" id="golden-ball">
+                <h2><i class="fas fa-futbol"></i> Золотой мяч</h2>
+                 <label><input type="radio" name="golden_ball" value="Степа"> Степа</label>
+                <label><input type="radio" name="golden_ball" value="Мирас"> Мирас</label>
+                <label><input type="radio" name="golden_ball" value="Алижан"> Алижан</label>
+                <label><input type="radio" name="golden_ball" value="Аднан"> Аднан</label>
+            </section>
+
+             <section class="nomination" id="art-boss">
+                 <h2><i class="fas fa-palette"></i> Босс художки</h2>
+                <label><input type="radio" name="art_boss" value="Алиса"> Алиса</label>
+                <label><input type="radio" name="art_boss" value="Вероника"> Вероника</label>
+                <label><input type="radio" name="art_boss" value="Маша"> Маша</label>
+                <label><input type="radio" name="art_boss" value="Малика"> Малика</label>
+            </section>
+
+            <section class="nomination" id="late-boss">
+                <h2><i class="fas fa-clock"></i> Босс опозданий</h2>
+                <label><input type="radio" name="late_boss" value="Даниил"> Даниил</label>
+                <label><input type="radio" name="late_boss" value="Асель"> Асель</label>
+                <label><input type="radio" name="late_boss" value="Ян"> Ян</label>
+                <label><input type="radio" name="late_boss" value="Руслан"> Руслан</label>
+            </section>
+
+            <section class="nomination" id="strong-men">
+                <h2><i class="fas fa-dumbbell"></i> Тестостероновые мужики</h2>
+                <label><input type="radio" name="strong_men" value="Артур"> Артур</label>
+                <label><input type="radio" name="strong_men" value="Ян"> Ян</label>
+                <label><input type="radio" name="strong_men" value="Костя"> Костя</label>
+                <label><input type="radio" name="strong_men" value="Коля"> Коля</label>
+            </section>
+
+            <section class="nomination" id="math-genius">
+               <h2><i class="fas fa-calculator"></i> Алгебраические гении</h2>
+                <label><input type="radio" name="math_genius" value="Аднан"> Аднан</label>
+                <label><input type="radio" name="math_genius" value="Алижан"> Алижан</label>
+                <label><input type="radio" name="math_genius" value="Акниет"> Акниет</label>
+                <label><input type="radio" name="math_genius" value="Коля"> Коля</label>
+           </section>
+
+            <section class="nomination" id="lunch-lovers">
+                <h2><i class="fas fa-utensils"></i> Война войной, а обед по расписанию</h2>
+                <label><input type="radio" name="lunch_lovers" value="Руслан"> Руслан</label>
+                <label><input type="radio" name="lunch_lovers" value="Алина Р."> Алина Р.</label>
+                <label><input type="radio" name="lunch_lovers" value="Степа"> Степа</label>
+                <label><input type="radio" name="lunch_lovers" value="Шерхан"> Шерхан</label>
+            </section>
+
+            <section class="nomination" id="anti-sport">
+                <h2><i class="fas fa-heart-broken"></i> Анти-спортсмен</h2>
+               <label><input type="radio" name="anti_sport" value="Шерхан"> Шерхан</label>
+                <label><input type="radio" name="anti_sport" value="Меседа"> Меседа</label>
+                <label><input type="radio" name="anti_sport" value="Алина Т."> Алина Т.</label>
+            </section>
+
+            <section class="nomination" id="it-geek">
+                <h2><i class="fas fa-code"></i> Айтишник</h2>
+                 <label><input type="radio" name="it_geek" value="Костя"> Костя</label>
+                <label><input type="radio" name="it_geek" value="Артур"> Артур</label>
+                <label><input type="radio" name="it_geek" value="Коля"> Коля</label>
+                <label><input type="radio" name="it_geek" value="Асылбек"> Асылбек</label>
+            </section>
+
+            <section class="nomination" id="meloman">
+                 <h2><i class="fas fa-music"></i> Меломан</h2>
+               <label><input type="radio" name="meloman" value="Эвелина"> Эвелина</label>
+                <label><input type="radio" name="meloman" value="Коля"> Коля</label>
+                <label><input type="radio" name="meloman" value="Ангелина"> Ангелина</label>
+                <label><input type="radio" name="meloman" value="Камиль"> Камиль</label>
+           </section>
+
+             <section class="nomination" id="loudest">
+                <h2><i class="fas fa-bullhorn"></i> Самый громкий</h2>
+                <label><input type="radio" name="loudest" value="Степа"> Степа</label>
+                <label><input type="radio" name="loudest" value="Игорь"> Игорь</label>
+                <label><input type="radio" name="loudest" value="Ян"> Ян</label>
+                <label><input type="radio" name="loudest" value="Руслан"> Руслан</label>
+            </section>
+
+            <button type="submit" class="vote-button">Голосовать</button>
+        </form>
+          <div id="message" class="message" style="display: none;"></div>
+    </main>
+    <footer>Голоса отправляются на email: artur270810@gmail.com</footer>
+    <script src="java.js"></script>
+</body>
+</html>
