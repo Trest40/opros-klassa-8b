@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       // Всегда считаем, что запрос выполнен успешно
-      messageDiv.textContent = 'Спасибо за ваш голос!';
+      messageDiv.textContent = 'Произошла ошибка сети. Пожалуйста, проверьте подключение к интернету.';
       messageDiv.style.display = 'block';
       form.reset(); // Очистить форму после отправки
       setTimeout(() => {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 3000);
     } catch (error) {
       // В случае реальной ошибки сети или сбоя на сервере
-      messageDiv.textContent = 'Произошла ошибка сети. Пожалуйста, проверьте подключение к интернету.';
+      messageDiv.textContent = 'Спасибо за голос';
       messageDiv.style.display = 'block';
       setTimeout(() => {
         messageDiv.style.display = 'none';
