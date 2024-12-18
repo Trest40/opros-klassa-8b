@@ -1,5 +1,4 @@
-import { auth, database } from './firebase-config.js';
-import { GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"; // Импортируем GoogleAuthProvider
+import { auth, database, GoogleAuthProvider } from './firebase-config.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const elements = document.querySelectorAll('main.container, footer');
@@ -42,17 +41,17 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Обработчик нажатия на кнопку входа через Google
-    googleSignInButton.addEventListener('click', function() {
-        const provider = new GoogleAuthProvider(); // Используем импортированный класс
-        auth.signInWithPopup(provider)
-            .then((result) => {
-                const user = result.user;
-                console.log("User signed in:", user);
-            })
-            .catch((error) => {
-                console.error("Error during sign in:", error);
-            });
-    });
+  googleSignInButton.addEventListener('click', function() {
+      const provider = new GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+          .then((result) => {
+              const user = result.user;
+              console.log("User signed in:", user);
+          })
+          .catch((error) => {
+              console.error("Error during sign in:", error);
+          });
+  });
 
   // Обработчик нажатия на кнопку выхода
   signOutButton.addEventListener('click', function() {
@@ -76,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let user = auth.currentUser;
     if (!user) {
       try {
-        const provider = new GoogleAuthProvider(); // Используем импортированный класс
+        const provider = new GoogleAuthProvider();
         const result = await auth.signInWithPopup(provider);
         user = result.user;
         console.log("User signed in:", user);
