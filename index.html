@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </head>
 <body>
     <div class="background-overlay"></div>
@@ -14,7 +16,7 @@
         <div class="header-container">
             <h1>Номинации 8Б Класса</h1>
             <div id="auth-container">
-                <button id="google-signin-button">Войти</button>
+                <div id="google-signin-button"></div>
                 <div id="user-info" style="display: none;">
                     <p>Привет, <span id="user-name"></span>!</p>
                     <button id="sign-out-button">Выйти</button>
@@ -24,7 +26,7 @@
         <p>Выберите лучшего в каждой номинации!</p>
     </header>
     <main class="container">
-        <form id="voting-form">
+        <form id="voting-form" style="display: none">
             <section class="nomination" id="golden-ball">
                 <h2><i class="fas fa-futbol"></i> Золотой мяч</h2>
                  <label><input type="radio" name="golden_ball" value="Степа"> Степа</label>
@@ -109,7 +111,6 @@
           <div id="message" class="message" style="display: none;"></div>
     </main>
     <footer>Голоса отправляются на email: artur270810@gmail.com</footer>
-    <script type="module" src="firebase-config.js"></script>
     <script type="module" src="java.js"></script>
 </body>
 </html>

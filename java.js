@@ -1,5 +1,3 @@
-import { auth, database, GoogleAuthProvider } from './firebase-config.js';
-
 document.addEventListener('DOMContentLoaded', function () {
   const elements = document.querySelectorAll('main.container, footer');
 
@@ -15,127 +13,68 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   window.addEventListener('scroll', checkScroll);
-  checkScroll(); // Проверяем при загрузке
+  checkScroll();
 
   const googleSignInButton = document.getElementById('google-signin-button');
   const signOutButton = document.getElementById('sign-out-button');
   const userInfo = document.getElementById('user-info');
   const userName = document.getElementById('user-name');
   const votingForm = document.getElementById('voting-form');
-  const form = document.querySelector('#voting-form');
   const messageDiv = document.getElementById('message');
 
-  // Проверка состояния аутентификации при загрузке страницы
-  auth.onAuthStateChanged(function(user) {
-    if (user) {
-      // Пользователь вошел в систему
-      userName.textContent = user.displayName;
-      userInfo.style.display = 'flex';
+  function checkAuthentication() {
+    const userName = localStorage.getItem('userName');
+    if (userName) {
+      // Пользователь аутентифицирован
+      votingForm.style.display = 'block';
       googleSignInButton.style.display = 'none';
-      checkIfUserVoted(user.uid); // Проверяем, голосовал ли пользователь
+      document.getElementById('user-name').textContent = userName;
+      document.getElementById('user-info').style.display = 'flex';
     } else {
-      // Пользователь не вошел в систему
-      userInfo.style.display = 'none';
+      // Пользователь не аутентифицирован
+      votingForm.style.display = 'none';
       googleSignInButton.style.display = 'block';
+      document.getElementById('user-info').style.display = 'none';
     }
-  });
+  }
 
-  // Обработчик нажатия на кнопку входа через Google
-  googleSignInButton.addEventListener('click', function() {
-      const provider = new GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-          .then((result) => {
-              const user = result.user;
-              console.log("User signed in:", user);
-              checkIfUserVoted(user.uid);
-          })
-          .catch((error) => {
-              console.error("Error during sign in:", error.code, error.message); // Добавлен вывод кода ошибки
-          });
-  });
+  function handleCredentialResponse(response) {
+      const responsePayload = jwt_decode(response.credential);
+      console.log("ID: " + responsePayload.sub);
+      console.log('Full Name: ' + responsePayload.name);
+      console.log("Image URL: " + responsePayload.picture);
+      console.log("Email: " + responsePayload.email);
+
+      // Сохраняем имя пользователя в localStorage
+      localStorage.setItem('userName', responsePayload.name);
+      // Проверяем аутентификацию и отображаем опрос
+      checkAuthentication();
+    }
+
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID', // Замени на свой Client ID
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("google-signin-button"),
+        { theme: "outline", size: "large" }  // customization attributes
+      );
+      checkAuthentication();
+    }
 
   // Обработчик нажатия на кнопку выхода
-  signOutButton.addEventListener('click', function() {
-    auth.signOut()
-      .then(() => {
-        console.log("User signed out");
-      })
-      .catch((error) => {
-        console.error("Error during sign out:", error);
-      });
+    signOutButton.addEventListener('click', function() {
+    localStorage.clear(); // Очищаем localStorage
+    checkAuthentication(); // Проверяем аутентификацию
   });
 
-  async function checkIfUserVoted(userId) {
-    const snapshot = await database.ref('votes/' + userId).once('value');
-    return snapshot.exists();
-  }
-
-  form.addEventListener('submit', async function (event) {
+  votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    let user = auth.currentUser;
-    if (!user) {
-      try {
-        const provider = new GoogleAuthProvider();
-        const result = await auth.signInWithPopup(provider);
-        user = result.user;
-        console.log("User signed in:", user);
-      } catch (error) {
-        console.error("Error during sign in:", error.code, error.message);
-        // Выходим из функции, если произошла ошибка входа
-        return;
-      }
-    }
-
-    // Вызываем функцию submitForm после авторизации (или если пользователь уже авторизован)
-    submitForm(user);
+    // Здесь логика отправки данных опроса
+    // ...
   });
-
-  async function submitForm(user) {
-    const userId = user.uid;
-
-    // Проверка, голосовал ли пользователь уже
-    const hasVoted = await checkIfUserVoted(userId);
-    if (hasVoted) {
-      messageDiv.textContent = 'Вы уже голосовали!';
-      messageDiv.style.display = 'block';
-      setTimeout(() => {
-        messageDiv.style.display = 'none';
-      }, 3000);
-      return;
-    }
-
-    const formData = {};
-    const nominations = document.querySelectorAll('.nomination');
-
-    nominations.forEach(nomination => {
-      const nominationName = nomination.id;
-      const selectedOption = nomination.querySelector('input:checked');
-
-      if (selectedOption) {
-        formData[nominationName] = selectedOption.value;
-      }
-    });
-
-    // Сохранение голоса в Firebase
-    database.ref('votes/' + userId).set(formData)
-      .then(() => {
-        messageDiv.textContent = 'Спасибо за голос!';
-        messageDiv.style.display = 'block';
-        form.reset();
-        setTimeout(() => {
-          messageDiv.style.display = 'none';
-        }, 3000);
-      })
-      .catch((error) => {
-        console.error("Ошибка при сохранении голоса:", error);
-        messageDiv.textContent = 'Произошла ошибка при сохранении голоса.';
-        messageDiv.style.display = 'block';
-        setTimeout(() => {
-          messageDiv.style.display = 'none';
-        }, 3000);
-      });
-  }
 
   const button = document.querySelector('button.vote-button');
   if (button) {
