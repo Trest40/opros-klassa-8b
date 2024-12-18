@@ -47,9 +47,10 @@ document.addEventListener('DOMContentLoaded', function () {
           .then((result) => {
               const user = result.user;
               console.log("User signed in:", user);
+              checkIfUserVoted(user.uid);
           })
           .catch((error) => {
-              console.error("Error during sign in:", error);
+              console.error("Error during sign in:", error.code, error.message); // Добавлен вывод кода ошибки
           });
   });
 
@@ -80,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         user = result.user;
         console.log("User signed in:", user);
       } catch (error) {
-        console.error("Error during sign in:", error);
+        console.error("Error during sign in:", error.code, error.message);
         // Выходим из функции, если произошла ошибка входа
         return;
       }
