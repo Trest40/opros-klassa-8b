@@ -184,6 +184,31 @@ footer {
   font-size: 1.2rem;
   margin-top: 15px;
   text-align: center;
+  /* ... (остальные стили) ... */
+
+.google-button {
+  background: linear-gradient(to right, #ffcc00, #ffd700);
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #000;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.google-button:hover {
+  background: #ffd700;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px gold;
+}
 }
 
 /*# sourceMappingURL=style.css.map */

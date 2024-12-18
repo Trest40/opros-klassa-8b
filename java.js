@@ -21,21 +21,22 @@ document.addEventListener('DOMContentLoaded', function () {
   const userName = document.getElementById('user-name');
   const votingForm = document.getElementById('voting-form');
   const messageDiv = document.getElementById('message');
+  const voteButton = document.querySelector('.vote-button');
 
   function checkAuthentication() {
-    const userName = localStorage.getItem('userName');
-    if (userName) {
-      // Пользователь аутентифицирован
-      votingForm.style.display = 'block';
-      googleSignInButton.style.display = 'none';
-      document.getElementById('user-name').textContent = userName;
-      document.getElementById('user-info').style.display = 'flex';
-    } else {
-      // Пользователь не аутентифицирован
-      votingForm.style.display = 'none';
-      googleSignInButton.style.display = 'block';
-      document.getElementById('user-info').style.display = 'none';
-    }
+      const userName = localStorage.getItem('userName');
+      if (userName) {
+          // Пользователь аутентифицирован
+          voteButton.disabled = false; // Разблокируем кнопку голосования
+          googleSignInButton.style.display = 'none';
+          document.getElementById('user-name').textContent = userName;
+          document.getElementById('user-info').style.display = 'flex';
+      } else {
+          // Пользователь не аутентифицирован
+          voteButton.disabled = true; // Блокируем кнопку голосования
+          googleSignInButton.style.display = 'block';
+          document.getElementById('user-info').style.display = 'none';
+      }
   }
 
   function handleCredentialResponse(response) {
