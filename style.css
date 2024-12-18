@@ -21,10 +21,50 @@ body {
 }
 
 header {
-  text-align: center;
-  opacity: 0;
-  transform: translateY(50px);
-  transition: all 0.3s ease;
+    text-align: center;
+    /* Removed opacity and transform for initial visibility */
+    transition: all 0.3s ease;
+}
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+#auth-container {
+    display: flex;
+    align-items: center;
+}
+
+#auth-container button {
+    background: linear-gradient(to right, #ffcc00, #ffd700);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #000;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    margin-right: 10px; /* Added margin for spacing */
+}
+
+#auth-container button:hover {
+    background: #ffd700;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px gold;
+}
+
+#user-info {
+    display: flex;
+    align-items: center;
+    color: #ffd700;
+}
+
+#user-name {
+    margin-right: 10px;
 }
 header h1 {
   font-size: 3rem;
