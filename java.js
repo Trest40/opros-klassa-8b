@@ -28,14 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (userName) {
       // Пользователь аутентифицирован
       voteButton.disabled = false; // Разблокируем кнопку голосования
-      signInButton.style.display = 'none';
-      document.getElementById('user-name').textContent = userName;
-      document.getElementById('user-info').style.display = 'flex';
+      signInButton.style.display = 'none'; // Скрываем кнопку "Войти"
+      userNameElement.textContent = userName; // Показываем имя пользователя
+      userInfo.style.display = 'flex'; // Отображаем блок с информацией о пользователе
     } else {
       // Пользователь не аутентифицирован
       voteButton.disabled = true; // Блокируем кнопку голосования
-      signInButton.style.display = 'block';
-      document.getElementById('user-info').style.display = 'none';
+      signInButton.style.display = 'block'; // Показываем кнопку "Войти"
+      userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
     }
   }
 
@@ -55,8 +55,12 @@ document.addEventListener('DOMContentLoaded', function () {
   window.onload = function () {
     google.accounts.id.initialize({
       client_id: '847429882483-05f9mev63nq15t1ccilrjbmb27vrem42.apps.googleusercontent.com', // Твой Client ID
-      callback: handleCredentialResponse
+      callback: handleCredentialResponse,
     });
+    google.accounts.id.renderButton(
+        signInButton,
+        { theme: "outline", size: "large" }  // customization attributes
+    );
     checkAuthentication();
   }
 
@@ -66,18 +70,13 @@ document.addEventListener('DOMContentLoaded', function () {
     checkAuthentication(); // Проверяем аутентификацию
   });
 
-  // Обработчик нажатия на кнопку входа
-  signInButton.addEventListener('click', () => {
-    google.accounts.id.prompt();
-  });
-
   votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
     if (voteButton.disabled) {
       // Если кнопка голосования заблокирована
-      document.body.classList.add('shake');
+      document.body.classList.add('shake'); // Трясем всю страницу
       setTimeout(() => {
-        document.body.classList.remove('shake');
+        document.body.classList.remove('shake'); // Убираем класс тряски через 300 мс
       }, 300);
       return; // Прерываем отправку формы
     }
