@@ -1,3 +1,5 @@
+import { auth, database } from './index.html'; // Импортируем auth и database
+
 document.addEventListener('DOMContentLoaded', function () {
   const elements = document.querySelectorAll('main.container, footer');
 
