@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.onload = function () {
       google.accounts.id.initialize({
-        client_id: 'YOUR_GOOGLE_CLIENT_ID', // Замени на свой Client ID
+        client_id: '847429882483-05f9mev63nq15t1ccilrjbmb27vrem42.apps.googleusercontent.com', // Твой Client ID
         callback: handleCredentialResponse
       });
       google.accounts.id.renderButton(
