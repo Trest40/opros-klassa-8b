@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('scroll', checkScroll);
   checkScroll();
 
-  const googleSignInButton = document.getElementById('google-signin-button');
+  const signInButton = document.getElementById('sign-in-button');
   const signOutButton = document.getElementById('sign-out-button');
   const userInfo = document.getElementById('user-info');
   const userName = document.getElementById('user-name');
@@ -24,54 +24,69 @@ document.addEventListener('DOMContentLoaded', function () {
   const voteButton = document.querySelector('.vote-button');
 
   function checkAuthentication() {
-      const userName = localStorage.getItem('userName');
-      if (userName) {
-          // Пользователь аутентифицирован
-          voteButton.disabled = false; // Разблокируем кнопку голосования
-          googleSignInButton.style.display = 'none';
-          document.getElementById('user-name').textContent = userName;
-          document.getElementById('user-info').style.display = 'flex';
-      } else {
-          // Пользователь не аутентифицирован
-          voteButton.disabled = true; // Блокируем кнопку голосования
-          googleSignInButton.style.display = 'block';
-          document.getElementById('user-info').style.display = 'none';
-      }
+    const userName = localStorage.getItem('userName');
+    if (userName) {
+      // Пользователь аутентифицирован
+      voteButton.disabled = false; // Разблокируем кнопку голосования
+      signInButton.style.display = 'none';
+      document.getElementById('user-name').textContent = userName;
+      document.getElementById('user-info').style.display = 'flex';
+    } else {
+      // Пользователь не аутентифицирован
+      voteButton.disabled = true; // Блокируем кнопку голосования
+      signInButton.style.display = 'block';
+      document.getElementById('user-info').style.display = 'none';
+    }
   }
 
   function handleCredentialResponse(response) {
-      const responsePayload = jwt_decode(response.credential);
-      console.log("ID: " + responsePayload.sub);
-      console.log('Full Name: ' + responsePayload.name);
-      console.log("Image URL: " + responsePayload.picture);
-      console.log("Email: " + responsePayload.email);
+    const responsePayload = jwt_decode(response.credential);
+    console.log("ID: " + responsePayload.sub);
+    console.log('Full Name: ' + responsePayload.name);
+    console.log("Image URL: " + responsePayload.picture);
+    console.log("Email: " + responsePayload.email);
 
-      // Сохраняем имя пользователя в localStorage
-      localStorage.setItem('userName', responsePayload.name);
-      // Проверяем аутентификацию и отображаем опрос
-      checkAuthentication();
-    }
+    // Сохраняем имя пользователя в localStorage
+    localStorage.setItem('userName', responsePayload.name);
+    // Проверяем аутентификацию и отображаем опрос
+    checkAuthentication();
+  }
 
-    window.onload = function () {
-      google.accounts.id.initialize({
-        client_id: '847429882483-05f9mev63nq15t1ccilrjbmb27vrem42.apps.googleusercontent.com', // Твой Client ID
-        callback: handleCredentialResponse
-      });
-      google.accounts.id.renderButton(
-        document.getElementById("google-signin-button"),
-        { theme: "outline", size: "large" }  // customization attributes
-      );
-      checkAuthentication();
-    }
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: '847429882483-05f9mev63nq15t1ccilrjbmb27vrem42.apps.googleusercontent.com', // Твой Client ID
+      callback: handleCredentialResponse
+    });
+    checkAuthentication();
+  }
 
   // Обработчик нажатия на кнопку выхода
-    signOutButton.addEventListener('click', function() {
+  signOutButton.addEventListener('click', function() {
     localStorage.clear(); // Очищаем localStorage
     checkAuthentication(); // Проверяем аутентификацию
   });
 
+  // Обработчик нажатия на кнопку входа
+  signInButton.addEventListener('click', () => {
+    google.accounts.id.prompt((notification) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        // Обработка ошибок входа
+        console.log("One Tap exit or not displayed");
+      }
+    });
+  });
+
   votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
+    if (voteButton.disabled) {
+      // Если кнопка голосования заблокирована
+      signInButton.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Прокручиваем до кнопки входа
+      votingForm.classList.add('shake'); // Добавляем класс для тряски
+      setTimeout(() => {
+        votingForm.classList.remove('shake'); // Убираем класс через 300 мс
+      }, 300);
+      return; // Прерываем отправку формы
+    }
 
     // Здесь логика отправки данных опроса
     // ...

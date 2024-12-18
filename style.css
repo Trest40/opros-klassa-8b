@@ -39,6 +39,10 @@ header {
 }
 
 .google-button {
+  display: none;
+}
+
+#sign-in-button {
   background: linear-gradient(to right, #ffcc00, #ffd700);
   border: none;
   padding: 10px 20px;
@@ -53,10 +57,10 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto; /* Кнопка по центру */
+  margin: 0 auto;
 }
 
-.google-button:hover {
+#sign-in-button:hover {
   background: #ffd700;
   transform: scale(1.05);
   box-shadow: 0 0 15px gold;
@@ -238,4 +242,19 @@ footer {
   #sign-out-button{
       font-size: 0.9rem;
   }
+  #sign-in-button{
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.3s;
 }
