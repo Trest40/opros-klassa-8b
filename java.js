@@ -68,22 +68,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Обработчик нажатия на кнопку входа
   signInButton.addEventListener('click', () => {
-    google.accounts.id.prompt((notification) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        // Обработка ошибок входа
-        console.log("One Tap exit or not displayed");
-      }
-    });
+    google.accounts.id.prompt();
   });
 
   votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
     if (voteButton.disabled) {
       // Если кнопка голосования заблокирована
-      signInButton.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Прокручиваем до кнопки входа
-      votingForm.classList.add('shake'); // Добавляем класс для тряски
+      document.body.classList.add('shake');
       setTimeout(() => {
-        votingForm.classList.remove('shake'); // Убираем класс через 300 мс
+        document.body.classList.remove('shake');
       }, 300);
       return; // Прерываем отправку формы
     }
