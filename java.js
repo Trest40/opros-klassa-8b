@@ -124,12 +124,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Создаем объект FormData для сбора данных формы
     const formData = new FormData(votingForm);
 
-    // Добавляем email пользователя в данные формы
-    formData.append('email', localStorage.getItem('userEmail'));
-
     // Отправляем данные формы с помощью Fetch API
     fetch(votingForm.action, {
       method: 'POST',
+      headers: {
+          'Accept': 'application/json'
+      },
       body: formData,
     })
     .then(response => {
