@@ -52,7 +52,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('Dv9E.gif') no-repeat center center fixed; // Замените 'Dv9E.gif' на путь к вашему GIF, если он отличается
+    background: url('Dv9E.gif') no-repeat center center fixed;
     background-size: cover;
     opacity: 0.3;
     z-index: -1;
@@ -60,9 +60,7 @@ body {
 
 header {
     @include center;
-    opacity: 0;
-    transform: translateY(50px);
-    @include transition-all;
+    @include transition-all; // Добавил анимацию появления
 
     h1 {
         font-size: 3rem;
@@ -80,7 +78,7 @@ header {
         color: $text-color-light;
     }
 }
-// Исправленный header-container
+
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -96,6 +94,7 @@ header {
     align-items: center;
     margin-top: 10px;
 }
+
 .google-button {
     display: none;
 }
@@ -252,8 +251,14 @@ footer {
     margin-top: 15px;
     @include center;
 }
+
 // Медиа-запросы для адаптивности
 @media (max-width: 768px) {
+  // Анимация появления
+  header, main.container, footer{
+      opacity: 1;
+      transform: translateY(0);
+  }
     header {
         h1 {
             font-size: 1.8rem;
@@ -296,7 +301,10 @@ footer {
         margin: 0;
       }
     }
-
+    // Стили для меньших экранов
+    button.vote-button{
+      font-size: 1.2rem;
+    }
 }
 
 @keyframes shake {
