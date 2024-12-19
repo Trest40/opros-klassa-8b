@@ -26,81 +26,94 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
     if (userName) {
-      // Пользователь аутентифицирован
-      voteButton.disabled = false; // Разблокируем кнопку голосования
-      signInButton.style.display = 'none'; // Скрываем кнопку "Войти"
-      userNameElement.textContent = userName; // Показываем имя пользователя
-      userInfo.style.display = 'flex'; // Отображаем блок с информацией о пользователе
+      voteButton.disabled = false;
+      signInButton.style.display = 'none';
+      userNameElement.textContent = userName;
+      userInfo.style.display = 'flex';
     } else {
-      // Пользователь не аутентифицирован
-      voteButton.disabled = true; // Блокируем кнопку голосования
-      signInButton.style.display = 'block'; // Показываем кнопку "Войти"
-      userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
+      voteButton.disabled = true;
+      signInButton.style.display = 'block';
+      userInfo.style.display = 'none';
     }
   }
 
   function handleCredentialResponse(response) {
     const responsePayload = jwt_decode(response.credential);
-    console.log("ID: " + responsePayload.sub);
-    console.log('Full Name: ' + responsePayload.name);
-    console.log("Image URL: " + responsePayload.picture);
-    console.log("Email: " + responsePayload.email);
-
-    // Сохраняем имя пользователя в localStorage
     localStorage.setItem('userName', responsePayload.name);
-    // Проверяем аутентификацию и отображаем опрос
     checkAuthentication();
   }
 
-  // Инициализируем GIS после полной загрузки страницы и отрисовки кнопки "Войти"
   window.onload = function() {
-    // Проверяем, загрузилась ли библиотека GIS
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com', // Твой Client ID
-        callback: handleCredentialResponse,
-      });
-      google.accounts.id.renderButton(
-        signInButton,
-        { theme: "outline", size: "large" }  // customization attributes
-      );
+    const storedUserName = localStorage.getItem('userName');
+    if (storedUserName) {
+      checkAuthentication();
     } else {
-      console.error("Google Identity Services library is not loaded.");
+      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
+          callback: handleCredentialResponse,
+        });
+        google.accounts.id.renderButton(
+          signInButton,
+          { theme: "outline", size: "large" }
+        );
+      } else {
+        console.error("Google Identity Services library is not loaded.");
+      }
     }
-    checkAuthentication();
   }
 
-  // Обработчик нажатия на кнопку выхода
   signOutButton.addEventListener('click', function() {
-    localStorage.clear(); // Очищаем localStorage
-    checkAuthentication(); // Проверяем аутентификацию
+    localStorage.clear();
+    checkAuthentication();
   });
 
   votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
     if (voteButton.disabled) {
-      // Если кнопка голосования заблокирована
-      document.body.classList.add('shake'); // Трясем всю страницу
-      setTimeout(() => {
-        document.body.classList.remove('shake'); // Убираем класс тряски через 300 мс
-      }, 300);
-      return; // Прерываем отправку формы
+      messageDiv.textContent = 'Вы не выполнили вход!';
+      messageDiv.style.display = 'block';
+      window.location.href = '#top';
+      setTimeout(() => { messageDiv.style.display = 'none'; }, 3000);
+      return;
     }
+    const formData = new FormData(votingForm);
 
-    // Здесь логика отправки данных опроса
-    // ...
+    fetch('https://formspree.io/f/xkgnlvgv', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        messageDiv.textContent = 'Успех!';
+        messageDiv.style.display = 'block';
+        votingForm.reset();
+        setTimeout(() => { messageDiv.style.display = 'none'; }, 3000);
+      } else {
+        messageDiv.textContent = 'Произошла ошибка при отправке голоса.';
+        messageDiv.style.display = 'block';
+        setTimeout(() => { messageDiv.style.display = 'none'; }, 3000);
+      }
+    })
+    .catch(error => {
+      messageDiv.textContent = 'Произошла ошибка при отправке голоса.';
+      messageDiv.style.display = 'block';
+      setTimeout(() => { messageDiv.style.display = 'none'; }, 3000);
+    });
   });
 
-  const button = document.querySelector('button.vote-button');
-  if (button) {
-    button.addEventListener('mouseover', function () {
-      button.style.transform = 'scale(1.08) translateY(-3px)';
-      button.style.boxShadow = '0 0 20px gold';
+  if (voteButton) {
+    voteButton.addEventListener('mouseover', function () {
+      voteButton.style.transform = 'scale(1.08) translateY(-3px)';
+      voteButton.style.boxShadow = '0 0 20px gold';
     });
 
-    button.addEventListener('mouseout', function () {
-      button.style.transform = 'scale(1) translateY(0)';
-      button.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.4)';
+    voteButton.addEventListener('mouseout', function () {
+      voteButton.style.transform = 'scale(1) translateY(0)';
+      voteButton.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.4)';
     });
   }
 });
