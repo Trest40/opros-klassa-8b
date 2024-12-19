@@ -1,0 +1,38 @@
+name: Compile SCSS
+
+on:
+  push:
+    branches:
+      - main # Замените 'main' на ветку, куда вы пушите изменения
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16' # Или другая версия Node.js
+
+    - name: Install dependencies
+      run: npm install -g sass
+
+    - name: Compile SCSS
+      run: sass style.scss style.css
+
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add style.css
+        git commit -m "Compile SCSS to CSS" || echo "No changes to commit"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
