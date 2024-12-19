@@ -102,8 +102,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Функция отправки формы (вызываем её после авторизации)
   function submitForm() {
-    // ... (код отправки формы, который был раньше в votingForm.addEventListener('submit', ...))
-    // ... (не забудь перенести сюда код проверки номинаций и т.д.)
         voteButton.textContent = 'Отправка...';
         voteButton.disabled = true;
 
@@ -134,11 +132,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
               return response.text();
             } else {
-              if (response.status === 422) {
-                throw new Error('Вы уже голосовали.');
-              } else {
-                throw new Error('Произошла ошибка при отправке формы.');
-              }
+              // Убрали проверку на статус 422
+              throw new Error('Произошла ошибка при отправке формы.');
             }
           })
           .then(responseText => {
