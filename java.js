@@ -90,79 +90,81 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   votingForm.addEventListener('submit', function (event) {
-      event.preventDefault();
+    event.preventDefault();
 
-      if (voteButton.disabled) {
-          // Если кнопка голосования заблокирована из-за неавторизованного пользователя
-          if (!localStorage.getItem('userName')) {
-              messageDiv.textContent = "Ошибка: пожалуйста, войдите в аккаунт, чтобы проголосовать.";
-              messageDiv.style.display = "block";
-              // Плавный скролл до auth-container
-              document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
-              setTimeout(() => {
-                  messageDiv.style.display = "none";
-              }, 5000);
-              return;
-          } else if (localStorage.getItem('hasVoted') === 'true') {
-              // Если пользователь уже голосовал
-              messageDiv.textContent = "Ошибка: Вы уже голосовали.";
-              messageDiv.style.display = "block";
-              setTimeout(() => {
-                  messageDiv.style.display = "none";
-              }, 5000);
-              return;
-          }
+    // Проверяем, авторизован ли пользователь
+    if (!localStorage.getItem('userName')) {
+      // Если пользователь не авторизован
+      messageDiv.textContent = "Ошибка: пожалуйста, войдите в аккаунт, чтобы проголосовать.";
+      messageDiv.style.display = "block";
+      // Плавный скролл до auth-container
+      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        messageDiv.style.display = "none";
+      }, 5000);
+      return; // Прерываем отправку формы
+    }
+
+    // Проверяем, голосовал ли пользователь уже
+    if (localStorage.getItem('hasVoted') === 'true') {
+      // Если пользователь уже голосовал
+      messageDiv.textContent = "Ошибка: Вы уже голосовали.";
+      messageDiv.style.display = "block";
+      setTimeout(() => {
+        messageDiv.style.display = "none";
+      }, 5000);
+      return; // Прерываем отправку формы
+    }
+
+    // Меняем текст на кнопке
+    voteButton.textContent = "Отправка...";
+    voteButton.disabled = true;
+
+    // Создаем объект FormData для сбора данных формы
+    const formData = new FormData(votingForm);
+
+    // Добавляем email пользователя в данные формы
+    formData.append('email', localStorage.getItem('userEmail'));
+
+    // Отправляем данные формы с помощью Fetch API
+    fetch(votingForm.action, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.text(); // Получаем текстовый ответ
+      } else {
+        throw new Error('Произошла ошибка при отправке формы.');
       }
+    })
+    .then(responseText => {
+      console.log(responseText); // Выводим ответ в консоль
 
-      // Меняем текст на кнопке
-      voteButton.textContent = "Отправка...";
-      voteButton.disabled = true;
+      // Показываем сообщение об успехе
+      messageDiv.textContent = "Спасибо за ваш голос!";
+      messageDiv.style.display = "block";
 
-      // Создаем объект FormData для сбора данных формы
-      const formData = new FormData(votingForm);
+      // Очищаем форму
+      votingForm.reset();
 
-      // Добавляем email пользователя в данные формы
-      formData.append('email', localStorage.getItem('userEmail'));
+      // Запоминаем, что пользователь проголосовал
+      localStorage.setItem('hasVoted', 'true');
 
-      // Отправляем данные формы с помощью Fetch API
-      fetch(votingForm.action, {
-          method: 'POST',
-          body: formData,
-      })
-      .then(response => {
-          if (response.ok) {
-              return response.text(); // Получаем текстовый ответ
-          } else {
-              throw new Error('Произошла ошибка при отправке формы.');
-          }
-      })
-      .then(responseText => {
-          console.log(responseText); // Выводим ответ в консоль
-
-          // Показываем сообщение об успехе
-          messageDiv.textContent = "Спасибо за ваш голос!";
-          messageDiv.style.display = "block";
-
-          // Очищаем форму
-          votingForm.reset();
-
-          // Запоминаем, что пользователь проголосовал
-          localStorage.setItem('hasVoted', 'true');
-
-          // Скрываем сообщение об успехе через 5 секунд
-          setTimeout(() => {
-              messageDiv.style.display = "none";
-          }, 5000);
-      })
-      .catch(error => {
-          console.error('Ошибка:', error);
-          messageDiv.textContent = "Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.";
-          messageDiv.style.display = "block";
-      })
-      .finally(() => {
-          // Возвращаем исходный текст на кнопке, но оставляем ее заблокированной
-          voteButton.textContent = "Вы уже голосовали"; // Текст после голосования
-      });
+      // Скрываем сообщение об успехе через 5 секунд
+      setTimeout(() => {
+        messageDiv.style.display = "none";
+      }, 5000);
+    })
+    .catch(error => {
+      console.error('Ошибка:', error);
+      messageDiv.textContent = "Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.";
+      messageDiv.style.display = "block";
+    })
+    .finally(() => {
+      // Возвращаем исходный текст на кнопке, но оставляем ее заблокированной
+      voteButton.textContent = "Вы уже голосовали"; // Текст после голосования
+    });
   });
 
   const button = document.querySelector('button.vote-button');
