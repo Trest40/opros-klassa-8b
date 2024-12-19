@@ -26,22 +26,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
-    const hasVoted = localStorage.getItem('hasVoted');
 
     if (userName) {
       // Пользователь аутентифицирован
       signInButton.style.display = 'none'; // Скрываем кнопку "Войти"
       userNameElement.textContent = userName; // Показываем имя пользователя
       userInfo.style.display = 'flex'; // Отображаем блок с информацией о пользователе
-
-      if (hasVoted === 'true') {
-        // Пользователь уже голосовал
-        voteButton.disabled = true; // Блокируем кнопку голосования
-        voteButton.textContent = 'Вы уже голосовали'; // Меняем текст кнопки
-      } else {
-        // Пользователь еще не голосовал
-        voteButton.disabled = false; // Разблокируем кнопку голосования
-      }
+      voteButton.disabled = false; // Разблокируем кнопку голосования
     } else {
       // Пользователь не аутентифицирован
       voteButton.disabled = true; // Блокируем кнопку голосования
@@ -57,8 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Image URL: " + responsePayload.picture);
     console.log("Email: " + responsePayload.email);
 
-    // Сохраняем ID пользователя, имя пользователя и email в localStorage
-    localStorage.setItem('userId', responsePayload.sub);
+    // Сохраняем имя пользователя и email в localStorage
     localStorage.setItem('userName', responsePayload.name);
     localStorage.setItem('userEmail', responsePayload.email);
     userEmailInput.value = responsePayload.email;
@@ -85,26 +75,20 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Обработчик нажатия на кнопку выхода
-    signOutButton.addEventListener('click', function() {
-    // Удаляем данные пользователя и сбрасываем флаг hasVoted
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('hasVoted'); // Добавлено удаление hasVoted
+  signOutButton.addEventListener('click', function() {
+      localStorage.clear(); // Очищаем localStorage
+      checkAuthentication(); // Проверяем аутентификацию
 
-    // Обновляем интерфейс
-    checkAuthentication();
-
-     // Разблокируем кнопку голосования и меняем ее текст
+      // Разблокируем кнопку голосования и меняем ее текст
       voteButton.disabled = false;
       voteButton.textContent = 'Голосовать';
-});
+  });
 
   votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
 
     // Проверяем, авторизован ли пользователь
-    if (!localStorage.getItem('userId')) {
+    if (!localStorage.getItem('userName')) {
       // Если пользователь не авторизован
       messageDiv.textContent = "Ошибка: пожалуйста, войдите в аккаунт, чтобы проголосовать.";
       messageDiv.style.display = "block";
@@ -116,16 +100,22 @@ document.addEventListener('DOMContentLoaded', function () {
       return; // Прерываем отправку формы
     }
 
-  // Проверяем, голосовал ли пользователь
-    if (localStorage.getItem('hasVoted') === 'true') {
-      // Если пользователь уже голосовал
-      messageDiv.textContent = "Ошибка: Вы уже голосовали.";
-      messageDiv.style.display = "block";
-      setTimeout(() => {
-        messageDiv.style.display = "none";
-      }, 5000);
-      return; // Прерываем отправку формы
-    }
+    // Проверяем, выбраны ли все номинации
+    const nominations = document.querySelectorAll('.nomination');
+    let valid = true;
+    nominations.forEach(nomination => {
+      const checked = nomination.querySelectorAll('input[type="radio"]:checked');
+      if (checked.length !== 1) {
+        valid = false;
+        messageDiv.textContent = "Ошибка: пожалуйста, выберите по одному варианту в каждой номинации.";
+        messageDiv.style.display = "block";
+        setTimeout(() => {
+          messageDiv.style.display = "none";
+        }, 5000);
+      }
+    });
+
+    if (!valid) return; // Прерываем отправку формы, если не все номинации выбраны
 
     // Меняем текст на кнопке
     voteButton.textContent = "Отправка...";
@@ -159,9 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
       // Очищаем форму
       votingForm.reset();
 
-      // Запоминаем, что пользователь проголосовал
-      localStorage.setItem('hasVoted', 'true');
-
       // Скрываем сообщение об успехе через 5 секунд
       setTimeout(() => {
         messageDiv.style.display = "none";
@@ -173,8 +160,9 @@ document.addEventListener('DOMContentLoaded', function () {
       messageDiv.style.display = "block";
     })
     .finally(() => {
-      // Возвращаем исходный текст на кнопке, но оставляем ее заблокированной
-      voteButton.textContent = "Вы уже голосовали"; // Текст после голосования
+      // Возвращаем исходный текст на кнопке и разблокируем ее
+      voteButton.textContent = "Голосовать";
+      voteButton.disabled = false;
     });
   });
 
