@@ -25,21 +25,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const userEmailInput = document.getElementById('user-email');
 
   function checkAuthentication() {
-    const userId = localStorage.getItem('userId');
+    const userName = localStorage.getItem('userName');
     const hasVoted = localStorage.getItem('hasVoted');
 
-    if (userId) {
+    if (userName) {
       // Пользователь аутентифицирован
       signInButton.style.display = 'none'; // Скрываем кнопку "Войти"
-      userNameElement.textContent = localStorage.getItem('userName'); // Показываем имя пользователя
+      userNameElement.textContent = userName; // Показываем имя пользователя
       userInfo.style.display = 'flex'; // Отображаем блок с информацией о пользователе
 
-      if (hasVoted === userId) {
-        // Пользователь уже голосовал именно с этого аккаунта
+      if (hasVoted === 'true') {
+        // Пользователь уже голосовал
         voteButton.disabled = true; // Блокируем кнопку голосования
         voteButton.textContent = 'Вы уже голосовали'; // Меняем текст кнопки
       } else {
-        // Пользователь еще не голосовал с этого аккаунта
+        // Пользователь еще не голосовал
         voteButton.disabled = false; // Разблокируем кнопку голосования
       }
     } else {
@@ -85,15 +85,20 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Обработчик нажатия на кнопку выхода
-  signOutButton.addEventListener('click', function() {
-      // Удаляем только данные пользователя, оставляя флаг hasVoted
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
+    signOutButton.addEventListener('click', function() {
+    // Удаляем данные пользователя и сбрасываем флаг hasVoted
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('hasVoted'); // Добавлено удаление hasVoted
 
-      // Обновляем интерфейс
-      checkAuthentication();
-  });
+    // Обновляем интерфейс
+    checkAuthentication();
+
+     // Разблокируем кнопку голосования и меняем ее текст
+      voteButton.disabled = false;
+      voteButton.textContent = 'Голосовать';
+});
 
   votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -111,10 +116,10 @@ document.addEventListener('DOMContentLoaded', function () {
       return; // Прерываем отправку формы
     }
 
-    // Проверяем, голосовал ли пользователь именно с этого аккаунта
-    if (localStorage.getItem('hasVoted') === localStorage.getItem('userId')) {
-      // Если пользователь уже голосовал с этого аккаунта
-      messageDiv.textContent = "Ошибка: Вы уже голосовали с этого аккаунта.";
+  // Проверяем, голосовал ли пользователь
+    if (localStorage.getItem('hasVoted') === 'true') {
+      // Если пользователь уже голосовал
+      messageDiv.textContent = "Ошибка: Вы уже голосовали.";
       messageDiv.style.display = "block";
       setTimeout(() => {
         messageDiv.style.display = "none";
@@ -154,8 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
       // Очищаем форму
       votingForm.reset();
 
-      // Запоминаем, что пользователь проголосовал именно с этого аккаунта
-      localStorage.setItem('hasVoted', localStorage.getItem('userId'));
+      // Запоминаем, что пользователь проголосовал
+      localStorage.setItem('hasVoted', 'true');
 
       // Скрываем сообщение об успехе через 5 секунд
       setTimeout(() => {
