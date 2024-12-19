@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+  console.log("DOMContentLoaded event fired"); // Проверка, срабатывает ли событие
+
   const elements = document.querySelectorAll('main.container, footer');
 
   function checkScroll() {
@@ -23,84 +25,94 @@ document.addEventListener('DOMContentLoaded', function () {
   const messageDiv = document.getElementById('message');
   const voteButton = document.querySelector('.vote-button');
 
-  function checkAuthentication() {
-    const userName = localStorage.getItem('userName');
-    if (userName) {
-      // Пользователь аутентифицирован
-      voteButton.disabled = false; // Разблокируем кнопку голосования
-      signInButton.style.display = 'none'; // Скрываем кнопку "Войти"
-      userNameElement.textContent = userName; // Показываем имя пользователя
-      userInfo.style.display = 'flex'; // Отображаем блок с информацией о пользователе
-    } else {
-      // Пользователь не аутентифицирован
-      voteButton.disabled = true; // Блокируем кнопку голосования
-      signInButton.style.display = 'block'; // Показываем кнопку "Войти"
-      userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
+  // Проверяем, существуют ли элементы перед тем, как с ними работать
+  if (signInButton && signOutButton && userInfo && userNameElement && votingForm && messageDiv && voteButton) {
+    function checkAuthentication() {
+      console.log("checkAuthentication called");
+      const userName = localStorage.getItem('userName');
+      if (userName) {
+        // Пользователь аутентифицирован
+        voteButton.disabled = false; // Разблокируем кнопку голосования
+        signInButton.style.display = 'none'; // Скрываем кнопку "Войти"
+        userNameElement.textContent = userName; // Показываем имя пользователя
+        userInfo.style.display = 'flex'; // Отображаем блок с информацией о пользователе
+      } else {
+        // Пользователь не аутентифицирован
+        voteButton.disabled = true; // Блокируем кнопку голосования
+        signInButton.style.display = 'block'; // Показываем кнопку "Войти"
+        userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
+      }
     }
-  }
 
-  function handleCredentialResponse(response) {
-    const responsePayload = jwt_decode(response.credential);
-    console.log("ID: " + responsePayload.sub);
-    console.log('Full Name: ' + responsePayload.name);
-    console.log("Image URL: " + responsePayload.picture);
-    console.log("Email: " + responsePayload.email);
+    function handleCredentialResponse(response) {
+      console.log("handleCredentialResponse called");
+      const responsePayload = jwt_decode(response.credential);
+      console.log("ID: " + responsePayload.sub);
+      console.log('Full Name: ' + responsePayload.name);
+      console.log("Image URL: " + responsePayload.picture);
+      console.log("Email: " + responsePayload.email);
 
-    // Сохраняем имя пользователя в localStorage
-    localStorage.setItem('userName', responsePayload.name);
-    // Проверяем аутентификацию и отображаем опрос
-    checkAuthentication();
-  }
+      // Сохраняем имя пользователя в localStorage
+      localStorage.setItem('userName', responsePayload.name);
+      // Проверяем аутентификацию и отображаем опрос
+      checkAuthentication();
+    }
 
-  // Инициализируем GIS после полной загрузки страницы и отрисовки кнопки "Войти"
-  window.onload = function() {
-    // Проверяем, загрузилась ли библиотека GIS
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com', // Твой Client ID
-        callback: handleCredentialResponse,
+    // Инициализируем GIS после полной загрузки страницы и отрисовки кнопки "Войти"
+    window.onload = function() {
+      console.log("window.onload event fired");
+      // Проверяем, загрузилась ли библиотека GIS
+      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com', // Твой Client ID
+          callback: handleCredentialResponse,
+        });
+        google.accounts.id.renderButton(
+          signInButton,
+          { theme: "outline", size: "large" }  // customization attributes
+        );
+      } else {
+        console.error("Google Identity Services library is not loaded.");
+      }
+      checkAuthentication();
+    }
+
+    // Обработчик нажатия на кнопку выхода
+    signOutButton.addEventListener('click', function() {
+      console.log("signOutButton clicked");
+      localStorage.clear(); // Очищаем localStorage
+      checkAuthentication(); // Проверяем аутентификацию
+    });
+
+    votingForm.addEventListener('submit', function (event) {
+      console.log("votingForm submitted");
+      event.preventDefault();
+      if (voteButton.disabled) {
+        // Если кнопка голосования заблокирована
+        document.body.classList.add('shake'); // Трясем всю страницу
+        setTimeout(() => {
+          document.body.classList.remove('shake'); // Убираем класс тряски через 300 мс
+        }, 300);
+        return; // Прерываем отправку формы
+      }
+
+      // Здесь логика отправки данных опроса
+      // ...
+    });
+
+    const button = document.querySelector('button.vote-button');
+    if (button) {
+      button.addEventListener('mouseover', function () {
+        button.style.transform = 'scale(1.08) translateY(-3px)';
+        button.style.boxShadow = '0 0 20px gold';
       });
-      google.accounts.id.renderButton(
-        signInButton,
-        { theme: "outline", size: "large" }  // customization attributes
-      );
-    } else {
-      console.error("Google Identity Services library is not loaded.");
+
+      button.addEventListener('mouseout', function () {
+        button.style.transform = 'scale(1) translateY(0)';
+        button.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.4)';
+      });
     }
-    checkAuthentication();
-  }
-
-  // Обработчик нажатия на кнопку выхода
-  signOutButton.addEventListener('click', function() {
-    localStorage.clear(); // Очищаем localStorage
-    checkAuthentication(); // Проверяем аутентификацию
-  });
-
-  votingForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    if (voteButton.disabled) {
-      // Если кнопка голосования заблокирована
-      document.body.classList.add('shake'); // Трясем всю страницу
-      setTimeout(() => {
-        document.body.classList.remove('shake'); // Убираем класс тряски через 300 мс
-      }, 300);
-      return; // Прерываем отправку формы
-    }
-
-    // Здесь логика отправки данных опроса
-    // ...
-  });
-
-  const button = document.querySelector('button.vote-button');
-  if (button) {
-    button.addEventListener('mouseover', function () {
-      button.style.transform = 'scale(1.08) translateY(-3px)';
-      button.style.boxShadow = '0 0 20px gold';
-    });
-
-    button.addEventListener('mouseout', function () {
-      button.style.transform = 'scale(1) translateY(0)';
-      button.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.4)';
-    });
+  } else {
+    console.error("One or more elements are missing on the page.");
   }
 });
