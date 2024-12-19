@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     userEmailInput.value = responsePayload.email;
     checkAuthentication();
 
-    // Отправляем форму после успешной авторизации
+    // Отправляем форму после успешной авторизации (без лишних проверок)
     submitForm();
   }
 
