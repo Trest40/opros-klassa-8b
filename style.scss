@@ -259,6 +259,9 @@ footer {
     }
 
     main.container {
+        form{
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
         .nomination {
             h2 {
                 font-size: 1.3rem;
