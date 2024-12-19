@@ -44,19 +44,26 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   window.onload = function() {
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
-        callback: handleCredentialResponse,
-      });
-      google.accounts.id.renderButton(
-        signInButton,
-        { theme: "outline", size: "large" }
-      );
+    // Проверяем, есть ли уже сохраненное имя пользователя
+    const storedUserName = localStorage.getItem('userName');
+    if (storedUserName) {
+      // Если есть, сразу проверяем аутентификацию и не показываем кнопку входа
+      checkAuthentication();
     } else {
-      console.error("Google Identity Services library is not loaded.");
+      // Если нет, инициализируем Google вход
+      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
+          callback: handleCredentialResponse,
+        });
+        google.accounts.id.renderButton(
+          signInButton,
+          { theme: "outline", size: "large" }
+        );
+      } else {
+        console.error("Google Identity Services library is not loaded.");
+      }
     }
-    checkAuthentication();
   }
 
   signOutButton.addEventListener('click', function() {
@@ -70,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
       messageDiv.textContent = 'Вы не выполнили вход!';
       messageDiv.style.display = 'block';
       window.location.href = '#top';
+      setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
       return;
     }
     const formData = new FormData(votingForm);
@@ -83,17 +91,20 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .then(response => {
       if (response.ok) {
-        messageDiv.textContent = 'Спасибо за ваш голос!';
+        messageDiv.textContent = 'Успех!';
         messageDiv.style.display = 'block';
         votingForm.reset();
+        setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
       } else {
         messageDiv.textContent = 'Произошла ошибка при отправке голоса.';
         messageDiv.style.display = 'block';
+        setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
       }
     })
     .catch(error => {
       messageDiv.textContent = 'Произошла ошибка при отправке голоса.';
       messageDiv.style.display = 'block';
+      setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
     });
   });
 
