@@ -26,7 +26,7 @@
         <p>Выберите лучшего в каждой номинации!</p>
     </header>
     <main class="container">
-        <form id="voting-form">
+        <form id="voting-form" action="https://formspree.io/f/xkgnlvgv" method="POST">
             <section class="nomination" id="golden-ball">
                 <h2><i class="fas fa-futbol"></i> Золотой мяч</h2>
                  <label><input type="radio" name="golden_ball" value="Степа"> Степа</label>
@@ -60,7 +60,7 @@
             </section>
 
             <section class="nomination" id="math-genius">
-               <h2><i class="fas fa-calculator"></i> Алгебраические гении</
+               <h2><i class="fas fa-calculator"></i> Алгебраические гении</</h2>
                 <label><input type="radio" name="math_genius" value="Аднан"> Аднан</label>
                 <label><input type="radio" name="math_genius" value="Алижан"> Алижан</label>
                 <label><input type="radio" name="math_genius" value="Акниет"> Акниет</label>
@@ -106,11 +106,7 @@
                 <label><input type="radio" name="loudest" value="Руслан"> Руслан</label>
             </section>
 
-
-
-
-
-
+            <input type="hidden" id="user-email" name="email">
             <button type="submit" class="vote-button" disabled>Голосовать</button>
         </form>
           <div id="message" class="message" style="display: none;"></div>
