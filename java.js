@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const signInButton = document.getElementById('sign-in-button');
   const signOutButton = document.getElementById('sign-out-button');
   const userInfo = document.getElementById('user-info');
-  const userName = document.getElementById('user-name');
+  const userNameElement = document.getElementById('user-name');
   const votingForm = document.getElementById('voting-form');
   const messageDiv = document.getElementById('message');
   const voteButton = document.querySelector('.vote-button');
@@ -52,15 +52,21 @@ document.addEventListener('DOMContentLoaded', function () {
     checkAuthentication();
   }
 
-  window.onload = function () {
-    google.accounts.id.initialize({
-      client_id: '847429882483-05f9mev63nq15t1ccilrjbmb27vrem42.apps.googleusercontent.com', // Твой Client ID
-      callback: handleCredentialResponse,
-    });
-    google.accounts.id.renderButton(
+  // Инициализируем GIS после полной загрузки страницы и отрисовки кнопки "Войти"
+  window.onload = function() {
+    // Проверяем, загрузилась ли библиотека GIS
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({
+        client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com', // Твой Client ID
+        callback: handleCredentialResponse,
+      });
+      google.accounts.id.renderButton(
         signInButton,
         { theme: "outline", size: "large" }  // customization attributes
-    );
+      );
+    } else {
+      console.error("Google Identity Services library is not loaded.");
+    }
     checkAuthentication();
   }
 
