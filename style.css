@@ -1,174 +1,33 @@
-$primary-color: #ffd700;
-$background-dark: #0a0a0a;
-$text-color-light: #aaa;
-$container-bg: rgba(20, 20, 20, 0.9);
-$hover-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
-$basic-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-$button-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-$button-hover: 0 0 15px gold;
-$main-font: 'Montserrat', sans-serif;
-
-@mixin transition-all {
-    transition: all 0.3s ease;
-}
-
-@mixin center {
-    text-align: center;
-}
-
-@mixin flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@mixin default-box {
-    background: $container-bg;
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px auto;
-    box-shadow: $basic-shadow;
-    @include transition-all;
-
-    &:hover {
-        box-shadow: $hover-shadow;
-        transform: translateY(-3px);
-    }
-}
-
 body {
-    margin: 0;
-    font-family: $main-font;
-    background-color: $background-dark;
-    color: #fff;
-    @include center;
-    padding-bottom: 50px;
-    overflow-x: hidden;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background-color: #0a0a0a;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 50px;
+  overflow-x: hidden;
 }
 
 .background-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('Dv9E.gif') no-repeat center center fixed;
-    background-size: cover;
-    opacity: 0.3;
-    z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("Dv9E.gif") no-repeat center center fixed;
+  background-size: cover;
+  opacity: 0.3;
+  z-index: -1;
 }
 
 header {
-    @include center;
-    opacity: 0;
-    transform: translateY(50px);
-    @include transition-all;
-    h1 {
-        font-size: 3rem;
-        font-weight: 700;
-        text-shadow: 3px 3px 10px $primary-color;
-        color: $primary-color;
-        margin-top: 30px;
-        margin-bottom: 10px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-    p {
-        font-size: 1.2rem;
-        color: $text-color-light;
-    }
-}
-
-main.container {
-    @include default-box;
-    width: 90%;
-    max-width: 1200px;
-    opacity: 0;
-    transform: translateY(50px);
-    @include transition-all;
-    form {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        grid-gap: 20px;
-    }
-    .nomination {
-        @include default-box;
-        padding: 20px;
-        h2 {
-            font-size: 1.8rem;
-            color: #ffdb58;
-            text-shadow: 0 0 8px $primary-color;
-            margin-bottom: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            i {
-                margin-right: 10px;
-            }
-        }
-        label {
-            display: block;
-            margin: 10px 0;
-            font-size: 1.2rem;
-            text-align: left;
-            padding-left: 20px;
-            color: #fff;
-
-        }
-    }
-}
-
-input[type="radio"] {
-    transform: scale(1.5);
-    margin-right: 15px;
-    accent-color: $primary-color;
-    cursor: pointer;
-}
-
-button.vote-button {
-    background: linear-gradient(to right, #ffcc00, $primary-color);
-    border: none;
-    padding: 18px 45px;
-    margin-top: 30px;
-    font-size: 1.5rem;
-    color: #000;
-    border-radius: 35px;
-    font-weight: bold;
-    cursor: pointer;
-    @include transition-all;
-    box-shadow: $button-shadow;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-
-    &:hover {
-        background: $primary-color;
-        transform: scale(1.05) translateY(-3px);
-        box-shadow: $button-hover;
-    }
-}
-
-footer {
-    margin-top: 50px;
-    color: $text-color-light;
-    font-size: 1.2rem;
-    opacity: 0;
-    transform: translateY(50px);
-    @include transition-all;
-}
-
-.message {
-    color: #ffd700;
-    font-size: 1.2rem;
-    margin-top: 15px;
     text-align: center;
+    transition: all 0.3s ease;
 }
 
 .header-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Элементы друг под другом на мобильных */
     align-items: center;
     padding: 10px 20px;
 }
@@ -215,7 +74,7 @@ footer {
 }
 
 #user-name {
-  margin-right: 0;
+  margin-right: 0; /* Убираем отступ на мобильных */
   margin-bottom: 5px;
 }
 
@@ -233,21 +92,148 @@ footer {
   margin-right: 10px;
 }
 
+header h1 {
+  font-size: 2rem; /* Уменьшаем размер на мобильных */
+  font-weight: 700;
+  text-shadow: 3px 3px 10px #ffd700;
+  color: #ffd700;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+header p {
+  font-size: 1rem; /* Уменьшаем размер на мобильных */
+  color: #aaa;
+}
+
+main.container {
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px auto;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  transition: all 0.3s ease;
+  width: 90%;
+  max-width: 1200px;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.3s ease;
+}
+
+main.container:hover {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+  transform: translateY(-3px);
+}
+
+main.container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Номинации друг под другом на мобильных */
+  grid-gap: 20px;
+}
+
+main.container .nomination {
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0; /* Уменьшаем отступ сверху и снизу */
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+main.container .nomination:hover {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+  transform: translateY(-3px);
+}
+
+main.container .nomination h2 {
+  font-size: 1.5rem; /* Уменьшаем размер на мобильных */
+  color: #ffdb58;
+  text-shadow: 0 0 8px #ffd700;
+  margin-bottom: 10px; /* Уменьшаем отступ */
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+main.container .nomination h2 i {
+  margin-right: 5px; /* Уменьшаем отступ */
+}
+
+main.container .nomination label {
+  display: block;
+  margin: 10px 0;
+  font-size: 1rem; /* Уменьшаем размер на мобильных */
+  text-align: left;
+  padding-left: 20px;
+  color: #fff;
+}
+
+input[type=radio] {
+  transform: scale(1.2); /* Немного уменьшаем размер */
+  margin-right: 10px; /* Уменьшаем отступ */
+  accent-color: #ffd700;
+  cursor: pointer;
+}
+
+button.vote-button {
+  background: linear-gradient(to right, #ffcc00, #ffd700);
+  border: none;
+  padding: 15px 30px; /* Уменьшаем отступы */
+  margin-top: 20px; /* Уменьшаем отступ */
+  font-size: 1.2rem; /* Уменьшаем размер */
+  color: #000;
+  border-radius: 35px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button.vote-button:hover {
+  background: #ffd700;
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 0 15px gold;
+}
+
+footer {
+  margin-top: 30px; /* Уменьшаем отступ */
+  color: #aaa;
+  font-size: 1rem; /* Уменьшаем размер на мобильных */
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.3s ease;
+}
+
+.message {
+  color: #ffd700;
+  font-size: 1rem; /* Уменьшаем размер на мобильных */
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* Медиа-запросы для адаптивности */
 @media (max-width: 768px) {
   header h1 {
-    font-size: 1.8rem;
+    font-size: 1.8rem; /* Еще уменьшаем на маленьких экранах */
   }
 
   header p {
-    font-size: 0.9rem;
+    font-size: 0.9rem; /* Еще уменьшаем на маленьких экранах */
   }
 
   main.container .nomination h2 {
-    font-size: 1.3rem;
+    font-size: 1.3rem; /* Еще уменьшаем на маленьких экранах */
   }
 
   main.container .nomination label {
-    font-size: 0.9rem;
+    font-size: 0.9rem; /* Еще уменьшаем на маленьких экранах */
   }
 
   .google-button {
