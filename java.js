@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const elements = document.querySelectorAll('footer');
+  const elements = document.querySelectorAll('main.container, footer'); // Добавлен main.container
 
   function checkScroll() {
     elements.forEach(element => {
