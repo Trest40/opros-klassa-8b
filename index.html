@@ -27,7 +27,7 @@
         <p>Выберите лучшего в каждой номинации!</p>
     </header>
     <main class="container">
-        <form id="voting-form" action="https://formspree.io/f/xkgnlvgv" method="POST">
+        <form id="voting-form" action="https://formspree.io/f/myzyrkrv" method="POST">
             <input type="hidden" name="_replyto" value="email">
             <section class="nomination" id="golden-ball">
                 <h2><i class="fas fa-futbol"></i> Золотой мяч</h2>
@@ -107,8 +107,7 @@
                 <label><input type="radio" name="loudest" value="Ян"> Ян</label>
                 <label><input type="radio" name="loudest" value="Руслан"> Руслан</label>
             </section>
-
-            <input type="hidden" id="user-email" name="email">
+            <input type="email" name="email" id="email" placeholder="Введите ваш email">
             <button type="submit" class="vote-button" >Голосовать</button>
         </form>
           <div id="message" class="message" style="display: none;"></div>

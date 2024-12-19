@@ -100,7 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           }
         }
-        formData['email'] = localStorage.getItem('userEmail');
+        // formData['email'] = localStorage.getItem('userEmail');
+        formData['email'] = document.getElementById('email').value;
 
         console.log('Отправляемые данные:', JSON.stringify(formData));
 
