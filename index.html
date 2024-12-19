@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="background-overlay"></div>
@@ -27,7 +28,6 @@
     </header>
     <main class="container">
         <form id="voting-form" action="https://formspree.io/f/xkgnlvgv" method="POST">
-            <input type="hidden" name="_format" value="plain">
             <input type="hidden" name="_replyto" value="email">
             <section class="nomination" id="golden-ball">
                 <h2><i class="fas fa-futbol"></i> Золотой мяч</h2>

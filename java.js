@@ -28,18 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-      // Пользователь аутентифицирован
-      signInButton.style.display = 'none'; // Скрываем кнопку "Войти"
-      userNameElement.textContent = userName; // Показываем имя пользователя
-      userInfo.style.display = 'flex'; // Отображаем блок с информацией о пользователе
-      voteButton.disabled = false; // Разблокируем кнопку голосования
+      signInButton.style.display = 'none';
+      userNameElement.textContent = userName;
+      userInfo.style.display = 'flex';
+      voteButton.disabled = false;
     } else {
-      // Пользователь не аутентифицирован
-      voteButton.disabled = true; // Блокируем кнопку голосования
-      signInButton.style.display = 'block'; // Показываем кнопку "Войти"
-      userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
+      voteButton.disabled = true;
+      signInButton.style.display = 'block';
+      userInfo.style.display = 'none';
     }
-}
+  }
 
   function handleCredentialResponse(response) {
     const responsePayload = jwt_decode(response.credential);
@@ -48,25 +46,21 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Image URL: " + responsePayload.picture);
     console.log("Email: " + responsePayload.email);
 
-    // Сохраняем имя пользователя и email в localStorage
     localStorage.setItem('userName', responsePayload.name);
     localStorage.setItem('userEmail', responsePayload.email);
     userEmailInput.value = responsePayload.email;
-    // Проверяем аутентификацию и отображаем опрос
     checkAuthentication();
   }
 
-  // Инициализируем GIS после полной загрузки страницы и отрисовки кнопки "Войти"
   window.onload = function() {
-    // Проверяем, загрузилась ли библиотека GIS
     if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
       google.accounts.id.initialize({
-        client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com', // Твой Client ID
+        client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
         callback: handleCredentialResponse,
       });
       google.accounts.id.renderButton(
         signInButton,
-        { theme: "outline", size: "large" }  // customization attributes
+        { theme: "outline", size: "large" }
       );
     } else {
       console.error("Google Identity Services library is not loaded.");
@@ -74,12 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
     checkAuthentication();
   }
 
-  // Обработчик нажатия на кнопку выхода
   signOutButton.addEventListener('click', function() {
-      localStorage.clear(); // Очищаем localStorage
-      checkAuthentication(); // Проверяем аутентификацию
+      localStorage.clear();
+      checkAuthentication();
 
-      // Разблокируем кнопку голосования и меняем ее текст
       voteButton.disabled = false;
       voteButton.textContent = 'Голосовать';
   });
@@ -87,83 +79,96 @@ document.addEventListener('DOMContentLoaded', function () {
   votingForm.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    // Проверяем, авторизован ли пользователь
     if (!localStorage.getItem('userName')) {
-      // Если пользователь не авторизован
-      messageDiv.textContent = "Ошибка: пожалуйста, войдите в аккаунт, чтобы проголосовать.";
-      messageDiv.style.display = "block";
-      // Плавный скролл до auth-container
-      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+      messageDiv.textContent =
+        'Ошибка: пожалуйста, войдите в аккаунт, чтобы проголосовать.';
+      messageDiv.style.display = 'block';
+      document
+        .getElementById('auth-container')
+        .scrollIntoView({ behavior: 'smooth' });
       setTimeout(() => {
-        messageDiv.style.display = "none";
+        messageDiv.style.display = 'none';
       }, 5000);
-      return; // Прерываем отправку формы
+      return;
     }
 
-    // Проверяем, выбраны ли все номинации
     const nominations = document.querySelectorAll('.nomination');
     let valid = true;
     nominations.forEach(nomination => {
-      const checked = nomination.querySelectorAll('input[type="radio"]:checked');
+      const checked = nomination.querySelectorAll(
+        'input[type="radio"]:checked'
+      );
       if (checked.length !== 1) {
         valid = false;
-        messageDiv.textContent = "Ошибка: пожалуйста, выберите по одному варианту в каждой номинации.";
-        messageDiv.style.display = "block";
+        messageDiv.textContent =
+          'Ошибка: пожалуйста, выберите по одному варианту в каждой номинации.';
+        messageDiv.style.display = 'block';
         setTimeout(() => {
-          messageDiv.style.display = "none";
+          messageDiv.style.display = 'none';
         }, 5000);
       }
     });
 
-    if (!valid) return; // Прерываем отправку формы, если не все номинации выбраны
+    if (!valid) return;
 
-    // Меняем текст на кнопке
-    voteButton.textContent = "Отправка...";
+    voteButton.textContent = 'Отправка...';
     voteButton.disabled = true;
 
-    // Создаем объект FormData для сбора данных формы
-    const formData = new FormData(votingForm);
+    // Сбор данных формы вручную
+    const formData = {};
+    for (const element of votingForm.elements) {
+      if (element.name && element.type !== 'submit') {
+        if (element.type === 'radio' && element.checked) {
+          formData[element.name] = element.value;
+        } else if (element.type !== 'radio') {
+          formData[element.name] = element.value;
+        }
+      }
+    }
+    formData['email'] = localStorage.getItem('userEmail');
 
-    // Отправляем данные формы с помощью Fetch API
+    console.log('Отправляемые данные:', JSON.stringify(formData));
+
     fetch(votingForm.action, {
       method: 'POST',
       headers: {
-          'Accept': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: formData,
+      body: JSON.stringify(formData),
     })
-    .then(response => {
-      if (response.ok) {
-        return response.text(); // Получаем текстовый ответ
-      } else {
-        throw new Error('Произошла ошибка при отправке формы.');
-      }
-    })
-    .then(responseText => {
-      console.log(responseText); // Выводим ответ в консоль
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          if (response.status === 422) {
+            throw new Error('Вы уже голосовали.');
+          } else {
+            throw new Error('Произошла ошибка при отправке формы.');
+          }
+        }
+      })
+      .then(responseText => {
+        console.log(responseText);
 
-      // Показываем сообщение об успехе
-      messageDiv.textContent = "Спасибо за ваш голос!";
-      messageDiv.style.display = "block";
+        messageDiv.textContent = 'Спасибо за ваш голос!';
+        messageDiv.style.display = 'block';
 
-      // Очищаем форму
-      votingForm.reset();
+        votingForm.reset();
 
-      // Скрываем сообщение об успехе через 5 секунд
-      setTimeout(() => {
-        messageDiv.style.display = "none";
-      }, 5000);
-    })
-    .catch(error => {
-      console.error('Ошибка:', error);
-      messageDiv.textContent = "Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.";
-      messageDiv.style.display = "block";
-    })
-    .finally(() => {
-      // Возвращаем исходный текст на кнопке и разблокируем ее
-      voteButton.textContent = "Голосовать";
-      voteButton.disabled = false;
-    });
+        setTimeout(() => {
+          messageDiv.style.display = 'none';
+        }, 5000);
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        messageDiv.textContent = error.message;
+        messageDiv.style.display = 'block';
+      })
+      .finally(() => {
+        voteButton.textContent = 'Голосовать';
+        voteButton.disabled = false;
+      });
   });
 
   const button = document.querySelector('button.vote-button');
