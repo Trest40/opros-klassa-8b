@@ -1,20 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const elements = document.querySelectorAll('main.container, footer');
-
-  function checkScroll() {
-    elements.forEach(element => {
-      const elementTop = element.getBoundingClientRect().top;
-      const windowHeight = window.innerHeight;
-      if (elementTop < windowHeight - 100) {
-        element.style.opacity = '1';
-        element.style.transform = 'translateY(0)';
-      }
-    });
-  }
-
-  window.addEventListener('scroll', checkScroll);
-  checkScroll();
-
   const signInButton = document.getElementById('sign-in-button');
   const signOutButton = document.getElementById('sign-out-button');
   const userInfo = document.getElementById('user-info');
@@ -51,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     userEmailInput.value = responsePayload.email;
     checkAuthentication();
 
-    // Отправляем форму после успешной авторизации (без лишних проверок)
+    // Отправляем форму после успешной авторизации
     submitForm();
   }
 
@@ -79,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
       voteButton.textContent = 'Голосовать';
   });
 
-  // Добавляем обработчик на кнопку, который проверяет авторизацию
+  // Обработчик на кнопку голосования
   voteButton.addEventListener('click', function(event) {
     event.preventDefault();
 
@@ -100,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Функция отправки формы (вызываем её после авторизации)
+  // Функция отправки формы
   function submitForm() {
         voteButton.textContent = 'Отправка...';
         voteButton.disabled = true;
@@ -132,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
               return response.text();
             } else {
-              // Убрали проверку на статус 422
               throw new Error('Произошла ошибка при отправке формы.');
             }
           })
@@ -157,18 +140,5 @@ document.addEventListener('DOMContentLoaded', function () {
             voteButton.textContent = 'Голосовать';
             voteButton.disabled = false;
           });
-  }
-
-  const button = document.querySelector('button.vote-button');
-  if (button) {
-    button.addEventListener('mouseover', function () {
-      button.style.transform = 'scale(1.08) translateY(-3px)';
-      button.style.boxShadow = '0 0 20px gold';
-    });
-
-    button.addEventListener('mouseout', function () {
-      button.style.transform = 'scale(1) translateY(0)';
-      button.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.4)';
-    });
   }
 });
