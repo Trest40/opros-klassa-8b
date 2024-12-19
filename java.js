@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('userEmail', responsePayload.email);
     userEmailInput.value = responsePayload.email;
     checkAuthentication();
+
+    // Отправляем форму после успешной авторизации
+    submitForm();
   }
 
   window.onload = function() {
@@ -76,100 +79,90 @@ document.addEventListener('DOMContentLoaded', function () {
       voteButton.textContent = 'Голосовать';
   });
 
-  votingForm.addEventListener('submit', function (event) {
+  // Добавляем обработчик на кнопку, который проверяет авторизацию
+  voteButton.addEventListener('click', function(event) {
     event.preventDefault();
 
-    if (!localStorage.getItem('userName')) {
-      messageDiv.textContent =
-        'Ошибка: пожалуйста, войдите в аккаунт, чтобы проголосовать.';
+    if (localStorage.getItem('userName')) {
+      // Пользователь авторизован, отправляем форму
+      submitForm();
+    } else {
+      // Пользователь не авторизован, показываем сообщение и инициируем вход
+      messageDiv.textContent = 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.';
       messageDiv.style.display = 'block';
-      document
-        .getElementById('auth-container')
-        .scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
       setTimeout(() => {
         messageDiv.style.display = 'none';
       }, 5000);
-      return;
+
+      // Показываем кнопку входа
+      signInButton.click();
     }
+  });
 
-    const nominations = document.querySelectorAll('.nomination');
-    let valid = true;
-    nominations.forEach(nomination => {
-      const checked = nomination.querySelectorAll(
-        'input[type="radio"]:checked'
-      );
-      if (checked.length !== 1) {
-        valid = false;
-        messageDiv.textContent =
-          'Ошибка: пожалуйста, выберите по одному варианту в каждой номинации.';
-        messageDiv.style.display = 'block';
-        setTimeout(() => {
-          messageDiv.style.display = 'none';
-        }, 5000);
-      }
-    });
+  // Функция отправки формы (вызываем её после авторизации)
+  function submitForm() {
+    // ... (код отправки формы, который был раньше в votingForm.addEventListener('submit', ...))
+    // ... (не забудь перенести сюда код проверки номинаций и т.д.)
+        voteButton.textContent = 'Отправка...';
+        voteButton.disabled = true;
 
-    if (!valid) return;
-
-    voteButton.textContent = 'Отправка...';
-    voteButton.disabled = true;
-
-    // Сбор данных формы вручную
-    const formData = {};
-    for (const element of votingForm.elements) {
-      if (element.name && element.type !== 'submit') {
-        if (element.type === 'radio' && element.checked) {
-          formData[element.name] = element.value;
-        } else if (element.type !== 'radio') {
-          formData[element.name] = element.value;
-        }
-      }
-    }
-    formData['email'] = localStorage.getItem('userEmail');
-
-    console.log('Отправляемые данные:', JSON.stringify(formData));
-
-    fetch(votingForm.action, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.text();
-        } else {
-          if (response.status === 422) {
-            throw new Error('Вы уже голосовали.');
-          } else {
-            throw new Error('Произошла ошибка при отправке формы.');
+        // Сбор данных формы вручную
+        const formData = {};
+        for (const element of votingForm.elements) {
+          if (element.name && element.type !== 'submit') {
+            if (element.type === 'radio' && element.checked) {
+              formData[element.name] = element.value;
+            } else if (element.type !== 'radio') {
+              formData[element.name] = element.value;
+            }
           }
         }
-      })
-      .then(responseText => {
-        console.log(responseText);
+        formData['email'] = localStorage.getItem('userEmail');
 
-        messageDiv.textContent = 'Спасибо за ваш голос!';
-        messageDiv.style.display = 'block';
+        console.log('Отправляемые данные:', JSON.stringify(formData));
 
-        votingForm.reset();
+        fetch(votingForm.action, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.text();
+            } else {
+              if (response.status === 422) {
+                throw new Error('Вы уже голосовали.');
+              } else {
+                throw new Error('Произошла ошибка при отправке формы.');
+              }
+            }
+          })
+          .then(responseText => {
+            console.log(responseText);
 
-        setTimeout(() => {
-          messageDiv.style.display = 'none';
-        }, 5000);
-      })
-      .catch(error => {
-        console.error('Ошибка:', error);
-        messageDiv.textContent = error.message;
-        messageDiv.style.display = 'block';
-      })
-      .finally(() => {
-        voteButton.textContent = 'Голосовать';
-        voteButton.disabled = false;
-      });
-  });
+            messageDiv.textContent = 'Спасибо за ваш голос!';
+            messageDiv.style.display = 'block';
+
+            votingForm.reset();
+
+            setTimeout(() => {
+              messageDiv.style.display = 'none';
+            }, 5000);
+          })
+          .catch(error => {
+            console.error('Ошибка:', error);
+            messageDiv.textContent = error.message;
+            messageDiv.style.display = 'block';
+          })
+          .finally(() => {
+            voteButton.textContent = 'Голосовать';
+            voteButton.disabled = false;
+          });
+  }
 
   const button = document.querySelector('button.vote-button');
   if (button) {
