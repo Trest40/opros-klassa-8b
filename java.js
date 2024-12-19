@@ -44,13 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   window.onload = function() {
-    // Проверяем, есть ли уже сохраненное имя пользователя
     const storedUserName = localStorage.getItem('userName');
     if (storedUserName) {
-      // Если есть, сразу проверяем аутентификацию и не показываем кнопку входа
       checkAuthentication();
     } else {
-      // Если нет, инициализируем Google вход
       if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
         google.accounts.id.initialize({
           client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
