@@ -52,7 +52,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('Dv9E.gif') no-repeat center center fixed; // Замените 'Dv9E.gif' на путь к вашему GIF, если он отличается
+    background: url('Dv9E.gif') no-repeat center center fixed;
     background-size: cover;
     opacity: 0.3;
     z-index: -1;
@@ -63,7 +63,6 @@ header {
     opacity: 0;
     transform: translateY(50px);
     @include transition-all;
-
     h1 {
         font-size: 3rem;
         font-weight: 700;
@@ -74,110 +73,41 @@ header {
         letter-spacing: 2px;
         text-transform: uppercase;
     }
-
     p {
         font-size: 1.2rem;
         color: $text-color-light;
     }
 }
-.header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-#auth-container {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-}
-.google-button {
-    display: none;
-}
-
-#sign-in-button {
-    background: linear-gradient(to right, #ffcc00, $primary-color);
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #000;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    @include transition-all;
-    box-shadow: $button-shadow;
-    margin-right: 10px;
-    display: block;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-
-    &:hover {
-        background: $primary-color;
-        transform: scale(1.05) translateY(-3px);
-        box-shadow: $button-hover;
-    }
-}
-
-#user-info {
-    display: flex;
-    align-items: center;
-    color: $primary-color;
-    flex-direction: column;
-}
-
-#user-name {
-    margin-right: 0;
-    margin-bottom: 5px;
-}
-
-#sign-out-button {
-    background: linear-gradient(to right, #ffcc00, $primary-color);
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #000;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    @include transition-all;
-    box-shadow: $button-shadow;
-    margin-right: 10px;
-}
 
 main.container {
     @include default-box;
     width: 90%;
-    max-width: 1200px;
+    max-width: 1200px; // Увеличил максимальную ширину
     opacity: 0;
     transform: translateY(50px);
     @include transition-all;
-
     form {
         width: 100%;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         grid-gap: 20px;
     }
-
     .nomination {
         @include default-box;
         padding: 20px;
-
         h2 {
             font-size: 1.8rem;
             color: #ffdb58;
             text-shadow: 0 0 8px $primary-color;
             margin-bottom: 20px;
             font-weight: 700;
-            @include flex-center;
-
+            display: flex;
+            align-items: center;
+            justify-content: center;
             i {
                 margin-right: 10px;
             }
         }
-
         label {
             display: block;
             margin: 10px 0;
@@ -185,6 +115,7 @@ main.container {
             text-align: left;
             padding-left: 20px;
             color: #fff;
+
         }
     }
 }
@@ -197,7 +128,7 @@ input[type="radio"] {
 }
 
 button.vote-button {
-    background: linear-gradient(to right, #ffcc00, $primary-color);
+     background: linear-gradient(to right, #ffcc00, $primary-color);
     border: none;
     padding: 18px 45px;
     margin-top: 30px;
@@ -213,7 +144,6 @@ button.vote-button {
     display: block;
     margin-left: auto;
     margin-right: auto;
-
     &:hover {
         background: $primary-color;
         transform: scale(1.05) translateY(-3px);
@@ -231,64 +161,8 @@ footer {
 }
 
 .message {
-    color: $primary-color;
+     color: #ffd700;
     font-size: 1.2rem;
     margin-top: 15px;
-    @include center;
-}
-// Медиа-запросы для адаптивности
-@media (max-width: 768px) {
-    header {
-        h1 {
-            font-size: 1.8rem;
-        }
-
-        p {
-            font-size: 0.9rem;
-        }
-    }
-
-    main.container {
-        .nomination {
-            h2 {
-                font-size: 1.3rem;
-            }
-
-            label {
-                font-size: 0.9rem;
-            }
-        }
-    }
-
-    .google-button,
-    #sign-out-button,
-    #sign-in-button {
-        font-size: 0.9rem;
-    }
-}
-
-@keyframes shake {
-    0% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-10px);
-    }
-
-    50% {
-        transform: translateX(10px);
-    }
-
-    75% {
-        transform: translateX(-10px);
-    }
-
-    100% {
-        transform: translateX(0);
-    }
-}
-
-.shake {
-    animation: shake 0.3s;
+     text-align: center;
 }

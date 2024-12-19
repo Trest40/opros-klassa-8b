@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const elements = document.querySelectorAll('footer');
+  const elements = document.querySelectorAll('main.container, footer');
 
   function checkScroll() {
     elements.forEach(element => {
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const votingForm = document.getElementById('voting-form');
   const messageDiv = document.getElementById('message');
   const voteButton = document.querySelector('.vote-button');
-  const userEmailInput = document.getElementById('user-email');
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
@@ -47,10 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Image URL: " + responsePayload.picture);
     console.log("Email: " + responsePayload.email);
 
-    // Сохраняем имя пользователя и email в localStorage
+    // Сохраняем имя пользователя в localStorage
     localStorage.setItem('userName', responsePayload.name);
-    localStorage.setItem('userEmail', responsePayload.email);
-    userEmailInput.value = responsePayload.email;
     // Проверяем аутентификацию и отображаем опрос
     checkAuthentication();
   }
@@ -80,68 +77,18 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   votingForm.addEventListener('submit', function (event) {
+    event.preventDefault();
     if (voteButton.disabled) {
       // Если кнопка голосования заблокирована
-      event.preventDefault();
       document.body.classList.add('shake'); // Трясем всю страницу
       setTimeout(() => {
         document.body.classList.remove('shake'); // Убираем класс тряски через 300 мс
       }, 300);
-      // Переход на плашку входа
-      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
       return; // Прерываем отправку формы
     }
 
-    // Меняем текст на кнопке
-    voteButton.textContent = "Отправка...";
-    voteButton.disabled = true;
-
-    // Создаем объект FormData для сбора данных формы
-    const formData = new FormData(votingForm);
-
-    // Добавляем email пользователя в данные формы
-    formData.append('email', localStorage.getItem('userEmail'));
-
-    // Отправляем данные формы с помощью Fetch API
-    fetch(votingForm.action, {
-      method: 'POST',
-      body: formData,
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.text(); // Получаем текстовый ответ
-      } else {
-        throw new Error('Произошла ошибка при отправке формы.');
-      }
-    })
-    .then(responseText => {
-      console.log(responseText); // Выводим ответ в консоль
-
-      // Показываем сообщение об успехе
-      messageDiv.textContent = "Спасибо за ваш голос!";
-      messageDiv.style.display = "block";
-
-      // Очищаем форму
-      votingForm.reset();
-
-      // Скрываем сообщение об успехе через 5 секунд
-      setTimeout(() => {
-        messageDiv.style.display = "none";
-      }, 5000);
-    })
-    .catch(error => {
-      console.error('Ошибка:', error);
-      messageDiv.textContent = "Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.";
-      messageDiv.style.display = "block";
-    })
-    .finally(() => {
-      // Возвращаем исходный текст на кнопке и разблокируем ее
-      voteButton.textContent = "Голосовать";
-      voteButton.disabled = false;
-    });
-
-    // Предотвращаем стандартное поведение формы
-    event.preventDefault();
+    // Здесь логика отправки данных опроса
+    // ...
   });
 
   const button = document.querySelector('button.vote-button');
