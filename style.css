@@ -17,18 +17,18 @@ body {
   background: url("Dv9E.gif") no-repeat center center fixed;
   background-size: cover;
   opacity: 0.3;
-  z-index: 1; /* Исправлено */
+  z-index: 1;
 }
 
 header {
     text-align: center;
     transition: all 0.3s ease;
-    z-index: 2; /* Добавлено */
+    z-index: 2;
 }
 
 .header-container {
     display: flex;
-    flex-direction: column; /* Элементы друг под другом на мобильных */
+    flex-direction: column;
     align-items: center;
     padding: 10px 20px;
 }
@@ -37,7 +37,7 @@ header {
   display: flex;
   align-items: center;
   margin-top: 10px;
-  z-index: 2; /* Добавлено */
+  z-index: 2;
 }
 
 .google-button {
@@ -76,7 +76,7 @@ header {
 }
 
 #user-name {
-  margin-right: 0; /* Убираем отступ на мобильных */
+  margin-right: 0;
   margin-bottom: 5px;
 }
 
@@ -95,7 +95,7 @@ header {
 }
 
 header h1 {
-  font-size: 2rem; /* Уменьшаем размер на мобильных */
+  font-size: 2rem;
   font-weight: 700;
   text-shadow: 3px 3px 10px #ffd700;
   color: #ffd700;
@@ -106,7 +106,7 @@ header h1 {
 }
 
 header p {
-  font-size: 1rem; /* Уменьшаем размер на мобильных */
+  font-size: 1rem;
   color: #aaa;
 }
 
@@ -119,10 +119,7 @@ main.container {
   transition: all 0.3s ease;
   width: 90%;
   max-width: 1200px;
-  /* opacity: 0; */  /* Удалено */
-  /* transform: translateY(50px); */  /* Удалено */
-  /* transition: all 0.3s ease; */
-  z-index: 2; /* Добавлено */
+  z-index: 2;
 }
 
 main.container:hover {
@@ -133,7 +130,7 @@ main.container:hover {
 main.container form {
   width: 100%;
   display: flex;
-  flex-direction: column; /* Номинации друг под другом на мобильных */
+  flex-direction: column;
   grid-gap: 20px;
 }
 
@@ -141,10 +138,10 @@ main.container .nomination {
   background: rgba(20, 20, 20, 0.9);
   border-radius: 15px;
   padding: 20px;
-  margin: 20px 0; /* Уменьшаем отступ сверху и снизу */
+  margin: 20px 0;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
   transition: all 0.3s ease;
-  z-index: 2; /* Добавлено */
+  z-index: 2;
 }
 
 main.container .nomination:hover {
@@ -153,10 +150,10 @@ main.container .nomination:hover {
 }
 
 main.container .nomination h2 {
-  font-size: 1.5rem; /* Уменьшаем размер на мобильных */
+  font-size: 1.5rem;
   color: #ffdb58;
   text-shadow: 0 0 8px #ffd700;
-  margin-bottom: 10px; /* Уменьшаем отступ */
+  margin-bottom: 10px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -164,21 +161,22 @@ main.container .nomination h2 {
 }
 
 main.container .nomination h2 i {
-  margin-right: 5px; /* Уменьшаем отступ */
+  margin-right: 5px;
 }
 
 main.container .nomination label {
   display: block;
   margin: 10px 0;
-  font-size: 1rem; /* Уменьшаем размер на мобильных */
+  font-size: 1rem;
   text-align: left;
   padding-left: 20px;
   color: #fff;
+  z-index: 3; /* Добавлено */
 }
 
 input[type=radio] {
-  transform: scale(1.2); /* Немного уменьшаем размер */
-  margin-right: 10px; /* Уменьшаем отступ */
+  transform: scale(1.2);
+  margin-right: 10px;
   accent-color: #ffd700;
   cursor: pointer;
 }
@@ -186,9 +184,9 @@ input[type=radio] {
 button.vote-button {
   background: linear-gradient(to right, #ffcc00, #ffd700);
   border: none;
-  padding: 15px 30px; /* Уменьшаем отступы */
-  margin-top: 20px; /* Уменьшаем отступ */
-  font-size: 1.2rem; /* Уменьшаем размер */
+  padding: 15px 30px;
+  margin-top: 20px;
+  font-size: 1.2rem;
   color: #000;
   border-radius: 35px;
   font-weight: bold;
@@ -198,7 +196,7 @@ button.vote-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  z-index: 2; /* Добавлено */
+  z-index: 2;
 }
 
 button.vote-button:hover {
@@ -208,18 +206,16 @@ button.vote-button:hover {
 }
 
 footer {
-  margin-top: 30px; /* Уменьшаем отступ */
+  margin-top: 30px;
   color: #aaa;
-  font-size: 1rem; /* Уменьшаем размер на мобильных */
-  /* opacity: 0; */ /* Удалено */
-  /* transform: translateY(50px); */ /* Удалено */
+  font-size: 1rem;
   transition: all 0.3s ease;
-  z-index: 2; /* Добавлено */
+  z-index: 2;
 }
 
 .message {
   color: #ffd700;
-  font-size: 1rem; /* Уменьшаем размер на мобильных */
+  font-size: 1rem;
   margin-top: 15px;
   text-align: center;
 }
@@ -227,19 +223,19 @@ footer {
 /* Медиа-запросы для адаптивности */
 @media (max-width: 768px) {
   header h1 {
-    font-size: 1.8rem; /* Еще уменьшаем на маленьких экранах */
+    font-size: 1.8rem;
   }
 
   header p {
-    font-size: 0.9rem; /* Еще уменьшаем на маленьких экранах */
+    font-size: 0.9rem;
   }
 
   main.container .nomination h2 {
-    font-size: 1.3rem; /* Еще уменьшаем на маленьких экранах */
+    font-size: 1.3rem;
   }
 
   main.container .nomination label {
-    font-size: 0.9rem; /* Еще уменьшаем на маленьких экранах */
+    font-size: 0.9rem;
   }
 
   .google-button,
