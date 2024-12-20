@@ -55,13 +55,13 @@ body {
     background: url('Dv9E.gif') no-repeat center center fixed;
     background-size: cover;
     opacity: 0.3;
-    z-index: 1;  // Исправлено: z-index установлен в 1
+    z-index: 1;
 }
 
 header {
     @include center;
     @include transition-all;
-    z-index: 2; // Исправлено: Добавлен z-index для header
+    z-index: 2;
 
     h1 {
         font-size: 3rem;
@@ -94,7 +94,7 @@ header {
     display: flex;
     align-items: center;
     margin-top: 10px;
-    z-index: 2; // Исправлено: Добавлен z-index для auth-container
+    z-index: 2;
 }
 
 .google-button {
@@ -155,8 +155,7 @@ main.container {
     @include default-box;
     width: 90%;
     max-width: 1200px;
-    @include transition-all;
-     z-index: 2; // Исправлено: Добавлен z-index для main.container
+    z-index: 2;
     form {
         width: 100%;
         display: grid;
@@ -220,7 +219,7 @@ button.vote-button {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    z-index: 2; // Исправлено: Добавлен z-index для кнопки
+    z-index: 2;
 
     &:hover {
         background: $primary-color;
@@ -236,7 +235,7 @@ footer {
     @include transition-all;
     background: none;
     box-shadow: none;
-    z-index: 2; // Исправлено: Добавлен z-index для footer
+    z-index: 2;
     &:hover{
       box-shadow: none;
       transform: none;
@@ -248,12 +247,11 @@ footer {
     font-size: 1.2rem;
     margin-top: 15px;
     @include center;
-    z-index: 2; // Исправлено: Добавлен z-index для message
+    z-index: 2;
 }
 
 // Медиа-запросы для адаптивности
 @media (max-width: 768px) {
-  // Animation removed here.
     header {
         h1 {
             font-size: 1.8rem;
@@ -296,7 +294,6 @@ footer {
         margin: 0;
       }
     }
-    // Стили для меньших экранов
     button.vote-button{
       font-size: 1.2rem;
     }
