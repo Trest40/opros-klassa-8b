@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(responseText);
             // Проверяем флаг
             if (!formSubmitted) {
-                console.log('Спасибо за ваш голос!'); // Вместо alert()
+                alert('Спасибо за ваш голос!');
                 formSubmitted = true; // Устанавливаем флаг
             }
 
