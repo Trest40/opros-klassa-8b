@@ -1,4 +1,3 @@
-// script.js
 function initializeGoogleSignIn() {
   return new Promise((resolve) => {
     const script = document.createElement('script');
@@ -22,6 +21,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   const votingForm = document.getElementById('voting-form');
   const voteButton = document.querySelector('.vote-button');
 
+  // Добавляем класс animate-fade-in для анимации появления
+  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
+  elementsToAnimate.forEach(element => {
+    element.classList.add('animate-fade-in');
+  });
+
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
 
@@ -41,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const responsePayload = jwt_decode(response.credential);
     console.log("ID: " + responsePayload.sub);
     console.log('Full Name: ' + responsePayload.name);
+    console.log('Full Name: " + responsePayload.name);
     console.log("Image URL: " + responsePayload.picture);
     console.log("Email: " + responsePayload.email);
 
@@ -68,7 +74,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     localStorage.clear();
     checkAuthentication();
     voteButton.disabled = false;
-    voteButton.textContent = 'Голосовать / Voter';
+    voteButton.querySelector('span').textContent = 'Голосовать / Voter';
+    voteButton.textContent = 'Голосовать';
   });
 
   voteButton.addEventListener('click', function (event) {
@@ -79,11 +86,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     } else {
       alert('Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
       document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+      signInButton.click(); // Исправлено: убираем .click()
       signInButton.click();
     }
   });
 
   function submitForm() {
+    voteButton.querySelector('span').textContent = 'Отправка...'; // Добавлено: изменяем текст внутри span
     voteButton.textContent = 'Отправка...';
     voteButton.disabled = true;
     let formSubmitted = false;
@@ -130,10 +139,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert(error.message);
       })
       .finally(() => {
-        voteButton.textContent = 'Голосовать / Voter';
+        voteButton.querySelector('span').textContent = 'Голосовать / Voter'; // Добавлено: изменяем текст внутри span
         voteButton.disabled = false;
       });
   }
+  // Инициализация Rellax (если используется)
+  var rellax = new Rellax('.rellax');
+  // Инициализация tsParticles
   tsParticles.load("tsparticles", {
         "fullScreen": {
             "enable": true,
