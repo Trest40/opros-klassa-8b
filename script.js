@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', async function () {
-  const signInButton = document.getElementById('sign-in-button');
+document.addEventListener('DOMContentLoaded', function () {
   const signOutButton = document.getElementById('sign-out-button');
   const userInfo = document.getElementById('user-info');
   const userNameElement = document.getElementById('user-name');
@@ -16,18 +15,18 @@ document.addEventListener('DOMContentLoaded', async function () {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-      signInButton.style.display = 'none';
+      //signInButton.style.display = 'none';
       userNameElement.textContent = userName;
       userInfo.style.display = 'flex';
       voteButton.disabled = false;
     } else {
       voteButton.disabled = true;
-      signInButton.style.display = 'block'; // Показывать кнопку, если не авторизован
+      //signInButton.style.display = 'block'; // Показывать кнопку, если не авторизован
       userInfo.style.display = 'none';
     }
   }
 
-  function handleCredentialResponse(response) {
+  window.handleCredentialResponse = (response) => {
     try {
       const responsePayload = jwt_decode(response.credential);
       console.log("ID: " + responsePayload.sub);
@@ -41,28 +40,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) {
       console.error("Error decoding or storing credentials:", error);
     }
-  }
-
-  // Инициализация Google Sign-In
-  if (window.google && window.google.accounts && window.google.accounts.id) {
-    google.accounts.id.initialize({
-      client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
-      callback: handleCredentialResponse,
-      moment: (notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          signInButton.style.display = 'block';
-        }
-      }
-    });
-
-    google.accounts.id.renderButton(
-      signInButton,
-      { theme: "outline", size: "large" }
-    );
-
-    checkAuthentication();
-  } else {
-    console.error("Google Identity Services library failed to load.");
   }
 
   signOutButton.addEventListener('click', function () {
