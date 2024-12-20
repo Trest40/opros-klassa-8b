@@ -44,17 +44,10 @@ body {
   @include center;
   padding-bottom: 50px;
   overflow-x: hidden;
-  // Добавляем фон для body:
-  background: linear-gradient(to bottom, #2e2248, #5e4588); /* Пример градиента */
-}
-
-.background-container{
-  position: relative;
-  z-index: 2;
 }
 
 .background-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -162,6 +155,7 @@ main.container {
   @include default-box;
   width: 90%;
   max-width: 1200px;
+  z-index: 2; // Поверх фона
   form {
     width: 100%;
     display: grid;
@@ -260,6 +254,9 @@ footer {
 
 // Медиа-запросы для адаптивности
 @media (max-width: 768px) {
+    .background-overlay {
+    background-attachment: scroll; /* Или попробуйте local */
+  }
   header {
     h1 {
       font-size: 1.8rem;
