@@ -39,11 +39,12 @@ $main-font: 'Montserrat', sans-serif;
 body {
   margin: 0;
   font-family: $main-font;
-  background-color: $background-dark;
   color: #fff;
   @include center;
   padding-bottom: 50px;
   overflow-x: hidden;
+  // Добавляем фон для body:
+  background: rgba(20, 20, 20, 0.9);
 }
 
 .background-overlay {
@@ -254,9 +255,6 @@ footer {
 
 // Медиа-запросы для адаптивности
 @media (max-width: 768px) {
-    .background-overlay {
-    background-attachment: scroll; /* Или попробуйте local */
-  }
   header {
     h1 {
       font-size: 1.8rem;
