@@ -37,8 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   window.onload = function() {
-    const checkGoogleApi = () => {
+    let googleApiInterval = setInterval(() => {
       if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        clearInterval(googleApiInterval); // Останавливаем интервал
         google.accounts.id.initialize({
           client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
           callback: handleCredentialResponse,
@@ -49,10 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
         );
       } else {
         console.error("Google Identity Services library is not loaded.");
-        setTimeout(checkGoogleApi, 100); // Check again after 100ms
       }
-    }
-    checkGoogleApi();
+    }, 100); // Проверяем каждые 100ms
     checkAuthentication();
   }
 

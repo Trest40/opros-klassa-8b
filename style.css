@@ -17,27 +17,27 @@ body {
   background: url("Dv9E.gif") no-repeat center center fixed;
   background-size: cover;
   opacity: 0.3;
-  z-index: 1;
+  z-index: 1; /* Фон */
 }
 
 header {
-    text-align: center;
-    transition: all 0.3s ease;
-    z-index: 2;
+  text-align: center;
+  transition: all 0.3s ease;
+  z-index: 3; /* Поверх фона и контейнера */
 }
 
 .header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
 }
 
 #auth-container {
   display: flex;
   align-items: center;
   margin-top: 10px;
-  z-index: 2;
+  z-index: 3; /* Поверх фона и контейнера */
 }
 
 .google-button {
@@ -119,7 +119,7 @@ main.container {
   transition: all 0.3s ease;
   width: 90%;
   max-width: 1200px;
-  z-index: 2;
+  z-index: 2; /* Поверх фона */
 }
 
 main.container:hover {
@@ -141,7 +141,7 @@ main.container .nomination {
   margin: 20px 0;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
   transition: all 0.3s ease;
-  z-index: 2;
+  z-index: 2; /* Поверх фона */
 }
 
 main.container .nomination:hover {
@@ -171,7 +171,8 @@ main.container .nomination label {
   text-align: left;
   padding-left: 20px;
   color: #fff;
-  z-index: 3; /* Добавлено */
+  z-index: 3; /* Поверх всего в секции */
+  pointer-events: auto; /* Явно указываем, что label кликабельны */
 }
 
 input[type=radio] {
@@ -179,6 +180,7 @@ input[type=radio] {
   margin-right: 10px;
   accent-color: #ffd700;
   cursor: pointer;
+  pointer-events: auto; /* Явно указываем, что радио-кнопки кликабельны */
 }
 
 button.vote-button {
@@ -196,7 +198,7 @@ button.vote-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  z-index: 2;
+  z-index: 3; /* Поверх всего */
 }
 
 button.vote-button:hover {
@@ -210,7 +212,7 @@ footer {
   color: #aaa;
   font-size: 1rem;
   transition: all 0.3s ease;
-  z-index: 2;
+  z-index: 3; /* Поверх фона и контейнера */
 }
 
 .message {
