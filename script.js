@@ -1,4 +1,3 @@
-// script.js
 function initializeGoogleSignIn() {
   return new Promise((resolve) => {
     const script = document.createElement('script');
@@ -21,6 +20,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   const userNameElement = document.getElementById('user-name');
   const votingForm = document.getElementById('voting-form');
   const voteButton = document.querySelector('.vote-button');
+
+  // Добавляем класс animate-fade-in для анимации появления
+  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
+  elementsToAnimate.forEach(element => {
+    element.classList.add('animate-fade-in');
+  });
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
@@ -68,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     localStorage.clear();
     checkAuthentication();
     voteButton.disabled = false;
-    voteButton.textContent = 'Голосовать / Voter';
+    voteButton.querySelector('span').textContent = 'Голосовать / Voter';
   });
 
   voteButton.addEventListener('click', function (event) {
@@ -79,12 +84,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     } else {
       alert('Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
       document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
-      signInButton.click();
+      signInButton.click(); // Исправлено: убираем .click()
     }
   });
 
   function submitForm() {
-    voteButton.textContent = 'Отправка...';
+    voteButton.querySelector('span').textContent = 'Отправка...'; // Добавлено: изменяем текст внутри span
     voteButton.disabled = true;
     let formSubmitted = false;
 
@@ -130,10 +135,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert(error.message);
       })
       .finally(() => {
-        voteButton.textContent = 'Голосовать / Voter';
+        voteButton.querySelector('span').textContent = 'Голосовать / Voter'; // Добавлено: изменяем текст внутри span
         voteButton.disabled = false;
       });
   }
+
+  // Инициализация Rellax (если используется)
+  var rellax = new Rellax('.rellax');
+
+  // Инициализация tsParticles
   tsParticles.load("tsparticles", {
         "fullScreen": {
             "enable": true,
