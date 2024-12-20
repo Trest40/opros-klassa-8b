@@ -58,9 +58,9 @@ header {
   @include transition-all;
   z-index: 3;
   padding: 20px;
-  position: sticky; // Добавил sticky позиционирование
-  top: 0; // Добавил
-  background-color: $background-dark; // Добавил фон
+  position: sticky;
+  top: 0;
+  background-color: $background-dark;
 
   .header-container {
     display: flex;
@@ -84,7 +84,7 @@ header {
   }
 
   .glow {
-    animation: glow 3s ease-in-out infinite alternate; // Изменил время анимации
+    animation: glow 3s ease-in-out infinite alternate;
   }
 
   @keyframes glow {
@@ -253,13 +253,12 @@ main.container {
       color: #fff;
       cursor: pointer;
       @include transition-all;
-      @include hover-effect; // Используем миксин для hover эффекта
+      @include hover-effect;
       .candidate-name {
         margin-left: 5px;
       }
     }
 
-    // Добавил стили для fieldset и legend
     fieldset {
       border: none;
       padding: 0;

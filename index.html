@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
-    <script src="rellax.min.js"></script> <link rel="stylesheet" href="style.css">
+    <script src="rellax.min.js"></script>
+    <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
 </head>
 <body>
@@ -26,7 +27,9 @@
         </div>
         <p class="subtitle">Выберите лучшего в каждой номинации!</p>
     </header>
-  <div id="vote-message"></div>
+
+    <div id="vote-message"></div>
+
     <main class="container">
       <form id="voting-form" action="https://formspree.io/f/myzyrkrv" method="POST">
         <section class="nomination animate-fade-in" id="golden-ball">
@@ -60,4 +63,7 @@
             <div class="glare-inner"></div>
         </div>
          <fieldset>
-           <legend><i class="fas fa-clock icon"></i> <span class="text-gold">Босс опозданий</span>
+           <legend><i class="fas fa-clock icon"></i> <span class="text-gold">Босс опозданий</span></legend>
+           <div><label><input type="radio" name="late_boss" value="Даниил" required> <span class="candidate-name">Даниил</span></label></div>
+           <div><label><input type="radio" name="late_boss" value="Асель" required> <span class="candidate-name">Асель</span></label></div>
+           <div><label><input type="radio" name="late_boss" value="

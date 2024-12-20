@@ -1,18 +1,20 @@
 function initializeGoogleSignIn() {
-  return new Promise((resolve, reject) => { // Добавил reject для обработки ошибок
+  return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
     script.defer = true;
     script.onload = () => {
+      console.log("Google Identity Services library loaded."); // Лог об успешной загрузке
       if (google && google.accounts && google.accounts.id) {
         resolve();
       } else {
-        console.error("Google Identity Services library failed to load.");
-        reject("Google Identity Services library failed to load."); // Добавил reject
+        console.error("Google Identity Services library failed to initialize.");
+        reject("Google Identity Services library failed to initialize.");
       }
     };
     script.onerror = () => {
+      console.error("Error loading Google Identity Services library.");
       reject("Error loading Google Identity Services library.");
     };
     document.head.appendChild(script);
@@ -26,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const userNameElement = document.getElementById('user-name');
   const votingForm = document.getElementById('voting-form');
   const voteButton = document.querySelector('.vote-button');
-  const voteMessage = document.getElementById('vote-message'); // Добавил элемент для сообщений
+  const voteMessage = document.getElementById('vote-message');
 
   // Добавляем класс animate-fade-in для анимации появления
   const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
@@ -36,14 +38,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
-    const userEmail = localStorage.getItem('userEmail'); // Добавил проверку email
+    const userEmail = localStorage.getItem('userEmail');
 
     if (userName && userEmail) {
       signInButton.style.display = 'none';
       userNameElement.textContent = userName;
       userInfo.style.display = 'flex';
       voteButton.disabled = false;
-      // Проверяем, голосовал ли уже пользователь
       if (localStorage.getItem('hasVoted')) {
         voteButton.disabled = true;
         voteButton.textContent = 'Вы уже голосовали';
@@ -54,12 +55,12 @@ document.addEventListener('DOMContentLoaded', async function () {
       voteButton.disabled = true;
       signInButton.style.display = 'block';
       userInfo.style.display = 'none';
-      voteMessage.style.display = 'none'; // Скрываем сообщение при выходе
+      voteMessage.style.display = 'none';
     }
   }
 
   function handleCredentialResponse(response) {
-    if (response.credential) { // Проверяем наличие credential
+    if (response.credential) {
       const responsePayload = jwt_decode(response.credential);
       console.log("ID: " + responsePayload.sub);
       console.log('Full Name: " + responsePayload.name);
@@ -93,9 +94,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     voteMessage.style.display = 'block';
   }
 
+  // Добавил проверку, загружена ли библиотека GIS перед вызовом disableAutoSelect
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
-    google.accounts.id.disableAutoSelect(); // Отключаем автовыбор аккаунта
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      google.accounts.id.disableAutoSelect();
+    }
     checkAuthentication();
     voteButton.disabled = true;
     voteButton.textContent = 'Голосовать';
@@ -105,98 +109,94 @@ document.addEventListener('DOMContentLoaded', async function () {
     event.preventDefault();
 
     if (localStorage.getItem('userName') && localStorage.getItem('userEmail')) {
-      // Показываем модальное окно с подтверждением
       document.getElementById('confirmation-modal').style.display = 'block';
     } else {
       voteMessage.textContent = 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.';
       voteMessage.style.display = 'block';
-      // Добавляем кнопку "Войти" в сообщение
       const signInLink = document.createElement('button');
       signInLink.textContent = 'Войти';
       signInLink.classList.add('auth-button');
       signInLink.addEventListener('click', () => {
         signInButton.click();
-        voteMessage.style.display = 'none'; // Скрываем сообщение после клика
+        voteMessage.style.display = 'none';
       });
       voteMessage.appendChild(signInLink);
     }
   });
 
-    // Обработчики для кнопок в модальном окне
-    document.getElementById('confirm-vote').addEventListener('click', submitForm);
-    document.getElementById('cancel-vote').addEventListener('click', () => {
-      document.getElementById('confirmation-modal').style.display = 'none';
+  document.getElementById('confirm-vote').addEventListener('click', submitForm);
+  document.getElementById('cancel-vote').addEventListener('click', () => {
+    document.getElementById('confirmation-modal').style.display = 'none';
+  });
+
+  function submitForm() {
+    document.getElementById('confirmation-modal').style.display = 'none';
+    voteButton.textContent = 'Отправка...';
+    voteButton.disabled = true;
+    voteButton.setAttribute('aria-disabled', 'true');
+    voteButton.setAttribute('aria-label', 'Отправка...');
+
+    if (!validateForm()) {
+      voteMessage.textContent = 'Пожалуйста, выберите по одному варианту в каждой номинации.';
+      voteMessage.style.display = 'block';
+      voteButton.textContent = 'Голосовать';
+      voteButton.disabled = false;
+      voteButton.removeAttribute('aria-disabled');
+      voteButton.removeAttribute('aria-label');
+      return;
+    }
+
+    const formData = {};
+    for (const element of votingForm.elements) {
+      if (element.name && element.type !== 'submit') {
+        if (element.type === 'radio' && element.checked) {
+          formData[element.name] = element.value;
+        } else if (element.type !== 'radio') {
+          formData[element.name] = element.value;
+        }
+      }
+    }
+    formData['email'] = localStorage.getItem('userEmail');
+
+    console.log('Отправляемые данные:', JSON.stringify(formData));
+
+    fetch(votingForm.action, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => {
+      if (response.ok) {
+        voteMessage.textContent = 'Спасибо за ваш голос!';
+        voteMessage.style.display = 'block';
+        voteButton.textContent = 'Вы уже голосовали';
+        localStorage.setItem('hasVoted', 'true');
+      } else {
+        throw new Error('Form submission failed.');
+      }
+    })
+    .catch(error => {
+      console.error('Error submitting form:', error);
+      voteMessage.textContent = 'Ошибка отправки формы. Попробуйте еще раз.';
+      voteMessage.style.display = 'block';
+      voteButton.textContent = 'Голосовать';
+      voteButton.disabled = false;
+      voteButton.removeAttribute('aria-disabled');
+      voteButton.removeAttribute('aria-label');
     });
+  }
 
-    function submitForm() {
-      document.getElementById('confirmation-modal').style.display = 'none'; // Скрываем модальное окно
-      voteButton.textContent = 'Отправка...';
-      voteButton.disabled = true;
-      voteButton.setAttribute('aria-disabled', 'true'); // Добавил ARIA-атрибут
-      voteButton.setAttribute('aria-label', 'Отправка...'); // Добавил ARIA-атрибут
-
-      // Валидация формы
-      if (!validateForm()) {
-        voteMessage.textContent = 'Пожалуйста, выберите по одному варианту в каждой номинации.';
-        voteMessage.style.display = 'block';
-        voteButton.textContent = 'Голосовать';
-        voteButton.disabled = false;
-        voteButton.removeAttribute('aria-disabled'); // Добавил ARIA-атрибут
-        voteButton.removeAttribute('aria-label'); // Добавил ARIA-атрибут
-        return;
+  function validateForm() {
+    const nominations = votingForm.querySelectorAll('section.nomination');
+    for (const nomination of nominations) {
+      const checked = nomination.querySelector('input[type="radio"]:checked');
+      if (!checked) {
+        return false;
       }
-
-      const formData = {};
-      for (const element of votingForm.elements) {
-        if (element.name && element.type !== 'submit') {
-          if (element.type === 'radio' && element.checked) {
-            formData[element.name] = element.value;
-          } else if (element.type !== 'radio') {
-            formData[element.name] = element.value;
-          }
-        }
-      }
-      formData['email'] = localStorage.getItem('userEmail');
-
-      console.log('Отправляемые данные:', JSON.stringify(formData));
-
-      fetch(votingForm.action, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-      .then(response => {
-        if (response.ok) {
-          voteMessage.textContent = 'Спасибо за ваш голос!';
-          voteMessage.style.display = 'block';
-          voteButton.textContent = 'Вы уже голосовали';
-          localStorage.setItem('hasVoted', 'true'); // Помечаем, что пользователь проголосовал
-        } else {
-          throw new Error('Form submission failed.');
-        }
-      })
-      .catch(error => {
-        console.error('Error submitting form:', error);
-        voteMessage.textContent = 'Ошибка отправки формы. Попробуйте еще раз.';
-        voteMessage.style.display = 'block';
-        voteButton.textContent = 'Голосовать';
-        voteButton.disabled = false;
-        voteButton.removeAttribute('aria-disabled'); // Добавил ARIA-атрибут
-        voteButton.removeAttribute('aria-label'); // Добавил ARIA-атрибут
-      });
     }
-
-    function validateForm() {
-      const nominations = votingForm.querySelectorAll('section.nomination');
-      for (const nomination of nominations) {
-        const checked = nomination.querySelector('input[type="radio"]:checked');
-        if (!checked) {
-          return false;
-        }
-      }
-      return true;
-    }
+    return true;
+  }
 });
