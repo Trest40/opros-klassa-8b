@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('userEmail', responsePayload.email);
     checkAuthentication();
 
-    // !!! УДАЛИЛ submitForm() ОТСЮДА !!!
+    // !!! СТРОКА submitForm(); УДАЛЕНА ОТСЮДА !!!
   }
 
   window.onload = function() {
