@@ -158,15 +158,21 @@ main.container {
     @include transition-all;
     overflow: hidden;
     position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) scale(1.03);
       box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
 
       label {
         color: $primary-color;
         .candidate-name{
           text-shadow: 0 0 10px $primary-color;
+        }
+      }
+      .nomination-title {
+        .icon {
+          transform: rotate(15deg);
         }
       }
     }
@@ -206,6 +212,7 @@ main.container {
         margin-right: 15px;
         color: $primary-color;
         font-size: 2.2rem;
+        transition: transform 0.3s ease;
       }
       .text-gold {
         color: $primary-color;
@@ -283,7 +290,9 @@ input[type="radio"] {
 
 // Vote Button
 button.vote-button {
-  background: linear-gradient(to right, #ffcc00, $primary-color);
+  background: linear-gradient(to right, #ffcc00, $primary-color, #ffcc00);
+  background-size: 200% auto;
+  animation: gradientAnimation 5s ease-in-out infinite;
   border: none;
   padding: 20px 50px;
   margin-top: 40px;
@@ -302,6 +311,18 @@ button.vote-button {
   position: relative;
 }
 
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .glow-on-hover {
     &:hover {
       color: rgba(0, 0, 0, 0.8);
@@ -314,200 +335,4 @@ button.vote-button {
       left:-2px;
       background-size: 400%;
       z-index: -1;
-      filter: blur(5px);
-      width: calc(100% + 4px);
-      height: calc(100% + 4px);
-      animation: glowing 20s linear infinite;
-      opacity: 0;
-      transition: opacity .3s ease-in-out;
-      border-radius: 40px;
-    }
-    &:active:after {
-      background: transparent;
-    }
-    &:hover:before {
-      opacity: 1;
-    }
-    &:after {
-      z-index: -1;
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to right, #ffcc00, $primary-color);
-      left: 0;
-      top: 0;
-      border-radius: 40px;
-    }
-    .glare {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-      }
-
-      .glare-inner {
-        position: absolute;
-        top: -50%;
-        left: -150%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
-        transform: rotate(45deg);
-        opacity: 0;
-        transition: opacity 0.5s ease, transform 0.5s ease;
-      }
-      &:hover .glare-inner {
-        opacity: 1;
-        transform: translateX(100%) rotate(45deg);
-      }
-  }
-
-  @keyframes glowing {
-    0% { background-position: 0 0; }
-    50% { background-position: 400% 0; }
-    100% { background-position: 0 0; }
-}
-// Footer
-footer {
-  margin-top: 60px;
-  color: $text-color-light;
-  font-size: 1.2rem;
-  @include transition-all;
-  background: none;
-  box-shadow: none;
-  z-index: 3;
-  padding: 20px;
-
-  p {
-    font-weight: 500;
-  }
-}
-
-// Анимации появления
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeInUp 0.8s ease-out;
-}
-
-// Media Queries
-@media (max-width: 768px) {
-  header {
-    h1 {
-      font-size: 2.5rem;
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-    }
-  }
-  main.container{
-    form{
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-    .nomination {
-      padding: 20px;
-      .nomination-title {
-        font-size: 1.6rem;
-        margin-bottom: 20px;
-        .icon {
-          font-size: 1.8rem;
-        }
-      }
-      label {
-        font-size: 1.1rem;
-        margin: 12px 0;
-      }
-    }
-  }
-  .auth-button {
-    font-size: 1rem;
-    padding: 8px 20px;
-  }
-
-  #user-info {
-    p {
-      font-size: 1.1rem;
-    }
-  }
-
-  .vote-button {
-    font-size: 1.5rem;
-    padding: 18px 40px;
-  }
-
-  footer {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-    header {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .subtitle {
-        font-size: 1rem;
-      }
-    }
-
-    main.container {
-        form{
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-      .nomination {
-        padding: 15px;
-
-        .nomination-title {
-          font-size: 1.4rem;
-          margin-bottom: 15px;
-
-          .icon {
-            font-size: 1.6rem;
-            margin-right: 10px;
-          }
-        }
-
-        label {
-          font-size: 1rem;
-          margin: 10px 0;
-        }
-      }
-    }
-
-    .auth-button {
-      font-size: 0.9rem;
-      padding: 6px 15px;
-      margin-left: 10px;
-    }
-
-    #user-info {
-      p {
-        font-size: 1rem;
-        margin-right: 10px;
-      }
-    }
-
-    .vote-button {
-      font-size: 1.3rem;
-      padding: 15px 30px;
-      margin-top: 30px;
-    }
-
-    footer {
-      font-size: 0.9rem;
-    }
-  }
+      filter

@@ -9,12 +9,13 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/rellax@1.12.1/rellax.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
 </head>
 <body>
     <div id="tsparticles" class="rellax" data-rellax-speed="-2"></div>
-    <header class="animate-fade-in">
+    <header data-aos="fade-up">
         <div class="header-container">
             <h1 class="glow">Номинации 8Б Класса</h1>
             <div id="auth-container">
@@ -30,7 +31,7 @@
 
     <main class="container">
       <form id="voting-form" action="https://formspree.io/f/myzyrkrv" method="POST">
-        <section class="nomination animate-fade-in" id="golden-ball">
+        <section class="nomination" data-aos="fade-up" id="golden-ball">
             <div class="glare">
                 <div class="glare-inner"></div>
             </div>
@@ -41,7 +42,7 @@
            <label><input type="radio" name="golden_ball" value="Аднан"> <span class="candidate-name">Аднан</span></label>
        </section>
 
-       <section class="nomination animate-fade-in" id="art-boss">
+       <section class="nomination" data-aos="fade-up" id="art-boss">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -52,7 +53,7 @@
            <label><input type="radio" name="art_boss" value="Малика"> <span class="candidate-name">Малика</span></label>
        </section>
 
-       <section class="nomination animate-fade-in" id="late-boss">
+       <section class="nomination" data-aos="fade-up" id="late-boss">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -63,7 +64,7 @@
            <label><input type="radio" name="late_boss" value="Руслан"> <span class="candidate-name">Руслан</span></label>
        </section>
 
-       <section class="nomination animate-fade-in" id="strong-men">
+       <section class="nomination" data-aos="fade-up" id="strong-men">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -74,7 +75,7 @@
            <label><input type="radio" name="strong_men" value="Коля"> <span class="candidate-name">Коля</span></label>
        </section>
 
-       <section class="nomination animate-fade-in" id="math-genius">
+       <section class="nomination" data-aos="fade-up" id="math-genius">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -85,7 +86,7 @@
            <label><input type="radio" name="math_genius" value="Коля"> <span class="candidate-name">Коля</span></label>
       </section>
 
-       <section class="nomination animate-fade-in" id="lunch-lovers">
+       <section class="nomination" data-aos="fade-up" id="lunch-lovers">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -96,7 +97,7 @@
            <label><input type="radio" name="lunch_lovers" value="Шерхан"> <span class="candidate-name">Шерхан</span></label>
        </section>
 
-       <section class="nomination animate-fade-in" id="anti-sport">
+       <section class="nomination" data-aos="fade-up" id="anti-sport">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -106,7 +107,7 @@
            <label><input type="radio" name="anti_sport" value="Алина Т."> <span class="candidate-name">Алина Т.</span></label>
        </section>
 
-       <section class="nomination animate-fade-in" id="it-geek">
+       <section class="nomination" data-aos="fade-up" id="it-geek">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -117,7 +118,7 @@
            <label><input type="radio" name="it_geek" value="Асылбек"> <span class="candidate-name">Асылбек</span></label>
        </section>
 
-       <section class="nomination animate-fade-in" id="meloman">
+       <section class="nomination" data-aos="fade-up" id="meloman">
         <div class="glare">
             <div class="glare-inner"></div>
         </div>
@@ -128,7 +129,7 @@
            <label><input type="radio" name="meloman" value="Камиль"> <span class="candidate-name">Камиль</span></label>
       </section>
 
-        <section class="nomination animate-fade-in" id="loudest">
+        <section class="nomination" data-aos="fade-up" id="loudest">
             <div class="glare">
                 <div class="glare-inner"></div>
             </div>
@@ -138,7 +139,7 @@
            <label><input type="radio" name="loudest" value="Ян"> <span class="candidate-name">Ян</span></label>
            <label><input type="radio" name="loudest" value="Руслан"> <span class="candidate-name">Руслан</span></label>
        </section>
-       <button type="submit" class="vote-button glow-on-hover animate-fade-in" >
+       <button type="submit" class="vote-button glow-on-hover" data-aos="fade-up">
             <div class="glare">
                 <div class="glare-inner"></div>
             </div>
@@ -147,8 +148,12 @@
    </form>
     </main>
 
-    <footer class="animate-fade-in">
+    <footer data-aos="fade-up">
         <p>© 2024 OprosKlassa8B.</p>
     </footer>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 </html>

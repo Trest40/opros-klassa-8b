@@ -21,12 +21,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   const votingForm = document.getElementById('voting-form');
   const voteButton = document.querySelector('.vote-button');
 
-  // Добавляем класс animate-fade-in для анимации появления
-  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
-  elementsToAnimate.forEach(element => {
-    element.classList.add('animate-fade-in');
-  });
-
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
 
@@ -114,3 +108,151 @@ document.addEventListener('DOMContentLoaded', async function () {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error('Произошла ошибка при отправке формы.');
+        }
+      })
+      .then(responseText => {
+        console.log(responseText);
+        if (!formSubmitted) {
+          alert('Спасибо за ваш голос!');
+          votingForm.reset();
+          formSubmitted = true;
+        }
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        alert(error.message);
+      })
+      .finally(() => {
+        voteButton.textContent = 'Голосовать';
+        voteButton.disabled = false;
+      });
+  }
+
+  // Инициализация Rellax (если используется)
+  var rellax = new Rellax('.rellax');
+
+  // Инициализация tsParticles
+  tsParticles.load("tsparticles", {
+    "fullScreen": {
+        "enable": true,
+        "zIndex": 1
+    },
+    "particles": {
+        "number": {
+            "value": 100, // Увеличим количество частиц
+            "density": {
+                "enable": true,
+                "value_area": 800
+            }
+        },
+        "color": {
+            "value": ["#ffd700", "#D4AF37", "#DAA520"] // Несколько оттенков золотого
+        },
+        "shape": {
+            "type": ["circle", "triangle"], // Добавим треугольники
+            "stroke": {
+                "width": 0,
+                "color": "#000000"
+            },
+            "polygon": {
+                "nb_sides": 5
+            },
+        },
+        "opacity": {
+            "value": 0.7, // Немного увеличим непрозрачность
+            "random": true,
+            "anim": {
+                "enable": true,
+                "speed": 0.5, // Медленная анимация непрозрачности
+                "opacity_min": 0.2,
+                "sync": false
+            }
+        },
+        "size": {
+            "value": 4, // Немного увеличим размер
+            "random": true,
+            "anim": {
+                "enable": true,
+                "speed": 5, // Добавим анимацию размера
+                "size_min": 1,
+                "sync": false
+            }
+        },
+        "line_linked": {
+            "enable": true,
+            "distance": 150,
+            "color": "#ffd700", // Соединительные линии золотого цвета
+            "opacity": 0.4,
+            "width": 1
+        },
+        "move": {
+            "enable": true,
+            "speed": 0.8, // Более медленное движение
+            "direction": "none",
+            "random": true,
+            "straight": false,
+            "out_mode": "bounce", // Частицы отскакивают от границ
+            "bounce": true,
+            "attract": {
+                "enable": true,
+                "rotateX": 600,
+                "rotateY": 1200
+            }
+        }
+    },
+    "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+            "onhover": {
+                "enable": true,
+                "mode": ["grab", "repulse"] // Добавим реакцию на наведение
+            },
+            "onclick": {
+                "enable": true,
+                "mode": "push" // И реакцию на клик
+            },
+            "resize": true
+        },
+        "modes": {
+            "grab": {
+                "distance": 140,
+                "line_linked": {
+                    "opacity": 0.8
+                }
+            },
+            "bubble": {
+                "distance": 400,
+                "size": 40,
+                "duration": 2,
+                "opacity": 8,
+                "speed": 3
+            },
+            "repulse": {
+                "distance": 150, // Увеличим расстояние отталкивания
+                "duration": 0.8
+            },
+            "push": {
+                "particles_nb": 4
+            },
+            "remove": {
+                "particles_nb": 2
+            }
+        }
+    },
+    "retina_detect": true
+});
+
+  // Инициализация AOS
+  AOS.init({
+    duration: 800, // Длительность анимации
+    easing: 'ease-out', // Тип анимации
+    once: true, // Анимация срабатывает только один раз
+    offset: 100, // Смещение до начала анимации
+  });
+});
