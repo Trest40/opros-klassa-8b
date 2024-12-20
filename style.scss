@@ -1,6 +1,5 @@
 // Variables
 $primary-color: #ffd700;
-$accent-color: #6C4675; // Or #00FFFF for a futuristic vibe
 $background-dark: #0F0F0F;
 $text-color-light: #F5F5F5;
 $container-bg: rgba(20, 20, 20, 0.7);
@@ -9,15 +8,11 @@ $basic-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
 $button-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 $button-hover: 0 0 15px $primary-color;
 $main-font: 'Inter', sans-serif;
-$header-font: 'Cormorant Garamond', serif; // Or 'Fraunces', 'Young Serif', 'Manrope'
+$header-font: 'Cormorant Garamond', serif;
 
 // Mixins
 @mixin transition-all {
   transition: all 0.3s ease;
-}
-
-@mixin center {
-  text-align: center;
 }
 
 @mixin flex-center {
@@ -26,13 +21,25 @@ $header-font: 'Cormorant Garamond', serif; // Or 'Fraunces', 'Young Serif', 'Man
   align-items: center;
 }
 
+@mixin hover-effect {
+  &:hover {
+    color: $primary-color;
+    .candidate-name {
+      text-shadow: 0 0 10px $primary-color;
+    }
+  }
+  .candidate-name {
+    @include transition-all;
+  }
+}
+
 // Base Styles
 body {
   margin: 0;
   font-family: $main-font;
   background: linear-gradient(180deg, #121212 0%, #0F0F0F 100%);
   color: $text-color-light;
-  @include center;
+  text-align: center;
   padding-bottom: 50px;
   overflow-x: hidden;
   position: relative;
@@ -47,10 +54,13 @@ body {
 
 // Header
 header {
-  @include center;
+  text-align: center;
   @include transition-all;
   z-index: 3;
   padding: 20px;
+  position: sticky; // Добавил sticky позиционирование
+  top: 0; // Добавил
+  background-color: $background-dark; // Добавил фон
 
   .header-container {
     display: flex;
@@ -72,8 +82,9 @@ header {
     letter-spacing: 2px;
     text-transform: uppercase;
   }
+
   .glow {
-    animation: glow 1.5s ease-in-out infinite alternate;
+    animation: glow 3s ease-in-out infinite alternate; // Изменил время анимации
   }
 
   @keyframes glow {
@@ -136,6 +147,22 @@ header {
   }
 }
 
+// Message
+#vote-message {
+  display: none;
+  background-color: $container-bg;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px auto;
+  max-width: 600px;
+  color: $text-color-light;
+  font-size: 1.2rem;
+
+  .auth-button {
+    margin-left: 10px;
+  }
+}
+
 // Main Container
 main.container {
   width: 90%;
@@ -143,7 +170,8 @@ main.container {
   margin: 30px auto;
   z-index: 3;
   position: relative;
-    form {
+
+  form {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -170,30 +198,32 @@ main.container {
         }
       }
     }
-    .glare {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-      }
 
-      .glare-inner {
-        position: absolute;
-        top: -50%;
-        left: -150%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
-        transform: rotate(45deg);
-        opacity: 0;
-        transition: opacity 0.5s ease, transform 0.5s ease;
-      }
-      &:hover .glare-inner {
-        opacity: 1;
-        transform: translateX(100%) rotate(45deg);
-      }
+    .glare {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .glare-inner {
+      position: absolute;
+      top: -50%;
+      left: -150%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+      transform: rotate(45deg);
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    &:hover .glare-inner {
+      opacity: 1;
+      transform: translateX(100%) rotate(45deg);
+    }
 
     .nomination-title {
       font-size: 2rem;
@@ -202,11 +232,13 @@ main.container {
       margin-bottom: 25px;
       font-weight: 700;
       @include flex-center;
+
       .icon {
         margin-right: 15px;
         color: $primary-color;
         font-size: 2.2rem;
       }
+
       .text-gold {
         color: $primary-color;
         text-shadow: 0 0 8px $primary-color;
@@ -221,23 +253,30 @@ main.container {
       color: #fff;
       cursor: pointer;
       @include transition-all;
-      .candidate-name{
+      @include hover-effect; // Используем миксин для hover эффекта
+      .candidate-name {
         margin-left: 5px;
       }
-      &:hover {
-        color: $primary-color;
-        .candidate-name{
-          text-shadow: 0 0 10px $primary-color;
-        }
-      }
-      .candidate-name{
-        transition: text-shadow 0.3s ease;
-      }
+    }
+
+    // Добавил стили для fieldset и legend
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    legend {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $primary-color;
+      margin-bottom: 10px;
     }
   }
+
   @for $i from 1 through 10 {
     .nomination:nth-child(#{$i}) {
-        animation-delay: 0.2s * $i;
+      animation-delay: 0.2s * $i;
     }
   }
 }
@@ -264,6 +303,7 @@ input[type="radio"] {
   &:checked {
     background-color: $primary-color;
     box-shadow: 0 0 5px $primary-color;
+
     &:before {
       content: '';
       position: absolute;
@@ -275,9 +315,10 @@ input[type="radio"] {
       background-color: #000;
       border-radius: 50%;
     }
+
     &:hover {
-        box-shadow: 0 0 10px $primary-color;
-      }
+      box-shadow: 0 0 10px $primary-color;
+    }
   }
 }
 
@@ -303,73 +344,80 @@ button.vote-button {
 }
 
 .glow-on-hover {
-    &:hover {
-      color: rgba(0, 0, 0, 0.8);
-      box-shadow: 0 5px 15px $primary-color;
-      }
-    &:before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left:-2px;
-      background-size: 400%;
-      z-index: -1;
-      filter: blur(5px);
-      width: calc(100% + 4px);
-      height: calc(100% + 4px);
-      animation: glowing 20s linear infinite;
-      opacity: 0;
-      transition: opacity .3s ease-in-out;
-      border-radius: 40px;
-    }
-    &:active:after {
-      background: transparent;
-    }
-    &:hover:before {
-      opacity: 1;
-    }
-    &:after {
-      z-index: -1;
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to right, #ffcc00, $primary-color);
-      left: 0;
-      top: 0;
-      border-radius: 40px;
-    }
-    .glare {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-      }
-
-      .glare-inner {
-        position: absolute;
-        top: -50%;
-        left: -150%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
-        transform: rotate(45deg);
-        opacity: 0;
-        transition: opacity 0.5s ease, transform 0.5s ease;
-      }
-      &:hover .glare-inner {
-        opacity: 1;
-        transform: translateX(100%) rotate(45deg);
-      }
+  &:hover {
+    color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 5px 15px $primary-color;
   }
 
-  @keyframes glowing {
-    0% { background-position: 0 0; }
-    50% { background-position: 400% 0; }
-    100% { background-position: 0 0; }
+  &:before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 40px;
+  }
+
+  &:active:after {
+    background: transparent;
+  }
+
+  &:hover:before {
+    opacity: 1;
+  }
+
+  &:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    left: 0;
+    top: 0;
+    border-radius: 40px;
+  }
+
+  .glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .glare-inner {
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  &:hover .glare-inner {
+    opacity: 1;
+    transform: translateX(100%) rotate(45deg);
+  }
 }
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
 // Footer
 footer {
   margin-top: 60px;
@@ -402,6 +450,65 @@ footer {
   animation: fadeInUp 0.8s ease-out;
 }
 
+// Модальное окно подтверждения
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: $background-dark;
+  margin: 15% auto;
+  padding: 30px;
+  border: 1px solid $primary-color;
+  border-radius: 10px;
+  width: 30%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: $text-color-light;
+  font-size: 1.2rem;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: $primary-color;
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+
+    .modal-button {
+      background: linear-gradient(to right, #ffcc00, $primary-color);
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      color: #000;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      @include transition-all;
+      box-shadow: $button-shadow;
+
+      &:hover {
+        background: $primary-color;
+        transform: translateY(-2px);
+        box-shadow: $button-hover;
+      }
+    }
+  }
+}
+
 // Media Queries
 @media (max-width: 768px) {
   header {
@@ -413,25 +520,31 @@ footer {
       font-size: 1.2rem;
     }
   }
-  main.container{
-    form{
+
+  main.container {
+    form {
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
+
     .nomination {
       padding: 20px;
+
       .nomination-title {
         font-size: 1.6rem;
         margin-bottom: 20px;
+
         .icon {
           font-size: 1.8rem;
         }
       }
+
       label {
         font-size: 1.1rem;
         margin: 12px 0;
       }
     }
   }
+
   .auth-button {
     font-size: 1rem;
     padding: 8px 20px;
@@ -451,63 +564,86 @@ footer {
   footer {
     font-size: 1rem;
   }
+
+  .modal-content {
+    width: 80%;
+    margin: 25% auto;
+
+    .modal-buttons {
+      flex-direction: column;
+
+      .modal-button {
+        margin-bottom: 15px;
+      }
+    }
+  }
 }
 
 @media (max-width: 480px) {
-    header {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .subtitle {
-        font-size: 1rem;
-      }
+  header {
+    h1 {
+      font-size: 2rem;
     }
 
-    main.container {
-        form{
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-      .nomination {
-        padding: 15px;
-
-        .nomination-title {
-          font-size: 1.4rem;
-          margin-bottom: 15px;
-
-          .icon {
-            font-size: 1.6rem;
-            margin-right: 10px;
-          }
-        }
-
-        label {
-          font-size: 1rem;
-          margin: 10px 0;
-        }
-      }
-    }
-
-    .auth-button {
-      font-size: 0.9rem;
-      padding: 6px 15px;
-      margin-left: 10px;
-    }
-
-    #user-info {
-      p {
-        font-size: 1rem;
-        margin-right: 10px;
-      }
-    }
-
-    .vote-button {
-      font-size: 1.3rem;
-      padding: 15px 30px;
-      margin-top: 30px;
-    }
-
-    footer {
-      font-size: 0.9rem;
+    .subtitle {
+      font-size: 1rem;
     }
   }
+
+  main.container {
+    form {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .nomination {
+      padding: 15px;
+
+      .nomination-title {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+
+        .icon {
+          font-size: 1.6rem;
+          margin-right: 10px;
+        }
+      }
+
+      label {
+        font-size: 1rem;
+        margin: 10px 0;
+      }
+    }
+  }
+
+  .auth-button {
+    font-size: 0.9rem;
+    padding: 6px 15px;
+    margin-left: 10px;
+  }
+
+  #user-info {
+    p {
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+  }
+
+  .vote-button {
+    font-size: 1.3rem;
+    padding: 15px 30px;
+    margin-top: 30px;
+  }
+
+  footer {
+    font-size: 0.9rem;
+  }
+
+  .modal-content {
+    .modal-buttons {
+      .modal-button {
+        font-size: 1rem;
+        padding: 8px 15px;
+      }
+    }
+  }
+}
