@@ -1,4 +1,3 @@
-// script.js
 function initializeGoogleSignIn() {
   return new Promise((resolve) => {
     const script = document.createElement('script');
@@ -22,6 +21,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   const votingForm = document.getElementById('voting-form');
   const voteButton = document.querySelector('.vote-button');
 
+  // Добавляем класс animate-fade-in для анимации появления
+  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
+  elementsToAnimate.forEach(element => {
+    element.classList.add('animate-fade-in');
+  });
+
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
 
@@ -40,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   function handleCredentialResponse(response) {
     const responsePayload = jwt_decode(response.credential);
     console.log("ID: " + responsePayload.sub);
-    console.log('Full Name: ' + responsePayload.name);
+    console.log('Full Name: " + responsePayload.name);
     console.log("Image URL: " + responsePayload.picture);
     console.log("Email: " + responsePayload.email);
 
@@ -68,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     localStorage.clear();
     checkAuthentication();
     voteButton.disabled = false;
-    voteButton.textContent = 'Голосовать / Voter';
+    voteButton.textContent = 'Голосовать';
   });
 
   voteButton.addEventListener('click', function (event) {
@@ -109,138 +114,3 @@ document.addEventListener('DOMContentLoaded', async function () {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.text();
-        } else {
-          throw new Error('Произошла ошибка при отправке формы.');
-        }
-      })
-      .then(responseText => {
-        console.log(responseText);
-        if (!formSubmitted) {
-          alert('Спасибо за ваш голос!');
-          votingForm.reset();
-          formSubmitted = true;
-        }
-      })
-      .catch(error => {
-        console.error('Ошибка:', error);
-        alert(error.message);
-      })
-      .finally(() => {
-        voteButton.textContent = 'Голосовать / Voter';
-        voteButton.disabled = false;
-      });
-  }
-  tsParticles.load("tsparticles", {
-        "fullScreen": {
-            "enable": true,
-            "zIndex": 1
-        },
-        "particles": {
-            "number": {
-                "value": 80,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
-                }
-            },
-            "color": {
-                "value": "#ffd700"
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000000"
-                },
-                "polygon": {
-                    "nb_sides": 5
-                },
-            },
-            "opacity": {
-                "value": 0.5,
-                "random": true,
-                "anim": {
-                    "enable": false,
-                    "speed": 1,
-                    "opacity_min": 0.1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 3,
-                "random": true,
-                "anim": {
-                    "enable": false,
-                    "speed": 40,
-                    "size_min": 0.1,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": false,
-                "distance": 150,
-                "color": "#ffffff",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 2,
-                "direction": "none",
-                "random": false,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": false,
-                    "rotateX": 600,
-                    "rotateY": 1200
-                }
-            }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": true,
-                    "mode": "repulse"
-                },
-                "onclick": {
-                    "enable": false,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 400,
-                    "line_linked": {
-                        "opacity": 1
-                    }
-                },
-                "bubble": {
-                    "distance": 400,
-                    "size": 40,
-                    "duration": 2,
-                    "opacity": 8,
-                    "speed": 3
-                },
-                "repulse": {
-                    "distance": 200,
-                    "duration": 0.4
-                },
-                "push": {
-                    "particles_nb": 4
-                },
-                "remove": {
-                    "particles_nb": 2
-                }
-            }
-        },
-        "retina_detect": true
-    });
-});
