@@ -30,21 +30,20 @@ $header-font: 'Cormorant Garamond', serif; // Or 'Fraunces', 'Young Serif', 'Man
 body {
   margin: 0;
   font-family: $main-font;
+  background: linear-gradient(180deg, #121212 0%, #0F0F0F 100%);
   color: $text-color-light;
   @include center;
   padding-bottom: 50px;
   overflow-x: hidden;
   position: relative;
-  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") no-repeat center center fixed;
-  background-size: cover;
 }
 
 #tsparticles {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-  }
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
 
 // Header
 header {
@@ -159,21 +158,15 @@ main.container {
     @include transition-all;
     overflow: hidden;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      transform: translateY(-5px) scale(1.03);
+      transform: translateY(-5px);
       box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
 
       label {
         color: $primary-color;
         .candidate-name{
           text-shadow: 0 0 10px $primary-color;
-        }
-      }
-      .nomination-title {
-        .icon {
-          transform: rotate(15deg);
         }
       }
     }
@@ -213,7 +206,6 @@ main.container {
         margin-right: 15px;
         color: $primary-color;
         font-size: 2.2rem;
-        transition: transform 0.3s ease;
       }
       .text-gold {
         color: $primary-color;
@@ -291,9 +283,7 @@ input[type="radio"] {
 
 // Vote Button
 button.vote-button {
-  background: linear-gradient(to right, #ffcc00, $primary-color, #ffcc00);
-  background-size: 200% auto;
-  animation: gradientAnimation 5s ease-in-out infinite;
+  background: linear-gradient(to right, #ffcc00, $primary-color);
   border: none;
   padding: 20px 50px;
   margin-top: 40px;
@@ -312,18 +302,6 @@ button.vote-button {
   position: relative;
 }
 
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 .glow-on-hover {
     &:hover {
       color: rgba(0, 0, 0, 0.8);
@@ -339,7 +317,7 @@ button.vote-button {
       filter: blur(5px);
       width: calc(100% + 4px);
       height: calc(100% + 4px);
-      animation: glowing 20s linear infinite, gradientAnimation 5s ease-in-out infinite;
+      animation: glowing 20s linear infinite;
       opacity: 0;
       transition: opacity .3s ease-in-out;
       border-radius: 40px;
