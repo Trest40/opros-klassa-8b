@@ -44,8 +44,6 @@ body {
   @include center;
   padding-bottom: 50px;
   overflow-x: hidden;
-  // Добавляем фон для body:
-  background: linear-gradient(to bottom, #2e2248, #5e4588); /* Пример градиента */
 }
 
 .background-container{

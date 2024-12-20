@@ -32,13 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('userEmail', responsePayload.email);
     checkAuthentication();
 
-    // !!! УДАЛИТЕ СТРОКУ submitForm() ОТСЮДА !!!
+    // Отправляем форму после успешной авторизации
+    submitForm();
   }
 
   window.onload = function() {
     let googleApiInterval = setInterval(() => {
       if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-        clearInterval(googleApiInterval);
+        clearInterval(googleApiInterval); // Останавливаем интервал
         google.accounts.id.initialize({
           client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
           callback: handleCredentialResponse,
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         console.error("Google Identity Services library is not loaded.");
       }
-    }, 100);
+    }, 100); // Проверяем каждые 100ms
     checkAuthentication();
   }
 
