@@ -2,46 +2,14 @@ $primary-color: #ffd700; // Золотой
 $background-dark: #0a0a0a; // Темно-серый/черный
 $text-color-light: #aaa;
 $container-bg: rgba(20, 20, 20, 0.9);
-$hover-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
-$basic-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-$button-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-$button-hover: 0 0 15px gold;
 $main-font: 'Montserrat', sans-serif;
-
-@mixin transition-all {
-  transition: all 0.3s ease;
-}
-
-@mixin center {
-  text-align: center;
-}
-
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin default-box {
-  background: $container-bg;
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px auto;
-  box-shadow: $basic-shadow;
-  @include transition-all;
-
-  &:hover {
-    box-shadow: $hover-shadow;
-    transform: translateY(-3px);
-  }
-}
 
 body {
   margin: 0;
   font-family: $main-font;
   background-color: $background-dark;
   color: #fff;
-  @include center;
+  text-align: center;
   padding-bottom: 50px;
   overflow-x: hidden;
 }
@@ -59,9 +27,8 @@ body {
 }
 
 header {
-  @include center;
-  @include transition-all;
-  z-index: 3; // Поверх фона и контейнера
+  text-align: center;
+  z-index: 3; // Поверх фона
 
   h1 {
     font-size: 3rem;
@@ -94,11 +61,7 @@ header {
   display: flex;
   align-items: center;
   margin-top: 10px;
-  z-index: 3; // Поверх фона и контейнера
-}
-
-.google-button {
-  display: none;
+  z-index: 3; // Поверх фона
 }
 
 #sign-in-button {
@@ -110,15 +73,12 @@ header {
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  @include transition-all;
-  box-shadow: $button-shadow;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   margin-right: 10px;
   display: block;
 
   &:hover {
     background: $primary-color;
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: $button-hover;
   }
 }
 
@@ -127,7 +87,8 @@ header {
   align-items: center;
   color: $primary-color;
   flex-direction: column;
-  p{
+
+  p {
     margin-right: 15px;
   }
 }
@@ -146,16 +107,20 @@ header {
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  @include transition-all;
-  box-shadow: $button-shadow;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   margin-right: 10px;
 }
 
 main.container {
-  @include default-box;
   width: 90%;
   max-width: 1200px;
   z-index: 2; // Поверх фона
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px auto;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+
   form {
     width: 100%;
     display: grid;
@@ -164,8 +129,10 @@ main.container {
   }
 
   .nomination {
-    @include default-box;
+    background: rgba(20, 20, 20, 0.9);
+    border-radius: 15px;
     padding: 20px;
+    margin: 20px 0;
 
     h2 {
       font-size: 1.8rem;
@@ -173,7 +140,9 @@ main.container {
       text-shadow: 0 0 8px $primary-color;
       margin-bottom: 20px;
       font-weight: 700;
-      @include flex-center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       i {
         margin-right: 10px;
@@ -187,23 +156,17 @@ main.container {
       text-align: left;
       padding-left: 20px;
       color: #fff;
-      z-index: 3; // Поверх всего в секции
-      pointer-events: auto; // Явно указываем, что label кликабельны
-    }
-  }
-  #math-genius{
-    label{
-      text-align: center;
+      z-index: 3; // Поверх всего
+      pointer-events: auto; // Кликабельно
     }
   }
 }
 
 input[type="radio"] {
-  transform: scale(1.5);
   margin-right: 15px;
   accent-color: $primary-color;
   cursor: pointer;
-  pointer-events: auto; // Явно указываем, что радио-кнопки кликабельны
+  pointer-events: auto; // Кликабельно
 }
 
 button.vote-button {
@@ -216,58 +179,31 @@ button.vote-button {
   border-radius: 35px;
   font-weight: bold;
   cursor: pointer;
-  @include transition-all;
-  box-shadow: $button-shadow;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   display: block;
   margin-left: auto;
   margin-right: auto;
   z-index: 3; // Поверх всего
-
-  &:hover {
-    background: $primary-color;
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: $button-hover;
-  }
 }
 
 footer {
-  margin-top: 50px;
+  margin-top: 30px;
   color: $text-color-light;
   font-size: 1.2rem;
-  @include transition-all;
-  background: none;
-  box-shadow: none;
-  z-index: 3; // Поверх фона и контейнера
-  &:hover{
-    box-shadow: none;
-    transform: none;
-  }
-}
-
-.message {
-  color: $primary-color;
-  font-size: 1.2rem;
-  margin-top: 15px;
-  @include center;
   z-index: 3; // Поверх фона
 }
 
 // Медиа-запросы для адаптивности
 @media (max-width: 768px) {
-  header {
-    h1 {
-      font-size: 1.8rem;
-    }
+  header h1 {
+    font-size: 1.8rem;
+  }
 
-    p {
-      font-size: 0.9rem;
-    }
+  header p {
+    font-size: 0.9rem;
   }
 
   main.container {
-    form{
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
     .nomination {
       h2 {
         font-size: 1.3rem;
@@ -284,47 +220,24 @@ footer {
   #sign-in-button {
     font-size: 0.9rem;
   }
-  .header-container{
+
+  .header-container {
     flex-direction: column;
-    h1{
+    h1 {
       margin-top: 0;
     }
   }
-  #user-info{
+
+  #user-info {
     flex-direction: row;
     p{
       margin: 0;
     }
   }
-  button.vote-button{
+
+  button.vote-button {
     font-size: 1.2rem;
   }
-}
-
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-10px);
-  }
-
-  50% {
-    transform: translateX(10px);
-  }
-
-  75% {
-    transform: translateX(-10px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.shake {
-  animation: shake 0.3s;
 }
 
 @media (min-width: 769px) {
