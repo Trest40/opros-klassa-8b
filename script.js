@@ -32,8 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('userEmail', responsePayload.email);
     checkAuthentication();
 
-    // Отправляем форму после успешной авторизации
-    submitForm();
+    // !!! УДАЛИЛ submitForm() ОТСЮДА !!!
   }
 
   window.onload = function() {
