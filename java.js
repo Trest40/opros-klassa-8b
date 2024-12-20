@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const votingForm = document.getElementById('voting-form');
   const messageDiv = document.getElementById('message');
   const voteButton = document.querySelector('.vote-button');
-  const userEmailInput = document.getElementById('user-email');
+  // const userEmailInput = document.getElementById('user-email');
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     localStorage.setItem('userName', responsePayload.name);
     localStorage.setItem('userEmail', responsePayload.email);
-    userEmailInput.value = responsePayload.email;
+    // userEmailInput.value = responsePayload.email;
     checkAuthentication();
 
     // Отправляем форму после успешной авторизации
@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           }
         }
-        // formData['email'] = localStorage.getItem('userEmail');
         formData['email'] = document.getElementById('email').value;
 
         console.log('Отправляемые данные:', JSON.stringify(formData));

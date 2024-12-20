@@ -60,7 +60,7 @@ body {
 
 header {
     @include center;
-    @include transition-all; // Добавил анимацию появления
+    @include transition-all;
 
     h1 {
         font-size: 3rem;
