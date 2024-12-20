@@ -39,24 +39,11 @@ $main-font: 'Montserrat', sans-serif;
 body {
   margin: 0;
   font-family: $main-font;
+  background-color: $background-dark; // Фон всего сайта
   color: #fff;
   @include center;
   padding-bottom: 50px;
   overflow-x: hidden;
-  // Добавляем фон для body:
-  background: rgba(20, 20, 20, 0.9);
-}
-
-.background-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('Dv9E.gif') no-repeat center center fixed;
-  background-size: cover;
-  opacity: 0.3;
-  z-index: 1; // Фон
 }
 
 header {
@@ -157,16 +144,41 @@ main.container {
   width: 90%;
   max-width: 1200px;
   z-index: 2; // Поверх фона
+  background: none;
+  box-shadow: none;
+
+  .background-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('Dv9E.gif') no-repeat center center;
+      background-size: cover;
+      opacity: 0.3;
+      z-index: -1;
+      border-radius: 15px;
+  }
+
   form {
+    position: relative;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-gap: 20px;
-  }
+    background: $container-bg;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: $basic-shadow;
+    z-index: 1;
+    }
 
   .nomination {
-    @include default-box;
     padding: 20px;
+    box-shadow: none;
+    background: none;
+    border-radius: none;
 
     h2 {
       font-size: 1.8rem;
@@ -255,6 +267,10 @@ footer {
 
 // Медиа-запросы для адаптивности
 @media (max-width: 768px) {
+  .background-overlay {
+    background-attachment: scroll; /* Или попробуйте local */
+  }
+
   header {
     h1 {
       font-size: 1.8rem;
