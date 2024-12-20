@@ -22,32 +22,37 @@ document.addEventListener('DOMContentLoaded', async function () {
       voteButton.disabled = false;
     } else {
       voteButton.disabled = true;
-      //signInButton.style.display = 'block'; // Убери эту строку
+      signInButton.style.display = 'block'; // Показывать кнопку, если не авторизован
       userInfo.style.display = 'none';
     }
   }
 
   function handleCredentialResponse(response) {
-      try{
-          const responsePayload = jwt_decode(response.credential);
-          console.log("ID: " + responsePayload.sub);
-          console.log('Full Name: " + responsePayload.name);
-          console.log("Image URL: " + responsePayload.picture);
-          console.log("Email: " + responsePayload.email);
+    try {
+      const responsePayload = jwt_decode(response.credential);
+      console.log("ID: " + responsePayload.sub);
+      console.log('Full Name: " + responsePayload.name);
+      console.log("Image URL: " + responsePayload.picture);
+      console.log("Email: " + responsePayload.email);
 
-          localStorage.setItem('userName', responsePayload.name);
-          localStorage.setItem('userEmail', responsePayload.email);
-          checkAuthentication();
-      } catch (error) {
-          console.error("Error decoding or storing credentials:", error);
-      }
+      localStorage.setItem('userName', responsePayload.name);
+      localStorage.setItem('userEmail', responsePayload.email);
+      checkAuthentication();
+    } catch (error) {
+      console.error("Error decoding or storing credentials:", error);
+    }
   }
 
   // Инициализация Google Sign-In
   if (window.google && window.google.accounts && window.google.accounts.id) {
     google.accounts.id.initialize({
       client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
-      callback: handleCredentialResponse
+      callback: handleCredentialResponse,
+      moment: (notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          signInButton.style.display = 'block';
+        }
+      }
     });
 
     google.accounts.id.renderButton(
@@ -65,9 +70,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     checkAuthentication();
     voteButton.disabled = false;
     voteButton.textContent = 'Голосовать';
-
-    // Добавим отзыв пользователю, что он вышел
-    userNameElement.textContent = ''; // Очищаем имя пользователя
+    userNameElement.textContent = '';
     alert('Вы успешно вышли из аккаунта.');
   });
 
@@ -79,7 +82,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     } else {
       alert('Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
       document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
-      // signInButton.click(); // Удали эту строку
     }
   });
 
