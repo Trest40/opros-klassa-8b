@@ -1,26 +1,3 @@
-function initializeGoogleSignIn() {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      console.log("Google Identity Services library loaded."); // Лог об успешной загрузке
-      if (google && google.accounts && google.accounts.id) {
-        resolve();
-      } else {
-        console.error("Google Identity Services library failed to initialize.");
-        reject("Google Identity Services library failed to initialize.");
-      }
-    };
-    script.onerror = () => {
-      console.error("Error loading Google Identity Services library.");
-      reject("Error loading Google Identity Services library.");
-    };
-    document.head.appendChild(script);
-  });
-}
-
 document.addEventListener('DOMContentLoaded', async function () {
   const signInButton = document.getElementById('sign-in-button');
   const signOutButton = document.getElementById('sign-out-button');
@@ -28,7 +5,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   const userNameElement = document.getElementById('user-name');
   const votingForm = document.getElementById('voting-form');
   const voteButton = document.querySelector('.vote-button');
-  const voteMessage = document.getElementById('vote-message');
 
   // Добавляем класс animate-fade-in для анимации появления
   const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
@@ -38,113 +14,79 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
-    const userEmail = localStorage.getItem('userEmail');
 
-    if (userName && userEmail) {
+    if (userName) {
       signInButton.style.display = 'none';
       userNameElement.textContent = userName;
       userInfo.style.display = 'flex';
       voteButton.disabled = false;
-      if (localStorage.getItem('hasVoted')) {
-        voteButton.disabled = true;
-        voteButton.textContent = 'Вы уже голосовали';
-        voteMessage.textContent = 'Вы уже голосовали.';
-        voteMessage.style.display = 'block';
-      }
     } else {
       voteButton.disabled = true;
-      signInButton.style.display = 'block';
+      //signInButton.style.display = 'block'; // Убери эту строку
       userInfo.style.display = 'none';
-      voteMessage.style.display = 'none';
     }
   }
 
   function handleCredentialResponse(response) {
-    if (response.credential) {
-      const responsePayload = jwt_decode(response.credential);
-      console.log("ID: " + responsePayload.sub);
-      console.log('Full Name: " + responsePayload.name);
-      console.log("Image URL: " + responsePayload.picture);
-      console.log("Email: " + responsePayload.email);
+      try{
+          const responsePayload = jwt_decode(response.credential);
+          console.log("ID: " + responsePayload.sub);
+          console.log('Full Name: " + responsePayload.name);
+          console.log("Image URL: " + responsePayload.picture);
+          console.log("Email: " + responsePayload.email);
 
-      localStorage.setItem('userName', responsePayload.name);
-      localStorage.setItem('userEmail', responsePayload.email);
-      checkAuthentication();
-    } else {
-      console.error("Authentication failed.");
-      voteMessage.textContent = 'Ошибка аутентификации. Попробуйте еще раз.';
-      voteMessage.style.display = 'block';
-    }
+          localStorage.setItem('userName', responsePayload.name);
+          localStorage.setItem('userEmail', responsePayload.email);
+          checkAuthentication();
+      } catch (error) {
+          console.error("Error decoding or storing credentials:", error);
+      }
   }
 
-  try {
-    await initializeGoogleSignIn();
+  // Инициализация Google Sign-In
+  if (window.google && window.google.accounts && window.google.accounts.id) {
     google.accounts.id.initialize({
       client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
       callback: handleCredentialResponse
     });
+
     google.accounts.id.renderButton(
       signInButton,
       { theme: "outline", size: "large" }
     );
+
     checkAuthentication();
-  } catch (error) {
-    console.error("Error initializing Google Sign-In:", error);
-    voteMessage.textContent = 'Ошибка инициализации Google Sign-In. Попробуйте позже.';
-    voteMessage.style.display = 'block';
+  } else {
+    console.error("Google Identity Services library failed to load.");
   }
 
-  // Добавил проверку, загружена ли библиотека GIS перед вызовом disableAutoSelect
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.disableAutoSelect();
-    }
     checkAuthentication();
-    voteButton.disabled = true;
+    voteButton.disabled = false;
     voteButton.textContent = 'Голосовать';
+
+    // Добавим отзыв пользователю, что он вышел
+    userNameElement.textContent = ''; // Очищаем имя пользователя
+    alert('Вы успешно вышли из аккаунта.');
   });
 
   voteButton.addEventListener('click', function (event) {
     event.preventDefault();
 
-    if (localStorage.getItem('userName') && localStorage.getItem('userEmail')) {
-      document.getElementById('confirmation-modal').style.display = 'block';
+    if (localStorage.getItem('userName')) {
+      submitForm();
     } else {
-      voteMessage.textContent = 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.';
-      voteMessage.style.display = 'block';
-      const signInLink = document.createElement('button');
-      signInLink.textContent = 'Войти';
-      signInLink.classList.add('auth-button');
-      signInLink.addEventListener('click', () => {
-        signInButton.click();
-        voteMessage.style.display = 'none';
-      });
-      voteMessage.appendChild(signInLink);
+      alert('Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
+      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+      // signInButton.click(); // Удали эту строку
     }
-  });
-
-  document.getElementById('confirm-vote').addEventListener('click', submitForm);
-  document.getElementById('cancel-vote').addEventListener('click', () => {
-    document.getElementById('confirmation-modal').style.display = 'none';
   });
 
   function submitForm() {
-    document.getElementById('confirmation-modal').style.display = 'none';
     voteButton.textContent = 'Отправка...';
     voteButton.disabled = true;
-    voteButton.setAttribute('aria-disabled', 'true');
-    voteButton.setAttribute('aria-label', 'Отправка...');
-
-    if (!validateForm()) {
-      voteMessage.textContent = 'Пожалуйста, выберите по одному варианту в каждой номинации.';
-      voteMessage.style.display = 'block';
-      voteButton.textContent = 'Голосовать';
-      voteButton.disabled = false;
-      voteButton.removeAttribute('aria-disabled');
-      voteButton.removeAttribute('aria-label');
-      return;
-    }
+    let formSubmitted = false;
 
     const formData = {};
     for (const element of votingForm.elements) {
@@ -170,33 +112,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     })
     .then(response => {
       if (response.ok) {
-        voteMessage.textContent = 'Спасибо за ваш голос!';
-        voteMessage.style.display = 'block';
-        voteButton.textContent = 'Вы уже голосовали';
-        localStorage.setItem('hasVoted', 'true');
+        console.log('Форма успешно отправлена!');
+        alert('Спасибо за ваш голос!');
+        votingForm.reset();
       } else {
-        throw new Error('Form submission failed.');
+        console.error('Ошибка при отправке формы:', response.statusText);
+        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
       }
     })
     .catch(error => {
-      console.error('Error submitting form:', error);
-      voteMessage.textContent = 'Ошибка отправки формы. Попробуйте еще раз.';
-      voteMessage.style.display = 'block';
+      console.error('Ошибка при отправке формы:', error);
+      alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+    })
+    .finally(() => {
       voteButton.textContent = 'Голосовать';
       voteButton.disabled = false;
-      voteButton.removeAttribute('aria-disabled');
-      voteButton.removeAttribute('aria-label');
     });
-  }
-
-  function validateForm() {
-    const nominations = votingForm.querySelectorAll('section.nomination');
-    for (const nomination of nominations) {
-      const checked = nomination.querySelector('input[type="radio"]:checked');
-      if (!checked) {
-        return false;
-      }
-    }
-    return true;
   }
 });
