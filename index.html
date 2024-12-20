@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/rellax@1.12.1/rellax.min.js"></script>
     <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
+
 </head>
 <body>
     <div id="tsparticles" class="rellax" data-rellax-speed="-2"></div>
@@ -23,7 +23,8 @@
                      data-context="signin"
                      data-ux_mode="popup"
                      data-callback="handleCredentialResponse"
-                     data-auto_prompt="false">
+                     data-auto_prompt="false"
+                     data-itp_support="true">
                 </div>
 
                 <div class="g_id_signin"
@@ -167,5 +168,6 @@
         <p>© 2024 OprosKlassa8B.</p>
     </footer>
     <script src="https://accounts.google.com/gsi/client" async></script>
+    <script defer src="script.js"></script>
 </body>
 </html>

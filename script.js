@@ -42,6 +42,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      google.accounts.id.prompt();
+    } else {
+      console.error("Google API is not initialized.");
+    }
+
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
     checkAuthentication();
