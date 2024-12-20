@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('userEmail', responsePayload.email);
     checkAuthentication();
 
-    // !!! СТРОКА submitForm(); УДАЛЕНА ОТСЮДА !!!
+    // !!! УДАЛИЛ submitForm() ОТСЮДА !!!
   }
 
   window.onload = function() {
@@ -84,6 +84,9 @@ document.addEventListener('DOMContentLoaded', function () {
         voteButton.textContent = 'Отправка...';
         voteButton.disabled = true;
 
+        // Добавляем флаг
+        let formSubmitted = false;
+
         // Сбор данных формы вручную
         const formData = {};
         for (const element of votingForm.elements) {
@@ -116,8 +119,11 @@ document.addEventListener('DOMContentLoaded', function () {
           })
           .then(responseText => {
             console.log(responseText);
-
-            alert('Спасибо за ваш голос!');
+            // Проверяем флаг
+            if (!formSubmitted) {
+                alert('Спасибо за ваш голос!');
+                formSubmitted = true; // Устанавливаем флаг
+            }
 
             votingForm.reset();
           })
