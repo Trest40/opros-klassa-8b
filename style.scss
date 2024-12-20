@@ -43,7 +43,7 @@ body {
     color: #fff;
     @include center;
     padding-bottom: 50px;
-    overflow-x: hidden; // для избежания горизонт. прокрутки
+    overflow-x: hidden;
 }
 
 .background-overlay {
@@ -55,12 +55,13 @@ body {
     background: url('Dv9E.gif') no-repeat center center fixed;
     background-size: cover;
     opacity: 0.3;
-    z-index: -1;
+    z-index: 1;  // Исправлено: z-index установлен в 1
 }
 
 header {
     @include center;
     @include transition-all;
+    z-index: 2; // Исправлено: Добавлен z-index для header
 
     h1 {
         font-size: 3rem;
@@ -93,26 +94,101 @@ header {
     display: flex;
     align-items: center;
     margin-top: 10px;
+    z-index: 2; // Исправлено: Добавлен z-index для auth-container
 }
 
 .google-button {
     display: none;
 }
 
-// ... (rest of your styles for buttons, user info, etc.)
+#sign-in-button {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #000;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    margin-right: 10px;
+    display: block;
+
+    &:hover {
+        background: $primary-color;
+        transform: scale(1.05) translateY(-3px);
+        box-shadow: $button-hover;
+    }
+}
+
+#user-info {
+    display: flex;
+    align-items: center;
+    color: $primary-color;
+    flex-direction: column;
+    p{
+    margin-right: 15px;
+    }
+}
+
+#user-name {
+    margin-right: 0;
+    margin-bottom: 5px;
+}
+
+#sign-out-button {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #000;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    margin-right: 10px;
+}
 
 main.container {
     @include default-box;
     width: 90%;
     max-width: 1200px;
-    @include transition-all; // Keep transition
-
+    @include transition-all;
+     z-index: 2; // Исправлено: Добавлен z-index для main.container
     form {
-       // ... (form styles)
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-gap: 20px;
     }
 
     .nomination {
-        // ... (nomination styles)
+        @include default-box;
+        padding: 20px;
+
+        h2 {
+            font-size: 1.8rem;
+            color: #ffdb58;
+            text-shadow: 0 0 8px $primary-color;
+            margin-bottom: 20px;
+            font-weight: 700;
+            @include flex-center;
+
+            i {
+                margin-right: 10px;
+            }
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.2rem;
+            text-align: left;
+            padding-left: 20px;
+            color: #fff;
+        }
     }
     #math-genius{
       label{
@@ -122,14 +198,134 @@ main.container {
     }
 }
 
+input[type="radio"] {
+    transform: scale(1.5);
+    margin-right: 15px;
+    accent-color: $primary-color;
+    cursor: pointer;
+}
 
+button.vote-button {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 18px 45px;
+    margin-top: 30px;
+    font-size: 1.5rem;
+    color: #000;
+    border-radius: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2; // Исправлено: Добавлен z-index для кнопки
 
-// ... (rest of your styles for inputs, buttons, footer, etc.)
+    &:hover {
+        background: $primary-color;
+        transform: scale(1.05) translateY(-3px);
+        box-shadow: $button-hover;
+    }
+}
 
+footer {
+    margin-top: 50px;
+    color: $text-color-light;
+    font-size: 1.2rem;
+    @include transition-all;
+    background: none;
+    box-shadow: none;
+    z-index: 2; // Исправлено: Добавлен z-index для footer
+    &:hover{
+      box-shadow: none;
+      transform: none;
+    }
+}
+
+.message {
+    color: $primary-color;
+    font-size: 1.2rem;
+    margin-top: 15px;
+    @include center;
+    z-index: 2; // Исправлено: Добавлен z-index для message
+}
 
 // Медиа-запросы для адаптивности
 @media (max-width: 768px) {
-    // ... (your existing media query styles)
+  // Animation removed here.
+    header {
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        p {
+            font-size: 0.9rem;
+        }
+    }
+
+    main.container {
+        form{
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        .nomination {
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            label {
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+    .google-button,
+    #sign-out-button,
+    #sign-in-button {
+        font-size: 0.9rem;
+    }
+    .header-container{
+      flex-direction: column;
+      h1{
+        margin-top: 0;
+      }
+    }
+    #user-info{
+      flex-direction: row;
+      p{
+        margin: 0;
+      }
+    }
+    // Стили для меньших экранов
+    button.vote-button{
+      font-size: 1.2rem;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    75% {
+        transform: translateX(-10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.shake {
+    animation: shake 0.3s;
 }
 
 @media (min-width: 769px) {
@@ -140,5 +336,3 @@ main.container {
         transform: translateY(0);
     }
 }
-
-// ... (rest of your styles for animations, etc.)
