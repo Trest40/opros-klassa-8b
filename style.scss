@@ -1,5 +1,6 @@
-$primary-color: #ffd700; // Золотой
-$background-dark: #0a0a0a; // Темно-серый/черный
+// style.scss
+$primary-color: #ffd700;
+$background-dark: #0a0a0a;
 $text-color-light: #aaa;
 $container-bg: rgba(20, 20, 20, 0.9);
 $hover-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
@@ -44,11 +45,10 @@ body {
   @include center;
   padding-bottom: 50px;
   overflow-x: hidden;
-  // Добавляем фон для body:
-  background: linear-gradient(to bottom, #2e2248, #5e4588); /* Пример градиента */
+  background: linear-gradient(to bottom, #2e2248, #5e4588);
 }
 
-.background-container{
+.background-container {
   position: relative;
   z-index: 2;
 }
@@ -62,13 +62,13 @@ body {
   background: url('Dv9E.gif') no-repeat center center fixed;
   background-size: cover;
   opacity: 0.3;
-  z-index: 1; // Фон
+  z-index: 1;
 }
 
 header {
   @include center;
   @include transition-all;
-  z-index: 3; // Поверх фона и контейнера
+  z-index: 3;
 
   h1 {
     font-size: 3rem;
@@ -101,7 +101,7 @@ header {
   display: flex;
   align-items: center;
   margin-top: 10px;
-  z-index: 3; // Поверх фона и контейнера
+  z-index: 3;
 }
 
 .google-button {
@@ -193,15 +193,15 @@ main.container {
       text-align: left;
       padding-left: 20px;
       color: #fff;
-      z-index: 3; // Поверх всего в секции
-      pointer-events: auto; // Явно указываем, что label кликабельны
+      z-index: 3;
+      pointer-events: auto;
     }
   }
-  #math-genius{
-    label{
-      text-align: center;
-    }
-  }
+#math-genius{
+label{
+text-align: center;
+}
+}
 }
 
 input[type="radio"] {
@@ -209,7 +209,7 @@ input[type="radio"] {
   margin-right: 15px;
   accent-color: $primary-color;
   cursor: pointer;
-  pointer-events: auto; // Явно указываем, что радио-кнопки кликабельны
+  pointer-events: auto;
 }
 
 button.vote-button {
@@ -227,7 +227,7 @@ button.vote-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  z-index: 3; // Поверх всего
+  z-index: 3;
 
   &:hover {
     background: $primary-color;
@@ -236,6 +236,7 @@ button.vote-button {
   }
 }
 
+
 footer {
   margin-top: 50px;
   color: $text-color-light;
@@ -243,10 +244,10 @@ footer {
   @include transition-all;
   background: none;
   box-shadow: none;
-  z-index: 3; // Поверх фона и контейнера
+  z-index: 3;
   &:hover{
-    box-shadow: none;
-    transform: none;
+  box-shadow: none;
+  transform: none;
   }
 }
 
@@ -255,10 +256,10 @@ footer {
   font-size: 1.2rem;
   margin-top: 15px;
   @include center;
-  z-index: 3; // Поверх фона
+  z-index: 3;
 }
 
-// Медиа-запросы для адаптивности
+
 @media (max-width: 768px) {
   header {
     h1 {
@@ -272,7 +273,7 @@ footer {
 
   main.container {
     form{
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
     .nomination {
       h2 {
@@ -308,25 +309,11 @@ footer {
 }
 
 @keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-10px);
-  }
-
-  50% {
-    transform: translateX(10px);
-  }
-
-  75% {
-    transform: translateX(-10px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
 }
 
 .shake {
