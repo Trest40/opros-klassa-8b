@@ -156,11 +156,44 @@ main.container {
     padding: 25px;
     box-shadow: $basic-shadow;
     @include transition-all;
+    overflow: hidden;
+    position: relative;
 
     &:hover {
-      box-shadow: $hover-shadow;
       transform: translateY(-5px);
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
+
+      label {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 10px $primary-color;
+        }
+      }
     }
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      &:hover .glare-inner {
+        opacity: 1;
+        transform: translateX(100%) rotate(45deg);
+      }
 
     .nomination-title {
       font-size: 2rem;
@@ -187,12 +220,26 @@ main.container {
       font-size: 1.3rem;
       color: #fff;
       cursor: pointer;
+      @include transition-all;
       .candidate-name{
         margin-left: 5px;
       }
+      &:hover {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 10px $primary-color;
+        }
+      }
+      .candidate-name{
+        transition: text-shadow 0.3s ease;
+      }
     }
   }
-
+  @for $i from 1 through 10 {
+    .nomination:nth-child(#{$i}) {
+        animation-delay: 0.2s * $i;
+    }
+  }
 }
 
 // Radio Buttons
@@ -207,6 +254,12 @@ input[type="radio"] {
   margin-right: 10px;
   cursor: pointer;
   position: relative;
+  @include transition-all;
+
+  &:hover {
+    box-shadow: 0 0 5px $primary-color;
+    transform: scale(1.1);
+  }
 
   &:checked {
     background-color: $primary-color;
@@ -222,6 +275,9 @@ input[type="radio"] {
       background-color: #000;
       border-radius: 50%;
     }
+    &:hover {
+        box-shadow: 0 0 10px $primary-color;
+      }
   }
 }
 
@@ -242,6 +298,8 @@ button.vote-button {
   margin-left: auto;
   margin-right: auto;
   z-index: 3;
+  overflow: hidden;
+  position: relative;
 }
 
 .glow-on-hover {
@@ -262,7 +320,7 @@ button.vote-button {
       animation: glowing 20s linear infinite;
       opacity: 0;
       transition: opacity .3s ease-in-out;
-      border-radius: 35px;
+      border-radius: 40px;
     }
     &:active:after {
       background: transparent;
@@ -279,137 +337,26 @@ button.vote-button {
       background: linear-gradient(to right, #ffcc00, $primary-color);
       left: 0;
       top: 0;
-      border-radius: 35px;
+      border-radius: 40px;
     }
-  }
-
-  @keyframes glowing {
-    0% { background-position: 0 0; }
-    50% { background-position: 400% 0; }
-    100% { background-position: 0 0; }
-}
-// Footer
-footer {
-  margin-top: 60px;
-  color: $text-color-light;
-  font-size: 1.2rem;
-  @include transition-all;
-  background: none;
-  box-shadow: none;
-  z-index: 3;
-  padding: 20px;
-
-  p {
-    font-weight: 500;
-  }
-}
-
-// Media Queries
-@media (max-width: 768px) {
-  header {
-    h1 {
-      font-size: 2.5rem;
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-    }
-  }
-  main.container{
-    form{
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-    .nomination {
-      padding: 20px;
-      .nomination-title {
-        font-size: 1.6rem;
-        margin-bottom: 20px;
-        .icon {
-          font-size: 1.8rem;
-        }
-      }
-      label {
-        font-size: 1.1rem;
-        margin: 12px 0;
-      }
-    }
-  }
-  .auth-button {
-    font-size: 1rem;
-    padding: 8px 20px;
-  }
-
-  #user-info {
-    p {
-      font-size: 1.1rem;
-    }
-  }
-
-  .vote-button {
-    font-size: 1.5rem;
-    padding: 18px 40px;
-  }
-
-  footer {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-    header {
-      h1 {
-        font-size: 2rem;
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
       }
 
-      .subtitle {
-        font-size: 1rem;
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
       }
-    }
-
-    main.container {
-        form{
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-      .nomination {
-        padding: 15px;
-
-        .nomination-title {
-          font-size: 1.4rem;
-          margin-bottom: 15px;
-
-          .icon {
-            font-size: 1.6rem;
-            margin-right: 10px;
-          }
-        }
-
-        label {
-          font-size: 1rem;
-          margin: 10px 0;
-        }
-      }
-    }
-
-    .auth-button {
-      font-size: 0.9rem;
-      padding: 6px 15px;
-      margin-left: 10px;
-    }
-
-    #user-info {
-      p {
-        font-size: 1rem;
-        margin-right: 10px;
-      }
-    }
-
-    .vote-button {
-      font-size: 1.3rem;
-      padding: 15px 30px;
-      margin-top: 30px;
-    }
-
-    footer {
-      font-size: 0.9rem;
-    }
-  }
+      &:hover .gl
