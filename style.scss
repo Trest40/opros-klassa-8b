@@ -414,15 +414,17 @@ footer {
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  transition: opacity 0.3s ease-in-out;
   opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 
   &.show {
-    opacity: 1;
+      opacity: 1;
+      animation: zoomIn 0.3s ease-out;
   }
 
   &.hidden {
-     display: none;
+      opacity: 0;
+      animation: zoomOut 0.3s ease-out;
   }
 
   &.success {
@@ -463,6 +465,23 @@ footer {
       box-shadow: $button-hover;
     }
   }
+  @keyframes zoomIn {
+    from {
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes zoomOut {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
 }
 /* Медиа-запросы */
 @media (max-width: 768px) {
