@@ -6,26 +6,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const voteButton = document.querySelector('.vote-button');
     const authButtons = document.getElementById('auth-buttons');
     const notification = document.getElementById('notification');
-    const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here
+    // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
+
 
     // Initialize Google API
     function initializeGoogleSignIn() {
         if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-            google.accounts.id.initialize({
-                client_id: googleClientId,
+           google.accounts.id.initialize({
+                // client_id: googleClientId, //No need for client_id here
                 callback: handleCredentialResponse,
                 auto_prompt: true, // Enable auto prompt
                 context: "signin", // Set the context for the sign-in prompt
                 ux_mode: "popup", // Use popup mode for a cleaner UX
                 itp_support: true // Enable Intelligent Tracking Prevention support
             });
-           // google.accounts.id.prompt(); // Let it auto prompt now
+          //  google.accounts.id.prompt(); // Let it auto prompt now
         } else {
             console.error("Google API is not initialized.");
         }
     }
 
+
     initializeGoogleSignIn();
+
 
     // Add animate-fade-in class for animation
     const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
@@ -87,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-     function submitForm() {
+      function submitForm() {
     voteButton.textContent = 'Отправка...';
     voteButton.disabled = true;
     let formSubmitted = false;
