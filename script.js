@@ -15,14 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-      //signInButton.style.display = 'none';
       userNameElement.textContent = userName;
-      userInfo.style.display = 'flex';
-      voteButton.disabled = false;
+      userInfo.style.display = 'flex'; // Показываем блок с информацией о пользователе и кнопкой выхода
+      voteButton.disabled = false; // Разблокируем кнопку голосования
     } else {
       voteButton.disabled = true;
-      //signInButton.style.display = 'block'; // Показывать кнопку, если не авторизован
-      userInfo.style.display = 'none';
+      userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
     }
   }
 
