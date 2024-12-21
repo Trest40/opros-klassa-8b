@@ -1,13 +1,13 @@
 /* Переменные */
 $primary-color: #ffd700;
-$accent-color: #b38b59; // Изменено для лучшей гармонии
-$background-dark: #0F0F0F;
-$text-color-light: #F5F5F5;
-$container-bg: rgba(20, 20, 20, 0.8); // Увеличена непрозрачность
-$hover-shadow: 0 0 25px rgba(255, 215, 0, 0.7); // Отрегулировано для тонкости
-$basic-shadow: 0 0 15px rgba(255, 215, 0, 0.4); // Отрегулировано для тонкости
-$button-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); // Отрегулировано для тонкости
-$button-hover: 0 0 12px $primary-color; // Отрегулировано для тонкости
+$accent-color: #b38b59;
+$background-dark: #0f0f0f;
+$text-color-light: #f5f5f5;
+$container-bg: rgba(20, 20, 20, 0.8);
+$hover-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+$basic-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+$button-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+$button-hover: 0 0 12px $primary-color;
 $main-font: 'Inter', sans-serif;
 $header-font: 'Cormorant Garamond', serif;
 
@@ -30,7 +30,8 @@ $header-font: 'Cormorant Garamond', serif;
 body {
   margin: 0;
   font-family: $main-font;
-  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") center/cover no-repeat fixed; // Добавлен GIF фон
+  background: url('4ef1578676dbf9b85df906d2a54c9992.gif') center/cover no-repeat
+    fixed;
   color: $text-color-light;
   @include center;
   padding-bottom: 50px;
@@ -62,14 +63,14 @@ header {
   }
 
   h1 {
-    font-size: 4rem; // Увеличен размер шрифта
+    font-size: 4rem;
     font-weight: 700;
     font-family: $header-font;
     text-shadow: 3px 3px 10px $primary-color;
     color: $primary-color;
     margin-top: 0;
     margin-bottom: 10px;
-    letter-spacing: 4px; // Увеличен интервал между буквами
+    letter-spacing: 4px;
     text-transform: uppercase;
   }
   .glow {
@@ -78,20 +79,122 @@ header {
 
   @keyframes glow {
     from {
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px $primary-color, 0 0 20px $primary-color, 0 0 25px $primary-color, 0 0 30px $primary-color, 0 0 35px $primary-color;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px $primary-color,
+        0 0 20px $primary-color, 0 0 25px $primary-color,
+        0 0 30px $primary-color, 0 0 35px $primary-color;
     }
     to {
-      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px $primary-color, 0 0 40px $primary-color, 0 0 50px $primary-color, 0 0 60px $primary-color, 0 0 70px $primary-color;
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px $primary-color,
+        0 0 40px $primary-color, 0 0 50px $primary-color,
+        0 0 60px $primary-color, 0 0 70px $primary-color;
     }
   }
 
   .subtitle {
-    font-size: 1.6rem; // Увеличен размер шрифта
+    font-size: 1.6rem;
     color: $text-color-light;
     margin-top: 0;
     font-weight: 500;
   }
 }
+
+/* Анимация появления */
+@keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+/* Стили для визитной карточки */
+#intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-color: $background-dark;
+
+    .intro-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        border-radius: 10px;
+        background-color: $container-bg;
+        box-shadow: $basic-shadow;
+        animation: fadeInUp 1s ease-out; /* Добавляем анимацию появления */
+
+        .intro-title {
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: $header-font;
+            color: $primary-color;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 10px $primary-color;
+        }
+
+        .intro-subtitle {
+            font-size: 1.4rem;
+            color: $text-color-light;
+            margin-bottom: 30px;
+        }
+
+        .intro-button {
+            background: linear-gradient(to right, #ffcc00, $primary-color);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: #000;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            @include transition-all;
+            box-shadow: $button-shadow;
+
+            &:hover {
+                background: $primary-color;
+                transform: translateY(-2px);
+                box-shadow: $button-hover;
+            }
+        }
+    }
+  }
+
+
+/* Стили для лоадера */
+#loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid $primary-color;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+  }
 
 /* Аутентификация */
 #auth-container {
@@ -389,21 +492,6 @@ footer {
   }
 }
 
-/* Анимации появления */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeInUp 0.8s ease-out;
-}
 .notification {
   position: fixed;
   top: 50%;
@@ -445,6 +533,7 @@ footer {
     padding: 10px 20px;
     text-align: center;
     margin-bottom: 10px;
+    max-width: 300px;
   }
 
   #close-notification {
@@ -512,56 +601,65 @@ footer {
       label {
         font-size: 1.2rem; // Adjusted font size
         margin: 12px 0;
-      }
     }
-  }
-
-  button.vote-button {
-    font-size: 1.5rem; // Adjusted font size
-    padding: 15px 40px; // Adjusted padding
   }
 }
 
-@media (max-width: 480px) {
-  header {
-    h1 {
-      font-size: 2.2rem; // Adjusted font size
-      letter-spacing: 2px; // Adjusted letter spacing
-    }
+button.vote-button {
+  font-size: 1.5rem; // Adjusted font size
+  padding: 15px 40px; // Adjusted padding
+}
+}
 
-    .subtitle {
+@media (max-width: 480px) {
+header {
+  h1 {
+    font-size: 2.2rem; // Adjusted font size
+    letter-spacing: 2px; // Adjusted letter spacing
+  }
+
+  .subtitle {
+    font-size: 1.1rem; // Adjusted font size
+  }
+}
+
+main.container {
+  .nomination {
+    .nomination-title {
+      font-size: 1.6rem; // Adjusted font size
+      .icon {
+        font-size: 1.8rem; // Adjusted font size
+      }
+    }
+    label {
       font-size: 1.1rem; // Adjusted font size
     }
   }
+}
 
-  main.container {
-    .nomination {
-      .nomination-title {
-        font-size: 1.6rem; // Adjusted font size
-        .icon {
-          font-size: 1.8rem; // Adjusted font size
-        }
+button.vote-button {
+  font-size: 1.4rem; // Adjusted font size
+  padding: 15px 30px; // Adjusted padding
+}
+#auth-container {
+  flex-direction: column;
+  .auth-button{
+      margin-left: 0;
+  }
+}
+#user-info{
+  flex-direction: column;
+  p{
+      margin-right: 0;
+  }
+}
+#intro {
+  .intro-container {
+      max-width: 95%;
+      padding: 20px;
+      .intro-title{
+          font-size: 2.5rem;
       }
-      label {
-        font-size: 1.1rem; // Adjusted font size
-      }
-    }
   }
-
-  button.vote-button {
-    font-size: 1.4rem; // Adjusted font size
-    padding: 15px 30px; // Adjusted padding
-  }
-  #auth-container {
-    flex-direction: column;
-    .auth-button{
-        margin-left: 0;
-    }
-  }
-  #user-info{
-    flex-direction: column;
-    p{
-        margin-right: 0;
-    }
-  }
+}
 }
