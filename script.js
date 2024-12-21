@@ -6,12 +6,33 @@ document.addEventListener('DOMContentLoaded', function () {
   const voteButton = document.querySelector('.vote-button');
   const authButtons = document.getElementById('auth-buttons');
   const notification = document.getElementById('notification');
+  const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here
 
-    // Добавляем класс animate-fade-in для анимации появления
-    const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
-    elementsToAnimate.forEach(element => {
-      element.classList.add('animate-fade-in');
-    });
+  // Initialize Google API
+  function initializeGoogleSignIn() {
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: handleCredentialResponse,
+            auto_prompt: false, // Disable automatic prompting for a cleaner UX
+            context: "signin", // Set the context for the sign-in prompt
+            ux_mode: "popup", // Use popup mode for a cleaner UX
+            itp_support: true // Enable Intelligent Tracking Prevention support
+        });
+        google.accounts.id.prompt();
+    } else {
+        console.error("Google API is not initialized.");
+        showNotification('error', 'Ошибка инициализации Google API.');
+    }
+  }
+
+  initializeGoogleSignIn();
+
+  // Add animate-fade-in class for animation
+  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
+  elementsToAnimate.forEach(element => {
+    element.classList.add('animate-fade-in');
+  });
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
@@ -32,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       const responsePayload = jwt_decode(response.credential);
       console.log("ID: " + responsePayload.sub);
-      console.log('Full Name: " + responsePayload.name);
+      console.log('Full Name: ' + responsePayload.name);
       console.log("Image URL: " + responsePayload.picture);
       console.log("Email: " + responsePayload.email);
 
@@ -42,15 +63,9 @@ document.addEventListener('DOMContentLoaded', function () {
       showNotification('success', 'Вы успешно авторизовались!');
     } catch (error) {
       console.error("Error decoding or storing credentials:", error);
-      showNotification('error', 'Ошибка авторизации.');
+      showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
     }
   }
-
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.prompt();
-    } else {
-      console.error("Google API is not initialized.");
-    }
 
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
@@ -67,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem('userName')) {
       submitForm();
     } else {
-        showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
-        document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+      showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
+      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
     }
   });
 
@@ -119,15 +134,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-    function showNotification(type, message) {
-      notification.textContent = message;
-      notification.className = `notification ${type}`;
-      notification.style.display = 'block';
+  function showNotification(type, message) {
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.style.display = 'block';
 
-      setTimeout(() => {
-        notification.style.display = 'none';
-      }, 3000);
-    }
+    setTimeout(() => {
+      notification.style.display = 'none';
+    }, 3000);
+  }
 
   checkAuthentication();
 });
