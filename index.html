@@ -3,173 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OprosKlassa8B - Awards</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/jwt-decode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/rellax@1.12.1/rellax.min.js"></script>
-    <script src="https://accounts.google.com/gsi/client" async></script>
+    <title>Slay Award 2024</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-
+    <script src="https://accounts.google.com/gsi/client" async></script>
 </head>
 <body>
-    <div id="tsparticles" class="rellax" data-rellax-speed="-2"></div>
-    <header class="animate-fade-in">
-        <div class="header-container">
-            <h1 class="glow">Номинации 8Б Класса</h1>
-            <div id="auth-container">
-                <div id="auth-buttons">
-                    <div id="g_id_onload"
-                         data-client_id="847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"
-                         data-context="signin"
-                         data-ux_mode="popup"
-                         data-callback="handleCredentialResponse"
-                         data-auto_prompt="false"
-                         data-itp_support="true">
-                    </div>
+    <div class="overlay"></div>
+    <div class="container">
+        <div id="g_id_onload"
+             data-client_id="847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"
+             data-login_uri="https://your-server.com/your-login-endpoint"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
 
-                    <div class="g_id_signin"
-                         data-type="standard"
-                         data-shape="rectangular"
-                         data-theme="outline"
-                         data-text="signin_with"
-                         data-size="large"
-                         data-logo_alignment="left">
-                    </div>
+        <header>
+            <h1 class="main-title">Slay Award 2024</h1>
+        </header>
+
+
+        <form action="https://formspree.io/f/myzyrkrv" method="POST" id="myForm">
+            <input type="hidden" id="user-email" name="user-email">
+
+            <section class="nomination" id="golden-ball">
+                <div class="glare">
+                    <div class="glare-inner"></div>
                 </div>
-                <div id="user-info" style="display: none;">
-                    <p>Привет, <span id="user-name"></span>!</p>
-                    <button id="sign-out-button" class="auth-button">Выйти</button>
+                <h2 class="nomination-title"><i class="fas fa-futbol icon"></i> <span class="text-gold">Золотой мяч</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="golden_ball" value="Степа"> <span class="candidate-name">Степа</span></label>
+                    <label class="candidate-card"><input type="radio" name="golden_ball" value="Мирас"> <span class="candidate-name">Мирас</span></label>
+                    <label class="candidate-card"><input type="radio" name="golden_ball" value="Алижан"> <span class="candidate-name">Алижан</span></label>
+                    <label class="candidate-card"><input type="radio" name="golden_ball" value="Аднан"> <span class="candidate-name">Аднан</span></label>
                 </div>
-            </div>
-        </div>
-        <p class="subtitle">Выберите лучшего в каждой номинации!</p>
-    </header>
+            </section>
 
-    <main class="container">
-        <div id="notification" class="notification"></div>
-      <form id="voting-form" action="https://formspree.io/f/myzyrkrv" method="POST">
-        <section class="nomination animate-fade-in" id="golden-ball">
-            <div class="glare">
-                <div class="glare-inner"></div>
-            </div>
-           <h2 class="nomination-title"><i class="fas fa-futbol icon"></i> <span class="text-gold">Золотой мяч</span></h2>
-            <label><input type="radio" name="golden_ball" value="Степа"> <span class="candidate-name">Степа</span></label>
-           <label><input type="radio" name="golden_ball" value="Мирас"> <span class="candidate-name">Мирас</span></label>
-           <label><input type="radio" name="golden_ball" value="Алижан"> <span class="candidate-name">Алижан</span></label>
-           <label><input type="radio" name="golden_ball" value="Аднан"> <span class="candidate-name">Аднан</span></label>
-       </section>
+            <section class="nomination" id="art-boss">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-palette icon"></i> <span class="text-gold">Босс художки</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="art_boss" value="Алиса"> <span class="candidate-name">Алиса</span></label>
+                    <label class="candidate-card"><input type="radio" name="art_boss" value="Вероника"> <span class="candidate-name">Вероника</span></label>
+                    <label class="candidate-card"><input type="radio" name="art_boss" value="Маша"> <span class="candidate-name">Маша</span></label>
+                    <label class="candidate-card"><input type="radio" name="art_boss" value="Малика"> <span class="candidate-name">Малика</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="art-boss">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-           <h2 class="nomination-title"><i class="fas fa-palette icon"></i> <span class="text-gold">Босс художки</span></h2>
-           <label><input type="radio" name="art_boss" value="Алиса"> <span class="candidate-name">Алиса</span></label>
-           <label><input type="radio" name="art_boss" value="Вероника"> <span class="candidate-name">Вероника</span></label>
-           <label><input type="radio" name="art_boss" value="Маша"> <span class="candidate-name">Маша</span></label>
-           <label><input type="radio" name="art_boss" value="Малика"> <span class="candidate-name">Малика</span></label>
-       </section>
+            <section class="nomination" id="late-boss">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-clock icon"></i> <span class="text-gold">Босс опозданий</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="late_boss" value="Даниил"> <span class="candidate-name">Даниил</span></label>
+                    <label class="candidate-card"><input type="radio" name="late_boss" value="Асель"> <span class="candidate-name">Асель</span></label>
+                    <label class="candidate-card"><input type="radio" name="late_boss" value="Ян"> <span class="candidate-name">Ян</span></label>
+                    <label class="candidate-card"><input type="radio" name="late_boss" value="Руслан"> <span class="candidate-name">Руслан</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="late-boss">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-           <h2 class="nomination-title"><i class="fas fa-clock icon"></i> <span class="text-gold">Босс опозданий</span></h2>
-           <label><input type="radio" name="late_boss" value="Даниил"> <span class="candidate-name">Даниил</span></label>
-           <label><input type="radio" name="late_boss" value="Асель"> <span class="candidate-name">Асель</span></label>
-           <label><input type="radio" name="late_boss" value="Ян"> <span class="candidate-name">Ян</span></label>
-           <label><input type="radio" name="late_boss" value="Руслан"> <span class="candidate-name">Руслан</span></label>
-       </section>
+            <section class="nomination" id="strong-men">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-dumbbell icon"></i> <span class="text-gold">Тестостероновые мужики</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="strong_men" value="Артур"> <span class="candidate-name">Артур</span></label>
+                    <label class="candidate-card"><input type="radio" name="strong_men" value="Ян"> <span class="candidate-name">Ян</span></label>
+                    <label class="candidate-card"><input type="radio" name="strong_men" value="Костя"> <span class="candidate-name">Костя</span></label>
+                    <label class="candidate-card"><input type="radio" name="strong_men" value="Коля"> <span class="candidate-name">Коля</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="strong-men">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-           <h2 class="nomination-title"><i class="fas fa-dumbbell icon"></i> <span class="text-gold">Тестостероновые мужики</span></h2>
-           <label><input type="radio" name="strong_men" value="Артур"> <span class="candidate-name">Артур</span></label>
-           <label><input type="radio" name="strong_men" value="Ян"> <span class="candidate-name">Ян</span></label>
-           <label><input type="radio" name="strong_men" value="Костя"> <span class="candidate-name">Костя</span></label>
-           <label><input type="radio" name="strong_men" value="Коля"> <span class="candidate-name">Коля</span></label>
-       </section>
+            <section class="nomination" id="math-genius">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-calculator icon"></i> <span class="text-gold">Алгебраические гении</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="math_genius" value="Аднан"> <span class="candidate-name">Аднан</span></label>
+                    <label class="candidate-card"><input type="radio" name="math_genius" value="Алижан"> <span class="candidate-name">Алижан</span></label>
+                    <label class="candidate-card"><input type="radio" name="math_genius" value="Акниет"> <span class="candidate-name">Акниет</span></label>
+                    <label class="candidate-card"><input type="radio" name="math_genius" value="Коля"> <span class="candidate-name">Коля</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="math-genius">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-          <h2 class="nomination-title"><i class="fas fa-calculator icon"></i> <span class="text-gold">Алгебраические гении</span></h2>
-           <label><input type="radio" name="math_genius" value="Аднан"> <span class="candidate-name">Аднан</span></label>
-           <label><input type="radio" name="math_genius" value="Алижан"> <span class="candidate-name">Алижан</span></label>
-           <label><input type="radio" name="math_genius" value="Акниет"> <span class="candidate-name">Акниет</span></label>
-           <label><input type="radio" name="math_genius" value="Коля"> <span class="candidate-name">Коля</span></label>
-      </section>
+            <section class="nomination" id="lunch-lovers">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-utensils icon"></i> <span class="text-gold">Обед по расписанию</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="lunch_lovers" value="Руслан"> <span class="candidate-name">Руслан</span></label>
+                    <label class="candidate-card"><input type="radio" name="lunch_lovers" value="Алина Р."> <span class="candidate-name">Алина Р.</span></label>
+                    <label class="candidate-card"><input type="radio" name="lunch_lovers" value="Степа"> <span class="candidate-name">Степа</span></label>
+                    <label class="candidate-card"><input type="radio" name="lunch_lovers" value="Шерхан"> <span class="candidate-name">Шерхан</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="lunch-lovers">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-           <h2 class="nomination-title"><i class="fas fa-utensils icon"></i> <span class="text-gold">Обед по расписанию</span></h2>
-           <label><input type="radio" name="lunch_lovers" value="Руслан"> <span class="candidate-name">Руслан</span></label>
-           <label><input type="radio" name="lunch_lovers" value="Алина Р."> <span class="candidate-name">Алина Р.</span></label>
-           <label><input type="radio" name="lunch_lovers" value="Степа"> <span class="candidate-name">Степа</span></label>
-           <label><input type="radio" name="lunch_lovers" value="Шерхан"> <span class="candidate-name">Шерхан</span></label>
-       </section>
+            <section class="nomination" id="anti-sport">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-heart-broken icon"></i> <span class="text-gold">Анти-спортсмен</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="anti_sport" value="Шерхан"> <span class="candidate-name">Шерхан</span></label>
+                    <label class="candidate-card"><input type="radio" name="anti_sport" value="Меседа"> <span class="candidate-name">Меседа</span></label>
+                    <label class="candidate-card"><input type="radio" name="anti_sport" value="Алина Т."> <span class="candidate-name">Алина Т.</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="anti-sport">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-           <h2 class="nomination-title"><i class="fas fa-heart-broken icon"></i> <span class="text-gold">Анти-спортсмен</span></h2>
-          <label><input type="radio" name="anti_sport" value="Шерхан"> <span class="candidate-name">Шерхан</span></label>
-           <label><input type="radio" name="anti_sport" value="Меседа"> <span class="candidate-name">Меседа</span></label>
-           <label><input type="radio" name="anti_sport" value="Алина Т."> <span class="candidate-name">Алина Т.</span></label>
-       </section>
+            <section class="nomination" id="it-geek">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-code icon"></i> <span class="text-gold">Айтишник</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="it_geek" value="Костя"> <span class="candidate-name">Костя</span></label>
+                    <label class="candidate-card"><input type="radio" name="it_geek" value="Артур"> <span class="candidate-name">Артур</span></label>
+                    <label class="candidate-card"><input type="radio" name="it_geek" value="Коля"> <span class="candidate-name">Коля</span></label>
+                    <label class="candidate-card"><input type="radio" name="it_geek" value="Асылбек"> <span class="candidate-name">Асылбек</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="it-geek">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-           <h2 class="nomination-title"><i class="fas fa-code icon"></i> <span class="text-gold">Айтишник</span></h2>
-            <label><input type="radio" name="it_geek" value="Костя"> <span class="candidate-name">Костя</span></label>
-           <label><input type="radio" name="it_geek" value="Артур"> <span class="candidate-name">Артур</span></label>
-           <label><input type="radio" name="it_geek" value="Коля"> <span class="candidate-name">Коля</span></label>
-           <label><input type="radio" name="it_geek" value="Асылбек"> <span class="candidate-name">Асылбек</span></label>
-       </section>
+            <section class="nomination" id="meloman">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-music icon"></i> <span class="text-gold">Меломан</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="meloman" value="Эвелина"> <span class="candidate-name">Эвелина</span></label>
+                    <label class="candidate-card"><input type="radio" name="meloman" value="Коля"> <span class="candidate-name">Коля</span></label>
+                    <label class="candidate-card"><input type="radio" name="meloman" value="Ангелина"> <span class="candidate-name">Ангелина</span></label>
+                    <label class="candidate-card"><input type="radio" name="meloman" value="Камиль"> <span class="candidate-name">Камиль</span></label>
+                </div>
+            </section>
 
-       <section class="nomination animate-fade-in" id="meloman">
-        <div class="glare">
-            <div class="glare-inner"></div>
-        </div>
-            <h2 class="nomination-title"><i class="fas fa-music icon"></i> <span class="text-gold">Меломан</span></h2>
-          <label><input type="radio" name="meloman" value="Эвелина"> <span class="candidate-name">Эвелина</span></label>
-           <label><input type="radio" name="meloman" value="Коля"> <span class="candidate-name">Коля</span></label>
-           <label><input type="radio" name="meloman" value="Ангелина"> <span class="candidate-name">Ангелина</span></label>
-           <label><input type="radio" name="meloman" value="Камиль"> <span class="candidate-name">Камиль</span></label>
-      </section>
+            <section class="nomination" id="loudest">
+                <div class="glare">
+                    <div class="glare-inner"></div>
+                </div>
+                <h2 class="nomination-title"><i class="fas fa-bullhorn icon"></i> <span class="text-gold">Самый громкий</span></h2>
+                <div class="candidates-container">
+                    <label class="candidate-card"><input type="radio" name="loudest" value="Степа"> <span class="candidate-name">Степа</span></label>
+                    <label class="candidate-card"><input type="radio" name="loudest" value="Игорь"> <span class="candidate-name">Игорь</span></label>
+                    <label class="candidate-card"><input type="radio" name="loudest" value="Ян"> <span class="candidate-name">Ян</span></label>
+                    <label class="candidate-card"><input type="radio" name="loudest" value="Руслан"> <span class="candidate-name">Руслан</span></label>
+                </div>
+            </section>
 
-        <section class="nomination animate-fade-in" id="loudest">
-            <div class="glare">
-                <div class="glare-inner"></div>
-            </div>
-           <h2 class="nomination-title"><i class="fas fa-bullhorn icon"></i> <span class="text-gold">Самый громкий</span></h2>
-           <label><input type="radio" name="loudest" value="Степа"> <span class="candidate-name">Степа</span></label>
-           <label><input type="radio" name="loudest" value="Игорь"> <span class="candidate-name">Игорь</span></label>
-           <label><input type="radio" name="loudest" value="Ян"> <span class="candidate-name">Ян</span></label>
-           <label><input type="radio" name="loudest" value="Руслан"> <span class="candidate-name">Руслан</span></label>
-       </section>
-       <button type="submit" class="vote-button glow-on-hover animate-fade-in" >
-            <div class="glare">
-                <div class="glare-inner"></div>
-            </div>
-            Голосовать
-        </button>
-   </form>
-    </main>
+            <button type="submit" id="submit-button" disabled><i class="fas fa-paper-plane"></i> Отправить</button>
+        </form>
+    </div>
 
-    <footer class="animate-fade-in">
-        <p>© 2024 OprosKlassa8B.</p>
-    </footer>
-    <script defer src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

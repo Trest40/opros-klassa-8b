@@ -1,148 +1,56 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const signOutButton = document.getElementById('sign-out-button');
-  const userInfo = document.getElementById('user-info');
-  const userNameElement = document.getElementById('user-name');
-  const votingForm = document.getElementById('voting-form');
-  const voteButton = document.querySelector('.vote-button');
-  const authButtons = document.getElementById('auth-buttons');
-  const notification = document.getElementById('notification');
-  const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('myForm');
+    const submitButton = document.getElementById('submit-button');
+    const userEmailInput = document.getElementById('user-email');
+    const candidateCards = document.querySelectorAll('.candidate-card');
 
-  // Initialize Google API
-  function initializeGoogleSignIn() {
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    function handleCredentialResponse(response) {
+        const responsePayload = decodeJwtResponse(response.credential);
+        userEmailInput.value = responsePayload.email;
+        submitButton.disabled = false;
+        console.log("Email: " + responsePayload.email);
+    }
+
+    function decodeJwtResponse(token) {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+
+    window.onload = function () {
         google.accounts.id.initialize({
-            client_id: googleClientId,
-            callback: handleCredentialResponse,
-            auto_prompt: false, // Disable automatic prompting for a cleaner UX
-            context: "signin", // Set the context for the sign-in prompt
-            ux_mode: "popup", // Use popup mode for a cleaner UX
-            itp_support: true // Enable Intelligent Tracking Prevention support
+            client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
+            callback: handleCredentialResponse
         });
-        google.accounts.id.prompt();
-    } else {
-        console.error("Google API is not initialized.");
-        showNotification('error', 'Ошибка инициализации Google API.');
+        google.accounts.id.renderButton(
+            document.getElementById("g_id_onload"),
+            { theme: "outline", size: "large" }  // customization attributes
+        );
+        google.accounts.id.prompt(); // also display the One Tap dialog
     }
-  }
 
-  initializeGoogleSignIn();
-
-  // Add animate-fade-in class for animation
-  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
-  elementsToAnimate.forEach(element => {
-    element.classList.add('animate-fade-in');
-  });
-
-  function checkAuthentication() {
-    const userName = localStorage.getItem('userName');
-
-    if (userName) {
-      authButtons.style.display = 'none';
-      userNameElement.textContent = userName;
-      userInfo.style.display = 'flex';
-      voteButton.disabled = false;
-    } else {
-      authButtons.style.display = 'block';
-      voteButton.disabled = true;
-      userInfo.style.display = 'none';
-    }
-  }
-
-  window.handleCredentialResponse = (response) => {
-    try {
-      const responsePayload = jwt_decode(response.credential);
-      console.log("ID: " + responsePayload.sub);
-      console.log('Full Name: ' + responsePayload.name);
-      console.log("Image URL: " + responsePayload.picture);
-      console.log("Email: " + responsePayload.email);
-
-      localStorage.setItem('userName', responsePayload.name);
-      localStorage.setItem('userEmail', responsePayload.email);
-      checkAuthentication();
-      showNotification('success', 'Вы успешно авторизовались!');
-    } catch (error) {
-      console.error("Error decoding or storing credentials:", error);
-      showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
-    }
-  }
-
-  signOutButton.addEventListener('click', function () {
-    localStorage.clear();
-    checkAuthentication();
-    voteButton.disabled = true;
-    voteButton.textContent = 'Голосовать';
-    userNameElement.textContent = '';
-    showNotification('info', 'Вы успешно вышли из аккаунта.');
-  });
-
-  voteButton.addEventListener('click', function (event) {
-    event.preventDefault();
-
-    if (localStorage.getItem('userName')) {
-      submitForm();
-    } else {
-      showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
-      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-
-  function submitForm() {
-    voteButton.textContent = 'Отправка...';
-    voteButton.disabled = true;
-    let formSubmitted = false;
-
-    const formData = {};
-    for (const element of votingForm.elements) {
-      if (element.name && element.type !== 'submit') {
-        if (element.type === 'radio' && element.checked) {
-          formData[element.name] = element.value;
-        } else if (element.type !== 'radio') {
-          formData[element.name] = element.value;
+    form.addEventListener('submit', function(event) {
+        if (!userEmailInput.value) {
+            event.preventDefault();
+            alert('Пожалуйста, войдите через Google перед отправкой формы.');
         }
-      }
-    }
-    formData['email'] = localStorage.getItem('userEmail');
-
-    console.log('Отправляемые данные:', JSON.stringify(formData));
-
-    fetch(votingForm.action, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-    .then(response => {
-      if (response.ok) {
-        console.log('Форма успешно отправлена!');
-        showNotification('success', 'Спасибо за ваш голос!');
-        votingForm.reset();
-      } else {
-        console.error('Ошибка при отправке формы:', response.statusText);
-        showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-      }
-    })
-    .catch(error => {
-      console.error('Ошибка при отправке формы:', error);
-      showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-    })
-    .finally(() => {
-      voteButton.textContent = 'Голосовать';
-      voteButton.disabled = false;
     });
-  }
 
-  function showNotification(type, message) {
-    notification.textContent = message;
-    notification.className = `notification ${type}`;
-    notification.style.display = 'block';
+    // Добавляем обработчик события для каждой карточки кандидата
+    candidateCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // Снимаем выделение со всех карточек
+            candidateCards.forEach(c => c.classList.remove('selected'));
 
-    setTimeout(() => {
-      notification.style.display = 'none';
-    }, 3000);
-  }
+            // Выделяем выбранную карточку
+            this.classList.add('selected');
 
-  checkAuthentication();
+            // Выбираем radio button внутри карточки
+            const radio = this.querySelector('input[type="radio"]');
+            radio.checked = true;
+        });
+    });
 });
