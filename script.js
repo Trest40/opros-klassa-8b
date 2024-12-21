@@ -10,111 +10,110 @@ document.addEventListener('DOMContentLoaded', function () {
   const closeButton = document.getElementById('close-notification');
 
   // Initialize Google API
-  function initializeGoogleSignIn() {
-    console.log('initializeGoogleSignIn called');
-    // Добавляем явную загрузку gapi.client
-    gapi.load('client', () => {
-      console.log('gapi.client loaded');
-      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-        console.log('Google API is defined. Initializing.');
-        google.accounts.id.initialize({
-          callback: handleCredentialResponse,
-          auto_prompt: false, // Отключаем автоматический вход
-          context: 'signin', // Set the context for the sign-in prompt
-          ux_mode: 'popup', // Use popup mode for a cleaner UX
-          itp_support: true, // Enable Intelligent Tracking Prevention support
-        });
-        google.accounts.id.renderButton(
-            document.getElementById("signInDiv"), // Укажи ID элемента, в котором будет отображаться кнопка
-            {
-              theme: 'outline',
-              size: 'large',
-              type: 'standard',
-              shape: 'rectangular',
-              text: 'signin_with',
-              logo_alignment: 'left'
-            });
-      } else {
-        console.error('Google API is not initialized.');
-        showNotification(
-          'error',
-          'Google API не инициализировано! Попробуйте перезагрузить страницу.'
-        );
-      }
-    });
-  }
+   function initializeGoogleSignIn() {
+     console.log('initializeGoogleSignIn called');
 
-  initializeGoogleSignIn();
+     // Явная загрузка gapi.client с коллбеком
+     gapi.load('client', () => {
+       console.log('gapi.client loaded');
+       if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+         console.log('Google API is defined. Initializing.');
+         google.accounts.id.initialize({
+           client_id: '847429882483-05f8m63nsg115it1coij8nb27vrem42.apps.googleusercontent.com', // Добавлен client_id
+           callback: handleCredentialResponse,
+           auto_prompt: false, // Отключаем автоматический вход
+           context: 'signin', // Set the context for the sign-in prompt
+           ux_mode: 'popup', // Use popup mode for a cleaner UX
+           itp_support: true, // Enable Intelligent Tracking Prevention support
+         });
+         google.accounts.id.renderButton(
+             document.getElementById("signInDiv"), // Укажи ID элемента, в котором будет отображаться кнопка
+             {
+               theme: 'outline',
+               size: 'large',
+               type: 'standard',
+               shape: 'rectangular',
+               text: 'signin_with',
+               logo_alignment: 'left'
+             });
+           checkForSignedInUser();
+       } else {
+         console.error('Google API is not initialized.');
+         showNotification(
+             'error',
+             'Google API не инициализировано! Попробуйте перезагрузить страницу.'
+         );
+       }
+     });
+   }
 
-  // Add animate-fade-in class for animation
-  const elementsToAnimate = document.querySelectorAll(
-    'header, .nomination, .vote-button, footer'
-  );
-  elementsToAnimate.forEach((element) => {
-    element.classList.add('animate-fade-in');
-  });
+     // Проверка наличия залогиненного пользователя
+   function checkForSignedInUser() {
+       const token = gapi.auth.getToken(); // Проверяем наличие токена в сессии
+       if (token) {
+           // Если токен присутствует, пытаемся его декодировать
+           try {
+               const payload = jwt_decode(token.access_token); // Декодируем access_token
+               // Проверяем, не истек ли срок действия токена
+               const now = Math.floor(Date.now() / 1000);
+               if (payload.exp > now) {
+                   // Если токен действителен, обновляем интерфейс
+                   localStorage.setItem('userName', payload.name);
+                   localStorage.setItem('userEmail', payload.email);
+                   checkAuthentication();
+               } else {
+                   // Если токен просрочен, удаляем его из хранилища
+                   console.log('Token expired, clearing local storage');
+                   localStorage.clear();
+               }
+           } catch (error) {
+               console.error('Error decoding or verifying token:', error);
+               localStorage.clear(); // В случае ошибки также очищаем хранилище
+           }
+       }
+   }
 
-  function checkAuthentication() {
-    const userName = localStorage.getItem('userName');
-    console.log('checkAuthentication called. userName:', userName);
+   function handleCredentialResponse(response) {
+   console.log('handleCredentialResponse called. response:', response); // Логируем
 
-    if (userName) {
-      console.log('Updating UI - logged in');
-      authButtons.style.display = 'none';
-      userInfo.style.display = 'flex';
-      userNameElement.textContent = userName;
-      voteButton.disabled = false;
-    } else {
-      console.log('Updating UI - logged out');
-      authButtons.style.display = 'block';
-      userInfo.style.display = 'none';
-      voteButton.disabled = true;
-      userNameElement.textContent = '';
-    }
-  }
+   if (response && response.credential) {
+     try {
+       const responsePayload = jwtDecode(response.credential); // Исправлено: jwt_decode -> jwtDecode
+       console.log('responsePayload:', responsePayload); // Логируем декодированный токен
 
-  function handleCredentialResponse(response) {
-    console.log('handleCredentialResponse called. response:', response); // Логируем
+       localStorage.setItem('userName', responsePayload.name);
+       localStorage.setItem('userEmail', responsePayload.email);
 
-    if (response && response.credential) {
-      try {
-        console.log('jwt_decode:', jwt_decode); // Проверяем, что jwt_decode - это функция
-        const responsePayload = jwt_decode(response.credential);
-        console.log('responsePayload:', responsePayload); // Логируем декодированный токен
+       console.log('localStorage userName:', localStorage.getItem('userName')); // Проверяем, сохранилось ли имя
 
-        localStorage.setItem('userName', responsePayload.name);
-        localStorage.setItem('userEmail', responsePayload.email);
-
-        console.log('localStorage userName:', localStorage.getItem('userName')); // Проверяем, сохранилось ли имя
-
-        // ПРОВЕРКА НА НАЛИЧИЕ ИМЕНИ В localstorage
-        if (localStorage.getItem('userName')) {
-          console.log('User is logged in. Updating UI.'); // Логируем
-          checkAuthentication();
-          showNotification('success', 'Вы успешно авторизовались!');
-        } else {
-          console.error('User name not found in local storage after login.');
-          showNotification(
-            'error',
-            'Ошибка авторизации. Имя пользователя не найдено.'
-          );
-        }
-      } catch (error) {
-        console.error('Error decoding or storing credentials:', error);
-        showNotification(
-          'error',
-          'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
-        );
-      }
-    } else {
-      console.error('Credential response is invalid or missing.');
-      showNotification(
-        'error',
-        'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
-      );
-    }
-  }
-
+       // ПРОВЕРКА НА НАЛИЧИЕ ИМЕНИ В localstorage
+       if (localStorage.getItem('userName')) {
+         console.log('User is logged in. Updating UI.'); // Логируем
+         checkAuthentication(); // Вызов после успешного логина
+         showNotification('success', 'Вы успешно авторизовались!');
+       } else {
+         console.error('User name not found in local storage after login.');
+         showNotification(
+           'error',
+           'Ошибка авторизации. Имя пользователя не найдено.'
+         );
+       }
+     } catch (error) {
+       console.error('Error decoding or storing credentials:', error);
+       showNotification(
+         'error',
+         'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
+       );
+     }
+   } else {
+     console.error('Credential response is invalid or missing.');
+     showNotification(
+       'error',
+       'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
+     );
+   }
+ }
+ 
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
     checkAuthentication();
