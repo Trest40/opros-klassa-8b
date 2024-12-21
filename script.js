@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const notification = document.getElementById('notification');
   const notificationMessage = document.getElementById('notification-message');
   const closeButton = document.getElementById('close-notification');
-  // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
   // Initialize Google API
   function initializeGoogleSignIn() {
@@ -19,14 +18,22 @@ document.addEventListener('DOMContentLoaded', function () {
       if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
         console.log('Google API is defined. Initializing.');
         google.accounts.id.initialize({
-          // client_id: googleClientId, //No need for client_id here
           callback: handleCredentialResponse,
-          auto_prompt: true, // Enable auto prompt
+          auto_prompt: false, // Отключаем автоматический вход
           context: 'signin', // Set the context for the sign-in prompt
           ux_mode: 'popup', // Use popup mode for a cleaner UX
           itp_support: true, // Enable Intelligent Tracking Prevention support
         });
-        // google.accounts.id.prompt();
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"), // Укажи ID элемента, в котором будет отображаться кнопка
+            {
+              theme: 'outline',
+              size: 'large',
+              type: 'standard',
+              shape: 'rectangular',
+              text: 'signin_with',
+              logo_alignment: 'left'
+            });
       } else {
         console.error('Google API is not initialized.');
         showNotification(
@@ -36,24 +43,34 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
-  // Добавляем проверку на имя пользователя в localStorage
-  function checkAuthentication() {
-      const userName = localStorage.getItem('userName');
-      console.log('checkAuthentication called. userName:', userName); // Логируем
 
-      if (userName) {
-          console.log('Updating UI - logged in'); // Логируем
-          authButtons.style.display = 'none';
-          userInfo.style.display = 'flex';
-          userNameElement.textContent = userName;
-          voteButton.disabled = false;
-      } else {
-          console.log('Updating UI - logged out'); // Логируем
-          authButtons.style.display = 'block';
-          userInfo.style.display = 'none';
-          voteButton.disabled = true;
-          userNameElement.textContent = '';
-      }
+  initializeGoogleSignIn();
+
+  // Add animate-fade-in class for animation
+  const elementsToAnimate = document.querySelectorAll(
+    'header, .nomination, .vote-button, footer'
+  );
+  elementsToAnimate.forEach((element) => {
+    element.classList.add('animate-fade-in');
+  });
+
+  function checkAuthentication() {
+    const userName = localStorage.getItem('userName');
+    console.log('checkAuthentication called. userName:', userName);
+
+    if (userName) {
+      console.log('Updating UI - logged in');
+      authButtons.style.display = 'none';
+      userInfo.style.display = 'flex';
+      userNameElement.textContent = userName;
+      voteButton.disabled = false;
+    } else {
+      console.log('Updating UI - logged out');
+      authButtons.style.display = 'block';
+      userInfo.style.display = 'none';
+      voteButton.disabled = true;
+      userNameElement.textContent = '';
+    }
   }
 
   function handleCredentialResponse(response) {
@@ -194,12 +211,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 3000);
   }
 
-    // Проверяем, загрузился ли API Google Sign-In
-    if (typeof gapi !== 'undefined' && typeof gapi.load !== 'undefined') {
-        initializeGoogleSignIn();
-        checkAuthentication();
-    } else {
-        // Если API не загрузилось, выводим сообщение об ошибке
-        showNotification('error', 'Не удалось загрузить Google API. Пожалуйста, перезагрузите страницу.');
-    }
+  initializeGoogleSignIn();
+  checkAuthentication();
 });
