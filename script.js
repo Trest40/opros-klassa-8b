@@ -13,12 +13,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
       google.accounts.id.initialize({
         client_id: "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com", // Ваш ID клиента
-        callback: handleCredentialResponse,
+        callback: handleCredentialResponse, // callback должна быть функцией
         auto_prompt: true,
         context: 'signin',
         ux_mode: 'popup',
         itp_support: true,
       });
+      google.accounts.id.prompt(); // Запрос на отображение UI Google Sign-In
     } else {
       console.error('Google API не инициализировано.');
       showNotification('error', 'Google API не инициализировано! Попробуйте перезагрузить страницу.');
