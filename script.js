@@ -11,33 +11,27 @@ document.addEventListener('DOMContentLoaded', function () {
   // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
   // Initialize Google API
-  function initializeGoogleAPI() {
-    console.log('initializeGoogleAPI called');
-    // Добавляем явную загрузку gapi.client
-    gapi.load('client', () => {
-      console.log('gapi.client loaded');
-      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-        console.log('Google API is defined. Initializing.');
-        google.accounts.id.initialize({
-          // client_id: googleClientId, //No need for client_id here
-          callback: handleCredentialResponse,
-          auto_prompt: true, // Enable auto prompt
-          context: 'signin', // Set the context for the sign-in prompt
-          ux_mode: 'popup', // Use popup mode for a cleaner UX
-          itp_support: true, // Enable Intelligent Tracking Prevention support
-        });
-        // google.accounts.id.prompt();
-      } else {
-        console.error('Google API is not initialized.');
-        showNotification(
-          'error',
-          'Google API не инициализировано! Попробуйте перезагрузить страницу.'
-        );
-      }
-    });
+  function initializeGoogleSignIn() {
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({
+        // client_id: googleClientId, //No need for client_id here
+        callback: handleCredentialResponse,
+        auto_prompt: true, // Enable auto prompt
+        context: 'signin', // Set the context for the sign-in prompt
+        ux_mode: 'popup', // Use popup mode for a cleaner UX
+        itp_support: true, // Enable Intelligent Tracking Prevention support
+      });
+      //  google.accounts.id.prompt();
+    } else {
+      console.error('Google API is not initialized.');
+      showNotification(
+        'error',
+        'Google API не инициализировано! Попробуйте перезагрузить страницу.'
+      );
+    }
   }
 
-  initializeGoogleAPI();
+  initializeGoogleSignIn();
 
   // Add animate-fade-in class for animation
   const elementsToAnimate = document.querySelectorAll(
@@ -49,16 +43,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
-    console.log('checkAuthentication called. userName:', userName); // Логируем
-
     if (userName) {
-      console.log('Updating UI - logged in'); // Логируем
       authButtons.style.display = 'none';
       userInfo.style.display = 'flex';
       userNameElement.textContent = userName;
       voteButton.disabled = false;
     } else {
-      console.log('Updating UI - logged out'); // Логируем
       authButtons.style.display = 'block';
       userInfo.style.display = 'none';
       voteButton.disabled = true;
@@ -66,32 +56,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  window.handleCredentialResponse = (response) => {
-    console.log('handleCredentialResponse called. response:', response); // Логируем
-
+  function handleCredentialResponse(response) {
     if (response && response.credential) {
       try {
-        console.log('jwt_decode:', jwt_decode); // Проверяем, что jwt_decode - это функция
         const responsePayload = jwt_decode(response.credential);
-        console.log('responsePayload:', responsePayload); // Логируем декодированный токен
+        console.log('ID: ' + responsePayload.sub);
+        console.log('Full Name: ' + responsePayload.name);
+        console.log('Image URL: ' + responsePayload.picture);
+        console.log('Email: ' + responsePayload.email);
 
         localStorage.setItem('userName', responsePayload.name);
         localStorage.setItem('userEmail', responsePayload.email);
-
-        console.log('localStorage userName:', localStorage.getItem('userName')); // Проверяем, сохранилось ли имя
-
-        // ПРОВЕРКА НА НАЛИЧИЕ ИМЕНИ В localstorage
-        if (localStorage.getItem('userName')) {
-          console.log('User is logged in. Updating UI.'); // Логируем
-          checkAuthentication();
-          showNotification('success', 'Вы успешно авторизовались!');
-        } else {
-          console.error('User name not found in local storage after login.');
-          showNotification(
-            'error',
-            'Ошибка авторизации. Имя пользователя не найдено.'
-          );
-        }
+        checkAuthentication();
+        showNotification('success', 'Вы успешно авторизовались!');
       } catch (error) {
         console.error('Error decoding or storing credentials:', error);
         showNotification(
@@ -99,14 +76,8 @@ document.addEventListener('DOMContentLoaded', function () {
           'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
         );
       }
-    } else {
-      console.error('Credential response is invalid or missing.');
-      showNotification(
-        'error',
-        'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
-      );
     }
-  };
+  }
 
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
