@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OprosKlassa8B - Awards</title>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/jwt-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.slim.min.js"></script>
@@ -19,111 +19,134 @@
         <div id="notification-message"></div>
         <button id="close-notification">OK</button>
     </div>
+    <header class="animate-fade-in">
+        <div class="header-container">
+            <h1 class="glow">Номинации 8Б Класса</h1>
+            <div id="auth-container">
+                <div id="auth-buttons">
+                     <div id="g_id_onload"
+                         data-client_id="847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="true"
+                         data-itp_support="true">
+                    </div>
 
-    <section id="intro">
-        <div class="intro-container">
-            <h1 class="intro-title">Премия 8 "Б" класса</h1>
-            <p class="intro-subtitle">Добро пожаловать на ежегодную премию 8 "Б" класса! Здесь вы можете отдать свой голос за лучших из лучших в различных номинациях.</p>
-            <button id="scroll-to-vote" class="intro-button">Принять участие</button>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-shape="rectangular"
+                         data-theme="outline"
+                         data-text="signin_with"
+                         data-size="large"
+                         data-logo_alignment="left">
+                    </div>
+                </div>
+                <div id="user-info" style="display: none;">
+                    <p>Привет, <span id="user-name"></span>!</p>
+                    <button id="sign-out-button" class="auth-button">Выйти</button>
+                </div>
+            </div>
         </div>
-    </section>
-
-    <div id="loader-wrapper">
-        <div class="loader"></div>
-    </div>
-
-    <header class="animate-slide-in">
-      <div class="header-container">
-          <div class="logo-container">
-              <img src="https://cdn.discordapp.com/attachments/958698779781914684/1209964943836549190/image.png?ex=65e8d78f&is=65d6628f&hm=9757775891f1d4776587457b54895691e8d43477695f7b927497b8757f5d7d25&" alt="Slay Logo">
-              <span class="site-title">OprosKlassa8B</span>
-          </div>
-          <div id="auth-container">
-              <div id="auth-buttons">
-                  <div id="g_id_onload"
-                      data-context="signin"
-                      data-ux_mode="popup"
-                      data-callback="handleCredentialResponse"
-                      data-auto_prompt="true"
-                      data-itp_support="true">
-                  </div>
-              </div>
-              <div id="user-info" style="display: none;">
-                  <p>Привет, <span id="user-name"></span>!</p>
-                  <button id="sign-out-button" class="auth-button">Выйти</button>
-              </div>
-          </div>
-      </div>
-  </header>
+        <p class="subtitle">Выберите лучшего в каждой номинации!</p>
+    </header>
 
     <main class="container">
       <form id="voting-form" action="https://formspree.io/f/myzyrkrv" method="POST">
-        <section class="nomination animate-slide-in" id="golden-ball">
-           <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209972187699564584/icons8-soccer-ball-50.png?ex=65e8de03&is=65d66903&hm=f8a84d87757559c38d59547753447973f95fd289a5d80b7b8a58f25d9b2cf684&" alt="icon"> <span class="text-gold">Золотой мяч</span></h2>
+        <section class="nomination animate-fade-in" id="golden-ball">
+            <div class="glare">
+                <div class="glare-inner"></div>
+            </div>
+           <h2 class="nomination-title"><i class="fas fa-futbol icon"></i> <span class="text-gold">Золотой мяч</span></h2>
             <label aria-label="Степа"><input type="radio" name="golden_ball" value="Степа"> <span class="candidate-name">Степа</span></label>
            <label aria-label="Мирас"><input type="radio" name="golden_ball" value="Мирас"> <span class="candidate-name">Мирас</span></label>
            <label aria-label="Алижан"><input type="radio" name="golden_ball" value="Алижан"> <span class="candidate-name">Алижан</span></label>
            <label aria-label="Аднан"><input type="radio" name="golden_ball" value="Аднан"> <span class="candidate-name">Аднан</span></label>
        </section>
 
-       <section class="nomination animate-slide-in" id="art-boss">
-           <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209972573886939176/icons8-marcador-50.png?ex=65e8de5e&is=65d6695e&hm=2c7a8d58743a876205c7d0d749f80d60795e38986f07a127695f93f34785e246&" alt="icon"> <span class="text-gold">Босс художки</span></h2>
+       <section class="nomination animate-fade-in" id="art-boss">
+        <div class="glare">
+            <div class="glare-inner"></div>
+        </div>
+           <h2 class="nomination-title"><i class="fas fa-palette icon"></i> <span class="text-gold">Босс художки</span></h2>
            <label aria-label="Алиса"><input type="radio" name="art_boss" value="Алиса"> <span class="candidate-name">Алиса</span></label>
            <label aria-label="Вероника"><input type="radio" name="art_boss" value="Вероника"> <span class="candidate-name">Вероника</span></label>
            <label aria-label="Маша"><input type="radio" name="art_boss" value="Маша"> <span class="candidate-name">Маша</span></label>
            <label aria-label="Малика"><input type="radio" name="art_boss" value="Малика"> <span class="candidate-name">Малика</span></label>
        </section>
 
-       <section class="nomination animate-slide-in" id="late-boss">
-           <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209972831419965470/icons8-clock-50.png?ex=65e8de9c&is=65d6699c&hm=c97a466b88953f9e1398854cb357d1d4723805739c20f21878f7096905773253&" alt="icon"> <span class="text-gold">Босс опозданий</span></h2>
+       <section class="nomination animate-fade-in" id="late-boss">
+        <div class="glare">
+            <div class="glare-inner"></div>
+        </div>
+           <h2 class="nomination-title"><i class="fas fa-clock icon"></i> <span class="text-gold">Босс опозданий</span></h2>
            <label aria-label="Даниил"><input type="radio" name="late_boss" value="Даниил"> <span class="candidate-name">Даниил</span></label>
            <label aria-label="Асель"><input type="radio" name="late_boss" value="Асель"> <span class="candidate-name">Асель</span></label>
            <label aria-label="Ян"><input type="radio" name="late_boss" value="Ян"> <span class="candidate-name">Ян</span></label>
            <label aria-label="Руслан"><input type="radio" name="late_boss" value="Руслан"> <span class="candidate-name">Руслан</span></label>
        </section>
 
-       <section class="nomination animate-slide-in" id="strong-men">
-           <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209973082799472680/icons8-biceps-50.png?ex=65e8ded7&is=65d669d7&hm=6b43274a0f8587d6758b35d723e2547879d3f0949e4e994724172a376e129285&" alt="icon"> <span class="text-gold">Тестостероновые мужики</span></h2>
+       <section class="nomination animate-fade-in" id="strong-men">
+        <div class="glare">
+            <div class="glare-inner"></div>
+        </div>
+           <h2 class="nomination-title"><i class="fas fa-dumbbell icon"></i> <span class="text-gold">Тестостероновые мужики</span></h2>
            <label aria-label="Артур"><input type="radio" name="strong_men" value="Артур"> <span class="candidate-name">Артур</span></label>
            <label aria-label="Ян"><input type="radio" name="strong_men" value="Ян"> <span class="candidate-name">Ян</span></label>
            <label aria-label="Костя"><input type="radio" name="strong_men" value="Костя"> <span class="candidate-name">Костя</span></label>
            <label aria-label="Коля"><input type="radio" name="strong_men" value="Коля"> <span class="candidate-name">Коля</span></label>
        </section>
 
-       <section class="nomination animate-slide-in" id="math-genius">
-          <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209973352936939580/icons8-square-root-50.png?ex=65e8df1a&is=65d66a1a&hm=d141948c2216a69006510d0d344568884199732b3e84969c82f7363744714477&" alt="icon"> <span class="text-gold">Алгебраические гении</span></h2>
+       <section class="nomination animate-fade-in" id="math-genius">
+        <div class="glare">
+            <div class="glare-inner"></div>
+        </div>
+          <h2 class="nomination-title"><i class="fas fa-calculator icon"></i> <span class="text-gold">Алгебраические гении</span></h2>
            <label aria-label="Аднан"><input type="radio" name="math_genius" value="Аднан"> <span class="candidate-name">Аднан</span></label>
            <label aria-label="Алижан"><input type="radio" name="math_genius" value="Алижан"> <span class="candidate-name">Алижан</span></label>
            <label aria-label="Акниет"><input type="radio" name="math_genius" value="Акниет"> <span class="candidate-name">Акниет</span></label>
            <label aria-label="Коля"><input type="radio" name="math_genius" value="Коля"> <span class="candidate-name">Коля</span></label>
       </section>
 
-       <section class="nomination animate-slide-in" id="lunch-lovers">
-           <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209973606410043452/icons8-pizza-50.png?ex=65e8df55&is=65d66a55&hm=86f6b167483936442701d50f25a279418d44c73c54c396c4c0f4149b745c753a&" alt="icon"> <span class="text-gold">Обед по расписанию</span></h2>
+       <section class="nomination animate-fade-in" id="lunch-lovers">
+        <div class="glare">
+            <div class="glare-inner"></div>
+        </div>
+           <h2 class="nomination-title"><i class="fas fa-utensils icon"></i> <span class="text-gold">Обед по расписанию</span></h2>
            <label aria-label="Руслан"><input type="radio" name="lunch_lovers" value="Руслан"> <span class="candidate-name">Руслан</span></label>
            <label aria-label="Алина Р."><input type="radio" name="lunch_lovers" value="Алина Р."> <span class="candidate-name">Алина Р.</span></label>
            <label aria-label="Степа"><input type="radio" name="lunch_lovers" value="Степа"> <span class="candidate-name">Степа</span></label>
            <label aria-label="Шерхан"><input type="radio" name="lunch_lovers" value="Шерхан"> <span class="candidate-name">Шерхан</span></label>
        </section>
 
-       <section class="nomination animate-slide-in" id="anti-sport">
-           <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209973847694807110/icons8-dislike-50.png?ex=65e8df8e&is=65d66a8e&hm=b96745d44d09e2726d8f67b340d3784f0607915c391f2c8672e19a434324236e&" alt="icon"> <span class="text-gold">Анти-спортсмен</span></h2>
+       <section class="nomination animate-fade-in" id="anti-sport">
+        <div class="glare">
+            <div class="glare-inner"></div>
+        </div>
+           <h2 class="nomination-title"><i class="fas fa-heart-broken icon"></i> <span class="text-gold">Анти-спортсмен</span></h2>
           <label aria-label="Шерхан"><input type="radio" name="anti_sport" value="Шерхан"> <span class="candidate-name">Шерхан</span></label>
            <label aria-label="Меседа"><input type="radio" name="anti_sport" value="Меседа"> <span class="candidate-name">Меседа</span></label>
            <label aria-label="Алина Т."><input type="radio" name="anti_sport" value="Алина Т."> <span class="candidate-name">Алина Т.</span></label>
        </section>
 
-       <section class="nomination animate-slide-in" id="it-geek">
-           <h2 class="nomination-title"><img class="icon" src="https://cdn.discordapp.com/attachments/958698779781914684/1209974040973733989/icons8-working-with-a-laptop-50.png?ex=65e8dfbc&is=65d66abc&hm=d77367514554154e1763659ee0d8be2f09357f21062d0d23189d3557c6563566&" alt="icon"> <span class="text-gold">Айтишник</span></h2>
+       <section class="nomination animate-fade-in" id="it-geek">
+        <div class="glare">
+            <div class="glare-inner"></div>
+        </div>
+           <h2 class="nomination-title"><i class="fas fa-code icon"></i> <span class="text-gold">Айтишник</span></h2>
             <label aria-label="Костя"><input type="radio" name="it_geek" value="Костя"> <span class="candidate-name">Костя</span></label>
            <label aria-label="Артур"><input type="radio" name="it_geek" value="Артур"> <span class="candidate-name">Артур</span></label>
            <label aria-label="Коля"><input type="radio" name="it_geek" value="Коля"> <span class="candidate-name">Коля</span></label>
            <label aria-label="Асылбек"><input type="radio" name="it_geek" value="Асылбек"> <span class="candidate-name">Асылбек</span></label>
        </section>
 
-       <button type="submit" class="vote-button" >Голосовать</button>
+       <button type="submit" class="vote-button glow-on-hover" >Голосовать</button>
      </form>
    </main>
+
+   <footer>
+     <p>© 2024 OprosKlassa8B. Все права защищены.</p>
+   </footer>
 
    <script src="script.js"></script>
 </body>

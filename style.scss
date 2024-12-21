@@ -1,16 +1,39 @@
+
 /* Переменные */
-/* Цвета фона */
-/* Текст */
-/* Тени */
-/* Шрифты */
+$primary-color: #ffd700;
+$accent-color: #b38b59; // Изменено для лучшей гармонии
+$background-dark: #0F0F0F;
+$text-color-light: #F5F5F5;
+$container-bg: rgba(20, 20, 20, 0.8); // Увеличена непрозрачность
+$hover-shadow: 0 0 25px rgba(255, 215, 0, 0.7); // Отрегулировано для тонкости
+$basic-shadow: 0 0 15px rgba(255, 215, 0, 0.4); // Отрегулировано для тонкости
+$button-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); // Отрегулировано для тонкости
+$button-hover: 0 0 12px $primary-color; // Отрегулировано для тонкости
+$main-font: 'Inter', sans-serif;
+$header-font: 'Cormorant Garamond', serif;
+
 /* Миксины */
+@mixin transition-all {
+  transition: all 0.3s ease;
+}
+
+@mixin center {
+  text-align: center;
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Базовые стили */
 body {
   margin: 0;
-  font-family: "Manrope", sans-serif;
-  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") center/cover no-repeat fixed;
-  color: #e8e8e8;
-  text-align: center;
+  font-family: $main-font;
+  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") center/cover no-repeat fixed; // Добавлен GIF фон
+  color: $text-color-light;
+  @include center;
   padding-bottom: 50px;
   overflow-x: hidden;
   position: relative;
@@ -25,190 +48,96 @@ body {
 
 /* Хедер */
 header {
-  text-align: center;
-  transition: all 0.3s ease;
+  @include center;
+  @include transition-all;
   z-index: 3;
   padding: 20px;
-  background-color: #0f0f0f;
-  border-bottom: 2px solid #ff6900;
-  margin-bottom: 40px;
-}
-header .header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-header .logo-container {
-  display: flex;
-  align-items: center;
-}
-header .logo-container img {
-  height: 60px;
-  margin-right: 20px;
-}
-header .logo-container .site-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #ff6900;
-  text-transform: uppercase;
-}
-header h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  font-family: "Manrope", sans-serif;
-  color: #ff6900;
-  margin-top: 0;
-  margin-bottom: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  display: none;
-}
-header .subtitle {
-  font-size: 1.4rem;
-  color: #e8e8e8;
-  margin-top: 0;
-  font-weight: 500;
-  display: none;
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 4rem; // Увеличен размер шрифта
+    font-weight: 700;
+    font-family: $header-font;
+    text-shadow: 3px 3px 10px $primary-color;
+    color: $primary-color;
+    margin-top: 0;
+    margin-bottom: 10px;
+    letter-spacing: 4px; // Увеличен интервал между буквами
+    text-transform: uppercase;
+  }
+  .glow {
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px $primary-color, 0 0 20px $primary-color, 0 0 25px $primary-color, 0 0 30px $primary-color, 0 0 35px $primary-color;
+    }
+    to {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px $primary-color, 0 0 40px $primary-color, 0 0 50px $primary-color, 0 0 60px $primary-color, 0 0 70px $primary-color;
+    }
+  }
+
+  .subtitle {
+    font-size: 1.6rem; // Увеличен размер шрифта
+    color: $text-color-light;
+    margin-top: 0;
+    font-weight: 500;
+  }
 }
 
-/* Анимация появления */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-.animate-slide-in {
-  animation: slideIn 0.8s ease-out;
-}
-
-/* Стили для визитной карточки */
-#intro {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-  background-color: #0f0f0f;
-}
-#intro .intro-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px;
-  border-radius: 10px;
-  background-color: rgba(24, 24, 24, 0.8);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  animation: slideIn 1s ease-out;
-  border: 2px solid #ff6900;
-}
-#intro .intro-container .intro-title {
-  font-size: 3rem;
-  font-weight: 800;
-  font-family: "Manrope", sans-serif;
-  color: #ff6900;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-}
-#intro .intro-container .intro-subtitle {
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #e8e8e8;
-  margin-bottom: 30px;
-}
-#intro .intro-container .intro-button {
-  background: #ff6900;
-  border: none;
-  padding: 15px 30px;
-  font-size: 1.2rem;
-  color: #000;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-}
-#intro .intro-container .intro-button:hover {
-  background: #e65e00;
-  transform: translateY(-2px);
-  box-shadow: 0 0 10px #ff6900;
-}
-
-/* Стили для лоадера */
-#loader-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-#loader-wrapper .loader {
-  border: 8px solid #f3f3f3;
-  border-top: 8px solid #ff6900;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 2s linear infinite;
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 /* Аутентификация */
 #auth-container {
   display: flex;
   align-items: center;
   z-index: 3;
-}
-#auth-container .auth-button {
-  background: #ff6900;
-  border: none;
-  padding: 10px 25px;
-  font-size: 1.1rem;
-  color: #000;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  margin-left: 15px;
-}
-#auth-container .auth-button:hover {
-  background: #e65e00;
-  transform: translateY(-2px);
-  box-shadow: 0 0 10px #ff6900;
-}
-#auth-container #sign-in-button {
-  margin-left: 0;
+
+  .auth-button {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    color: #000;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    margin-left: 15px;
+
+    &:hover {
+      background: $primary-color;
+      transform: translateY(-2px);
+      box-shadow: $button-hover;
+    }
+  }
+  #sign-in-button{
+    margin-left: 0;
+  }
 }
 
 #user-info {
   display: flex;
   align-items: center;
-  color: #ff6900;
-}
-#user-info p {
-  margin-right: 15px;
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-#user-info #user-name {
-  font-weight: 600;
+  color: $primary-color;
+
+  p {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  #user-name {
+    font-weight: 600;
+  }
 }
 
 /* Основной контейнер */
@@ -218,127 +147,157 @@ main.container {
   margin: 30px auto;
   z-index: 3;
   position: relative;
-}
-main.container form {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  grid-gap: 30px;
-}
-main.container .nomination {
-  background: rgba(24, 24, 24, 0.8);
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-  overflow: hidden;
-  position: relative;
-  border: 2px solid #ff6900;
-}
-main.container .nomination:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 15px rgba(255, 105, 0, 0.7);
-  background-color: rgba(255, 105, 0, 0.1);
-}
-main.container .nomination .nomination-title {
-  font-size: 2rem;
-  font-family: "Manrope", sans-serif;
-  color: #e8e8e8;
-  margin-bottom: 25px;
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-main.container .nomination .nomination-title .icon {
-  margin-right: 15px;
-  color: #ff6900;
-  font-size: 2.2rem;
-  filter: drop-shadow(0 0 6px #ff6900);
-}
-main.container .nomination .nomination-title .text-gold {
-  color: #ff6900;
-  text-shadow: 0 0 8px #ff6900;
-}
-main.container .nomination label {
-  display: flex;
-  align-items: center;
-  margin: 15px 0;
-  font-size: 1.2rem;
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-main.container .nomination label .candidate-name {
-  margin-left: 5px;
-  font-weight: 600;
-}
-main.container .nomination label:hover {
-  color: #ff6900;
-}
-main.container .nomination label:hover .candidate-name {
-  text-shadow: 0 0 8px #ff6900;
-}
-main.container .nomination label .candidate-name {
-  transition: text-shadow 0.3s ease;
-}
-@for $i from 1 through 8 {
-  main.container .nomination:nth-child(#{$i}) {
-    animation-delay: 0.1s * $i;
+    form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-gap: 30px;
+  }
+
+  .nomination {
+    background: $container-bg;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: $basic-shadow;
+    @include transition-all;
+    overflow: hidden;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $hover-shadow;
+
+      label {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 8px $primary-color; // Отрегулировано для тонкости
+        }
+      }
+    }
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0) 50%); // Отрегулировано для тонкости
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.4s ease, transform 0.4s ease; // Сделано более плавным
+      }
+      &:hover .glare-inner {
+        opacity: 1;
+        transform: translateX(100%) rotate(45deg);
+      }
+
+    .nomination-title {
+      font-size: 2.2rem; // Увеличен размер шрифта
+      font-family: $header-font;
+      color: $text-color-light;
+      margin-bottom: 25px;
+      font-weight: 700;
+      @include flex-center;
+      .icon {
+        margin-right: 15px;
+        color: $primary-color;
+        font-size: 2.4rem; // Увеличен размер шрифта
+      }
+      .text-gold {
+        color: $primary-color;
+        text-shadow: 0 0 8px $primary-color;
+      }
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      font-size: 1.4rem; // Увеличен размер шрифта
+      color: #fff;
+      cursor: pointer;
+      @include transition-all;
+      .candidate-name{
+        margin-left: 5px;
+      }
+      &:hover {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 8px $primary-color; // Отрегулировано для тонкости
+        }
+      }
+      .candidate-name{
+        transition: text-shadow 0.3s ease;
+      }
+    }
+  }
+  @for $i from 1 through 8 { // Изменено на 8 для корректного количества номинаций
+    .nomination:nth-child(#{$i}) {
+        animation-delay: 0.1s * $i; // Отрегулирована задержка анимации
+    }
   }
 }
 
 /* Радиокнопки */
-input[type=radio] {
+input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #ff6900;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $primary-color;
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease;
-  outline: none;
-}
-input[type=radio]:hover {
-  box-shadow: 0 0 5px #ff6900;
-  transform: scale(1.1);
-}
-input[type=radio]:checked {
-  background-color: #ff6900;
-  box-shadow: 0 0 5px #ff6900;
-}
-input[type=radio]:checked:before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  background-color: #000;
-  border-radius: 50%;
-}
-input[type=radio]:checked:hover {
-  box-shadow: 0 0 10px #ff6900;
+  @include transition-all;
+
+  &:hover {
+    box-shadow: 0 0 5px $primary-color;
+    transform: scale(1.1);
+  }
+
+  &:checked {
+    background-color: $primary-color;
+    box-shadow: 0 0 5px $primary-color;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background-color: #000;
+      border-radius: 50%;
+    }
+    &:hover {
+        box-shadow: 0 0 10px $primary-color;
+      }
+  }
 }
 
 /* Кнопка голосования */
 button.vote-button {
-  background: #ff6900;
+  background: linear-gradient(to right, #ffcc00, $primary-color);
   border: none;
-  padding: 15px 40px;
+  padding: 20px 50px;
   margin-top: 40px;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   color: #000;
-  border-radius: 10px;
+  border-radius: 40px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  @include transition-all;
+  box-shadow: $button-shadow;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -346,169 +305,264 @@ button.vote-button {
   overflow: hidden;
   position: relative;
 }
-button.vote-button:hover {
-  background: #e65e00;
-  transform: translateY(-2px);
-  box-shadow: 0 0 10px #ff6900;
+
+.glow-on-hover {
+    &:hover {
+      color: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 5px 15px $primary-color;
+      }
+    &:before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left:-2px;
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(5px);
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      animation: glowing 20s linear infinite;
+      opacity: 0;
+      transition: opacity .3s ease-in-out;
+      border-radius: 40px;
+    }
+    &:active:after {
+      background: transparent;
+    }
+    &:hover:before {
+      opacity: 1;
+    }
+    &:after {
+      z-index: -1;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #ffcc00, $primary-color);
+      left: 0;
+      top: 0;
+      border-radius: 40px;
+    }
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      &:hover .glare-inner {
+        opacity: 1;
+        transform: translateX(100%) rotate(45deg);
+      }
+  }
+
+  @keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+/* Футер */
+footer {
+  margin-top: 60px;
+  color: $text-color-light;
+  font-size: 1.2rem;
+  @include transition-all;
+  background: none;
+  box-shadow: none;
+  z-index: 3;
+  padding: 20px;
+
+  p {
+    font-weight: 500;
+  }
 }
 
+/* Анимации появления */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out;
+}
 .notification {
   position: fixed;
-  top: 80%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #181818;
+  background-color: #2c2c2c;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
-  border: 2px solid #ff6900;
-}
-.notification.show {
-  opacity: 1;
-  animation: zoomIn 0.3s ease-out;
-}
-.notification.hidden {
-  opacity: 0;
-  animation: zoomOut 0.3s ease-out;
-  display: none;
-}
-.notification.success {
-  background-color: #458347;
-}
-.notification.error {
-  background-color: #8f2823;
-}
-.notification.info {
-  background-color: #15548f;
-}
-.notification #notification-message {
-  color: #fff;
-  padding: 10px 20px;
-  text-align: center;
-  margin-bottom: 10px;
-  max-width: 300px;
-}
-.notification #close-notification {
-  background: #555;
-  border: none;
-  padding: 5px 15px;
-  font-size: 1rem;
-  color: #fff;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: none;
-  margin: 5px;
-}
-.notification #close-notification:hover {
-  background: #333;
-  transform: none;
-  box-shadow: none;
-}
-@keyframes zoomIn {
-  from {
-    transform: translate(-50%, -50%) scale(0.8);
+
+  &.show {
+      opacity: 1;
+      animation: zoomIn 0.3s ease-out;
   }
-  to {
-    transform: translate(-50%, -50%) scale(1);
+
+  &.hidden {
+      opacity: 0;
+      animation: zoomOut 0.3s ease-out;
+      display: none;
   }
+
+  &.success {
+    background-color: #4caf50;
+  }
+
+  &.error {
+    background-color: #f44336;
+  }
+
+  &.info {
+    background-color: #2196f3;
+  }
+
+  #notification-message {
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #close-notification {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 5px 15px;
+    font-size: 1rem;
+    color: #000;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    margin: 5px;
+
+    &:hover {
+      background: $primary-color;
+      transform: translateY(-2px);
+      box-shadow: $button-hover;
+    }
+  }
+  @keyframes zoomIn {
+    from {
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
+
 @keyframes zoomOut {
-  from {
-    transform: translate(-50%, -50%) scale(1);
+    from {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+}
+/* Медиа-запросы */
+@media (max-width: 768px) {
+  header {
+    h1 {
+      font-size: 2.8rem; // Adjusted font size
+      letter-spacing: 3px; // Adjusted letter spacing
+    }
+
+    .subtitle {
+      font-size: 1.3rem; // Adjusted font size
+    }
   }
-  to {
-    transform: translate(-50%, -50%) scale(0.8);
+  main.container{
+    form{
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .nomination {
+      padding: 20px;
+      .nomination-title {
+        font-size: 1.8rem; // Adjusted font size
+        margin-bottom: 20px;
+        .icon {
+          font-size: 2rem; // Adjusted font size
+        }
+      }
+      label {
+        font-size: 1.2rem; // Adjusted font size
+        margin: 12px 0;
+      }
+    }
+  }
+
+  button.vote-button {
+    font-size: 1.5rem; // Adjusted font size
+    padding: 15px 40px; // Adjusted padding
   }
 }
 
-/* Медиа-запросы */
-@media (max-width: 768px) {
-  header .logo-container img {
-    height: 40px;
-    margin-right: 10px;
-  }
-  header .logo-container .site-title {
-    font-size: 1.5rem;
-  }
-  header h1 {
-    font-size: 2.8rem;
-    letter-spacing: 3px;
-  }
-  header .subtitle {
-    font-size: 1.3rem;
-  }
-  main.container form {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-  main.container .nomination {
-    padding: 20px;
-  }
-  main.container .nomination .nomination-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-  }
-  main.container .nomination .nomination-title .icon {
-    font-size: 2rem;
-  }
-  main.container .nomination label {
-  font-size: 1.2rem;
-  margin: 12px 0;
-}
-button.vote-button {
-  font-size: 1.5rem;
-  padding: 15px 40px;
-}
-}
 @media (max-width: 480px) {
-header .logo-container img {
-  height: 30px;
-  margin-right: 10px;
-}
-header .logo-container .site-title {
-  font-size: 1.2rem;
-}
-header h1 {
-  font-size: 2.2rem;
-  letter-spacing: 2px;
-}
-header .subtitle {
-  font-size: 1.1rem;
-}
-main.container .nomination .nomination-title {
-  font-size: 1.6rem;
-}
-main.container .nomination .nomination-title .icon {
-  font-size: 1.8rem;
-}
-main.container .nomination label {
-  font-size: 1.1rem;
-}
-button.vote-button {
-  font-size: 1.4rem;
-  padding: 15px 30px;
-}
-#auth-container {
-  flex-direction: column;
-}
-#auth-container .auth-button {
-  margin-left: 0;
-}
-#user-info {
-  flex-direction: column;
-}
-#user-info p {
-  margin-right: 0;
-}
-#intro .intro-container {
-  max-width: 95%;
-  padding: 20px;
-}
-#intro .intro-container .intro-title {
-  font-size: 2.5rem;
-}
+  header {
+    h1 {
+      font-size: 2.2rem; // Adjusted font size
+      letter-spacing: 2px; // Adjusted letter spacing
+    }
+
+    .subtitle {
+      font-size: 1.1rem; // Adjusted font size
+    }
+  }
+
+  main.container {
+    .nomination {
+      .nomination-title {
+        font-size: 1.6rem; // Adjusted font size
+        .icon {
+          font-size: 1.8rem; // Adjusted font size
+        }
+      }
+      label {
+        font-size: 1.1rem; // Adjusted font size
+      }
+    }
+  }
+
+  button.vote-button {
+    font-size: 1.4rem; // Adjusted font size
+    padding: 15px 30px; // Adjusted padding
+  }
+  #auth-container {
+    flex-direction: column;
+    .auth-button{
+        margin-left: 0;
+    }
+  }
+  #user-info{
+    flex-direction: column;
+    p{
+        margin-right: 0;
+    }
+  }
 }
