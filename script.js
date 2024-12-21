@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         google.accounts.id.renderButton(
             document.getElementById("g_id_onload"),
-            { theme: "outline", size: "large" }  // customization attributes
+            { theme: "dark", size: "large" }  // customization attributes
         );
         google.accounts.id.prompt(); // also display the One Tap dialog
     }
@@ -39,16 +39,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Добавляем обработчик события для каждой карточки кандидата
     candidateCards.forEach(card => {
         card.addEventListener('click', function() {
-            // Снимаем выделение со всех карточек
             candidateCards.forEach(c => c.classList.remove('selected'));
-
-            // Выделяем выбранную карточку
             this.classList.add('selected');
-
-            // Выбираем radio button внутри карточки
             const radio = this.querySelector('input[type="radio"]');
             radio.checked = true;
         });

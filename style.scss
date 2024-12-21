@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap');
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
     background-image: url('images/4ef1578676dbf9b85df906d2a54c9992.gif');
     background-size: cover;
     background-position: center;
-    color: #fff;
+    color: #fd7e14;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,31 +21,19 @@ body {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to bottom, #1a237e, #000 80%);
-        opacity: 0.8;
+        background: rgba(0, 0, 0, 0.85);
         z-index: -1;
     }
 }
 
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: -2;
-    pointer-events: none;
-}
-
 .container {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     padding: 40px;
-    border-radius: 20px;
+    border-radius: 10px;
     text-align: center;
     max-width: 900px;
     width: 90%;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px rgba(253, 126, 20, 0.7);
     position: relative;
     z-index: 1;
 }
@@ -56,20 +44,20 @@ header {
 
 .main-title {
     font-family: 'Roboto Slab', serif;
-    color: #ffd700;
+    color: #fd7e14;
     font-size: 3.5em;
-    text-shadow: 0 0 20px #ffd700;
+    text-shadow: 0 0 15px #fd7e14;
     margin: 0;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     animation: title-glow 2s ease-in-out infinite alternate;
 }
 
 @keyframes title-glow {
     from {
-        text-shadow: 0 0 10px #ffd700;
+        text-shadow: 0 0 10px #fd7e14;
     }
     to {
-        text-shadow: 0 0 20px #ffc400, 0 0 30px #ffb300;
+        text-shadow: 0 0 20px #fd7e14, 0 0 30px #fd7e14;
     }
 }
 
@@ -79,28 +67,8 @@ header {
     opacity: 0;
     animation: fade-in 1s ease forwards;
 
-    .glare {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        border-radius: 15px;
-
-        .glare-inner {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 50%);
-            animation: glare-rotate 8s linear infinite;
-        }
-    }
-
     .nomination-title {
-        color: #ffd700;
+        color: #fd7e14;
         font-size: 2em;
         margin-bottom: 20px;
         display: flex;
@@ -110,19 +78,19 @@ header {
         .icon {
             margin-right: 15px;
             font-size: 1.3em;
-            color: #ffc400;
+            color: #fd7e14;
             transition: transform 0.3s ease, color 0.3s ease;
         }
 
-        .text-gold {
-            color: #ffd700;
-            text-shadow: 0 0 10px #ffd700;
+        .text-orange {
+            color: #fd7e14;
+            text-shadow: 0 0 10px #fd7e14;
         }
     }
 
     &:hover .nomination-title .icon {
         transform: scale(1.2) rotate(10deg);
-        color: #ffd700;
+        color: #fd7e14;
     }
 }
 
@@ -133,34 +101,41 @@ header {
 }
 
 .candidate-card {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid #ffd700;
+    background-color: #000;
+    border: 2px solid #fd7e14;
     padding: 15px 25px;
     margin: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     flex-basis: calc(25% - 20px);
     box-sizing: border-box;
 
     &:hover {
-        transform: translateY(-5px);
-        background-color: rgba(255, 215, 0, 0.2);
-        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+        transform: translateY(-3px);
+        background-color: #fd7e14;
+        .candidate-name{
+            color: #000;
+        }
+        box-shadow: 0 5px 15px rgba(253, 126, 20, 0.8);
     }
 
     input[type="radio"] {
         display: none;
 
         &:checked + .candidate-name {
-            color: #ffd700;
+            color: #fd7e14;
             font-weight: bold;
+        }
+        &:checked  {
+            background-color: #fd7e14;
+            color: #000;
         }
     }
 
     .candidate-name {
         font-size: 1.3em;
-        color: #fff;
+        color: #fd7e14;
         transition: color 0.3s ease;
     }
 }
@@ -176,15 +151,6 @@ header {
     }
 }
 
-@keyframes glare-rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 // Анимация появления номинаций
 @for $i from 1 through 10 {
     .nomination:nth-child(#{$i}) {
@@ -193,8 +159,8 @@ header {
 }
 
 button[type="submit"] {
-    background-color: #ffd700;
-    color: #333;
+    background-color: #fd7e14;
+    color: #000;
     border: none;
     padding: 15px 30px;
     font-size: 1.4em;
@@ -207,12 +173,13 @@ button[type="submit"] {
     margin-top: 20px;
 
     &:hover {
-        background-color: #ffc400;
-        box-shadow: 0 0 15px #ffd700;
+        background-color: #ff9138;
+        box-shadow: 0 0 15px #fd7e14;
     }
 
     &:disabled {
-        background-color: #ccc;
+        background-color: #696969;
+        color: #000;
         cursor: default;
         box-shadow: none;
     }
