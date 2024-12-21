@@ -8,82 +8,82 @@ document.addEventListener('DOMContentLoaded', function () {
   const notification = document.getElementById('notification');
     // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
-    // Initialize Google API
-    function initializeGoogleSignIn() {
-        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-           google.accounts.id.initialize({
-                // client_id: googleClientId, //No need for client_id here
-                callback: handleCredentialResponse,
-                auto_prompt: true, // Enable auto prompt
-                context: "signin", // Set the context for the sign-in prompt
-                ux_mode: "popup", // Use popup mode for a cleaner UX
-                itp_support: true // Enable Intelligent Tracking Prevention support
-            });
-          //  google.accounts.id.prompt();
-        } else {
-            console.error("Google API is not initialized.");
-        }
+  // Initialize Google API
+  function initializeGoogleSignIn() {
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({
+        // client_id: googleClientId, //No need for client_id here
+        callback: handleCredentialResponse,
+        auto_prompt: true, // Enable auto prompt
+        context: "signin", // Set the context for the sign-in prompt
+        ux_mode: "popup", // Use popup mode for a cleaner UX
+        itp_support: true, // Enable Intelligent Tracking Prevention support
+      });
+        //  google.accounts.id.prompt();
+    } else {
+        console.error("Google API is not initialized.");
     }
-
+  }
 
   initializeGoogleSignIn();
 
   // Add animate-fade-in class for animation
-  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
-  elementsToAnimate.forEach(element => {
+  const elementsToAnimate = document.querySelectorAll(
+    'header, .nomination, .vote-button, footer'
+  );
+  elementsToAnimate.forEach((element) => {
     element.classList.add('animate-fade-in');
   });
 
+   function checkAuthentication(bypass = false) {
+        const userName = localStorage.getItem('userName');
 
-  function checkAuthentication(bypass = false) {
-    const userName = localStorage.getItem('userName');
-
-    if (userName || bypass) {
-        authButtons.style.display = 'none';
-        userInfo.style.display = 'flex';
-        userNameElement.textContent = userName || '';
-         voteButton.disabled = false;
-
-      } else {
-      authButtons.style.display = 'block';
-      userInfo.style.display = 'none';
-      voteButton.disabled = true;
-      userNameElement.textContent = '';
-
-    }
-  }
-
-
-  window.handleCredentialResponse = (response) => {
-    if (response && response.credential) {
-        try {
-            const responsePayload = jwt_decode(response.credential);
-            console.log("ID: " + responsePayload.sub);
-             console.log('Full Name: ' + responsePayload.name);
-             console.log("Image URL: " + responsePayload.picture);
-             console.log("Email: " + responsePayload.email);
-           localStorage.setItem('userName', responsePayload.name);
-            localStorage.setItem('userEmail', responsePayload.email);
-             checkAuthentication(true);
-              showNotification('success', 'Вы успешно авторизовались!');
-          } catch (error) {
-                  console.error("Error decoding or storing credentials:", error);
-           }
+        if (userName || bypass) {
+            authButtons.style.display = 'none';
+            userInfo.style.display = 'flex';
+            userNameElement.textContent = userName || '';
+            voteButton.disabled = false;
+        } else {
+             authButtons.style.display = 'block';
+            userInfo.style.display = 'none';
+             voteButton.disabled = true;
+              userNameElement.textContent = '';
         }
+    }
 
+
+
+  window.handleCredentialResponse = async (response) => {
+      if (response && response.credential) {
+           try{
+                 const responsePayload = jwt_decode(response.credential);
+                 console.log("ID: " + responsePayload.sub);
+                  console.log('Full Name: ' + responsePayload.name);
+                  console.log("Image URL: " + responsePayload.picture);
+                  console.log("Email: " + responsePayload.email);
+
+                  localStorage.setItem('userName', responsePayload.name);
+                  localStorage.setItem('userEmail', responsePayload.email);
+                 await checkAuthentication(true);
+                  showNotification('success', 'Вы успешно авторизовались!');
+             } catch(error) {
+              console.error("Error decoding or storing credentials:", error);
+             }
+
+      }
     };
-
 
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
-     checkAuthentication();
+      checkAuthentication();
     voteButton.disabled = true;
     voteButton.textContent = 'Голосовать';
-    userNameElement.textContent = '';
+     userNameElement.textContent = '';
     showNotification('info', 'Вы успешно вышли из аккаунта.');
   });
 
-    voteButton.addEventListener('click', function (event) {
+
+     voteButton.addEventListener('click', function (event) {
         event.preventDefault();
 
         if (localStorage.getItem('userName')) {
@@ -95,55 +95,55 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-   function submitForm() {
-        voteButton.textContent = 'Отправка...';
-        voteButton.disabled = true;
-         let formSubmitted = false;
+  function submitForm() {
+    voteButton.textContent = 'Отправка...';
+    voteButton.disabled = true;
+     let formSubmitted = false;
 
-        const formData = {};
-        for (const element of votingForm.elements) {
-          if (element.name && element.type !== 'submit') {
-            if (element.type === 'radio' && element.checked) {
-              formData[element.name] = element.value;
-            } else if (element.type !== 'radio') {
-              formData[element.name] = element.value;
-            }
-          }
+
+    const formData = {};
+    for (const element of votingForm.elements) {
+      if (element.name && element.type !== 'submit') {
+        if (element.type === 'radio' && element.checked) {
+          formData[element.name] = element.value;
+        } else if (element.type !== 'radio') {
+          formData[element.name] = element.value;
         }
-        formData['email'] = localStorage.getItem('userEmail');
-
-
-        console.log('Отправляемые данные:', JSON.stringify(formData));
-
-
-        fetch(votingForm.action, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        })
-        .then(response => {
-          if (response.ok) {
-            console.log('Форма успешно отправлена!');
-            showNotification('success', 'Спасибо за ваш голос!');
-            votingForm.reset();
-          } else {
-            console.error('Ошибка при отправке формы:', response.statusText);
-            showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-          }
-        })
-        .catch(error => {
-          console.error('Ошибка при отправке формы:', error);
-          showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-        })
-        .finally(() => {
-          voteButton.textContent = 'Голосовать';
-          voteButton.disabled = false;
-        });
       }
+    }
+    formData['email'] = localStorage.getItem('userEmail');
 
+
+    console.log('Отправляемые данные:', JSON.stringify(formData));
+
+
+     fetch(votingForm.action, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('Форма успешно отправлена!');
+        showNotification('success', 'Спасибо за ваш голос!');
+        votingForm.reset();
+      } else {
+        console.error('Ошибка при отправке формы:', response.statusText);
+        showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке формы:', error);
+      showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+    })
+    .finally(() => {
+      voteButton.textContent = 'Голосовать';
+      voteButton.disabled = false;
+    });
+  }
 
   function showNotification(type, message) {
     notification.textContent = message;
