@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const voteButton = document.querySelector('.vote-button');
     const authButtons = document.getElementById('auth-buttons');
     const notification = document.getElementById('notification');
+    const notificationMessage = document.getElementById('notification-message');
     // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
     // Initialize Google API
@@ -145,12 +146,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNotification(type, message) {
-        notification.textContent = message;
-        notification.className = `notification ${type}`;
-        notification.style.display = 'block';
+        notificationMessage.textContent = message;
+        notification.classList.remove('success', 'error', 'info', 'hidden');
+        notification.classList.add(type, 'show');
 
         setTimeout(() => {
-            notification.style.display = 'none';
+            notification.classList.remove('show');
+            notification.classList.add('hidden');
         }, 3000);
     }
 
