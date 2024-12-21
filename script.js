@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const authButtons = document.getElementById('auth-buttons');
   const notification = document.getElementById('notification');
   const notificationMessage = document.getElementById('notification-message');
+  const closeButton = document.getElementById('close-notification');
   // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
   // Initialize Google API
@@ -23,10 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
       //  google.accounts.id.prompt();
     } else {
       console.error('Google API is not initialized.');
-       showNotification(
-         'error',
-         'Google API не инициализировано! Попробуйте перезагрузить страницу.'
-       );
+      showNotification(
+        'error',
+        'Google API не инициализировано! Попробуйте перезагрузить страницу.'
+      );
     }
   }
 
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  window.handleCredentialResponse = (response) => {
+  function handleCredentialResponse(response) {
     if (response && response.credential) {
       try {
         const responsePayload = jwt_decode(response.credential);
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         );
       }
     }
-  };
+  }
 
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
@@ -153,13 +154,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function showNotification(type, message) {
     notificationMessage.textContent = message;
-    notification.className = `notification ${type}`;
-    notification.classList.add('show');
+    notification.className = `notification ${type} show`; // Changed line
+    notification.style.display = 'block';
 
     setTimeout(() => {
-      notification.classList.remove('show');
+        notification.classList.remove('show');
+        notification.classList.add('hidden');
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 300); // Ensure the notification is hidden after the transition
     }, 3000);
-  }
+}
+
+  closeButton.addEventListener('click', () => {
+    notification.classList.remove('show');
+    notification.classList.add('hidden');
+  });
 
   checkAuthentication();
 });
