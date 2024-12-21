@@ -1,49 +1,153 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('myForm');
-    const submitButton = document.getElementById('submit-button');
-    const userEmailInput = document.getElementById('user-email');
-    const candidateCards = document.querySelectorAll('.candidate-card');
+document.addEventListener('DOMContentLoaded', function () {
+  const signOutButton = document.getElementById('sign-out-button');
+  const userInfo = document.getElementById('user-info');
+  const userNameElement = document.getElementById('user-name');
+  const votingForm = document.getElementById('voting-form');
+  const voteButton = document.querySelector('.vote-button');
+  const authButtons = document.getElementById('auth-buttons');
+  const notification = document.getElementById('notification');
+  const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com";
+  const signInButton = document.getElementById('sign-in-button'); // Находим кнопку входа
 
-    function handleCredentialResponse(response) {
-        const responsePayload = decodeJwtResponse(response.credential);
-        userEmailInput.value = responsePayload.email;
-        submitButton.disabled = false;
-        console.log("Email: " + responsePayload.email);
+  // Initialize Google API
+  function initializeGoogleSignIn() {
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: handleCredentialResponse,
+        auto_prompt: false,
+        context: "signin",
+        ux_mode: "popup",
+        itp_support: true
+      });
+        // google.accounts.id.prompt(); // Убрали автоматический вызов
+
+    } else {
+      console.error("Google API is not initialized.");
     }
+  }
 
-    function decodeJwtResponse(token) {
-        let base64Url = token.split('.')[1];
-        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
+  initializeGoogleSignIn();
+
+    signInButton.addEventListener('click', () => {
+        google.accounts.id.prompt(); // Вызываем окно входа при клике на "Войти"
+    });
+
+
+  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
+  elementsToAnimate.forEach(element => {
+    element.classList.add('animate-fade-in');
+  });
+
+  function checkAuthentication() {
+    const userName = localStorage.getItem('userName');
+
+    if (userName) {
+      authButtons.style.display = 'none';
+      userNameElement.textContent = userName;
+      userInfo.style.display = 'flex';
+      voteButton.disabled = false;
+    } else {
+      authButtons.style.display = 'block';
+      voteButton.disabled = true;
+      userInfo.style.display = 'none';
     }
+  }
 
-    window.onload = function () {
-        google.accounts.id.initialize({
-            client_id: '847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com',
-            callback: handleCredentialResponse
-        });
-        google.accounts.id.renderButton(
-            document.getElementById("g_id_onload"),
-            { theme: "dark", size: "large" }
-        );
+  window.handleCredentialResponse = (response) => {
+    try {
+      const responsePayload = jwt_decode(response.credential);
+      console.log("ID: " + responsePayload.sub);
+      console.log('Full Name: ' + responsePayload.name);
+      console.log("Image URL: " + responsePayload.picture);
+      console.log("Email: " + responsePayload.email);
+
+      localStorage.setItem('userName', responsePayload.name);
+      localStorage.setItem('userEmail', responsePayload.email);
+      checkAuthentication();
+      showNotification('success', 'Вы успешно авторизовались!');
+    } catch (error) {
+      console.error("Error decoding or storing credentials:", error);
+      showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
     }
+  }
 
-    form.addEventListener('submit', function(event) {
-        if (!userEmailInput.value) {
-            event.preventDefault();
-            alert('Пожалуйста, войдите через Google перед отправкой формы.');
+  signOutButton.addEventListener('click', function () {
+    localStorage.clear();
+    checkAuthentication();
+    voteButton.disabled = true;
+    voteButton.textContent = 'Голосовать';
+    userNameElement.textContent = '';
+    showNotification('info', 'Вы успешно вышли из аккаунта.');
+  });
+
+  voteButton.addEventListener('click', function (event) {
+    event.preventDefault();
+
+    if (localStorage.getItem('userName')) {
+      submitForm();
+    } else {
+      showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
+      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  function submitForm() {
+    voteButton.textContent = 'Отправка...';
+    voteButton.disabled = true;
+    let formSubmitted = false;
+
+    const formData = {};
+    for (const element of votingForm.elements) {
+      if (element.name && element.type !== 'submit') {
+        if (element.type === 'radio' && element.checked) {
+          formData[element.name] = element.value;
+        } else if (element.type !== 'radio') {
+          formData[element.name] = element.value;
         }
-    });
+      }
+    }
+    formData['email'] = localStorage.getItem('userEmail');
 
-    candidateCards.forEach(card => {
-        card.addEventListener('click', function() {
-            candidateCards.forEach(c => c.classList.remove('selected'));
-            this.classList.add('selected');
-            const radio = this.querySelector('input[type="radio"]');
-            radio.checked = true;
-        });
+    console.log('Отправляемые данные:', JSON.stringify(formData));
+
+    fetch(votingForm.action, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('Форма успешно отправлена!');
+        showNotification('success', 'Спасибо за ваш голос!');
+        votingForm.reset();
+      } else {
+        console.error('Ошибка при отправке формы:', response.statusText);
+        showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке формы:', error);
+      showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+    })
+    .finally(() => {
+      voteButton.textContent = 'Голосовать';
+      voteButton.disabled = false;
     });
+  }
+
+  function showNotification(type, message) {
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.style.display = 'block';
+
+    setTimeout(() => {
+      notification.style.display = 'none';
+    }, 3000);
+  }
+
+  checkAuthentication();
 });

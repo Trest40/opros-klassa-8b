@@ -1,234 +1,512 @@
-/*  --  Переменные  --  */
-:root {
-    --primary-color: #fd7e14;
-    --secondary-color: #ff9138;
-    --background-color: #000;
-    --font-family-main: 'Roboto Slab', serif;
-    --font-family-secondary: 'Roboto Condensed', sans-serif;
-    --shadow-color: rgba(253, 126, 20, 0.7);
-    --transition-duration: 0.3s;
+/* Переменные */
+$primary-color: #ffd700;
+$accent-color: #b38b59; // Изменено для лучшей гармонии
+$background-dark: #0F0F0F;
+$text-color-light: #F5F5F5;
+$container-bg: rgba(20, 20, 20, 0.8); // Увеличена непрозрачность
+$hover-shadow: 0 0 25px rgba(255, 215, 0, 0.7); // Отрегулировано для тонкости
+$basic-shadow: 0 0 15px rgba(255, 215, 0, 0.4); // Отрегулировано для тонкости
+$button-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); // Отрегулировано для тонкости
+$button-hover: 0 0 12px $primary-color; // Отрегулировано для тонкости
+$main-font: 'Inter', sans-serif;
+$header-font: 'Cormorant Garamond', serif;
+
+/* Миксины */
+@mixin transition-all {
+  transition: all 0.3s ease;
 }
 
+@mixin center {
+  text-align: center;
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Базовые стили */
 body {
-    margin: 0;
-    overflow: hidden;
-    font-family: var(--font-family-secondary);
-    background-color: var(--background-color);
-    color: var(--primary-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    overflow-x: hidden;
-    background-image: url('4ef1578676dbf9b85df906d2a54c9992.gif'); /* Просто имя файла */
-    background-attachment: fixed;
+  margin: 0;
+  font-family: $main-font;
+  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") center/cover no-repeat fixed; // Добавлен GIF фон
+  color: $text-color-light;
+  @include center;
+  padding-bottom: 50px;
+  overflow-x: hidden;
+  position: relative;
 }
 
-.parallax-container {
-    height: 100vh;
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    perspective: 1px;
+#tsparticles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
-.container {
-    background-color: rgba(0, 0, 0, 0.9);
-    padding: 40px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 900px;
-    width: 90%;
-    box-shadow: 0 0 20px var(--shadow-color);
-    position: relative;
-    z-index: 1;
-}
-
+/* Хедер */
 header {
-    margin-bottom: 40px;
-}
+  @include center;
+  @include transition-all;
+  z-index: 3;
+  padding: 20px;
 
-.main-title {
-    font-family: var(--font-family-main);
-    color: var(--primary-color);
-    font-size: 3.5em;
-    text-shadow: 0 0 15px var(--primary-color);
-    margin: 0;
-    letter-spacing: 3px;
-    animation: title-glow 2s ease-in-out infinite alternate;
-}
-
-.nomination {
-    margin-bottom: 30px;
-    position: relative;
-    opacity: 0;
-    animation: fade-in 1s ease forwards;
-
-    .nomination-title {
-        background-color: var(--primary-color);
-        color: #000;
-        font-size: 2em;
-        margin-bottom: 20px;
-        padding: 10px 20px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 0 10px var(--shadow-color);
-
-        .icon {
-            margin-right: 15px;
-            font-size: 1.3em;
-            color: #000;
-            transition: transform var(--transition-duration) ease, color var(--transition-duration) ease;
-        }
-
-        .text-orange {
-            color: #000;
-            text-shadow: none;
-        }
-    }
-
-    &:hover .nomination-title .icon {
-        transform: scale(1.2) rotate(10deg);
-    }
-}
-
-.candidates-container {
+  .header-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.candidate-card {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 2px solid var(--primary-color);
-    padding: 10px 15px;
-    margin: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform var(--transition-duration) ease, background-color var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
-    flex-basis: calc(25% - 20px);
-    box-sizing: border-box;
-
-    &:hover {
-        transform: translateY(-5px) scale(1.05);
-        background-color: var(--primary-color);
-        box-shadow: 0 0 20px var(--primary-color);
-
-        .candidate-name {
-            color: #000;
-        }
-    }
-
-    input[type="radio"] {
-        display: none;
-
-        &:checked + .candidate-name {
-            color: #000;
-            font-weight: bold;
-            text-shadow: 0 0 5px var(--primary-color);
-        }
-    }
-
-    .candidate-name {
-        font-size: 1.1em;
-        color: var(--primary-color);
-        transition: color var(--transition-duration) ease;
-    }
-}
-
-button[type="submit"] {
-    background-color: var(--primary-color);
-    color: #000;
-    border: none;
-    padding: 15px 30px;
-    font-size: 1.4em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
-    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    margin-top: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 4rem; // Увеличен размер шрифта
+    font-weight: 700;
+    font-family: $header-font;
+    text-shadow: 3px 3px 10px $primary-color;
+    color: $primary-color;
+    margin-top: 0;
+    margin-bottom: 10px;
+    letter-spacing: 4px; // Увеличен интервал между буквами
+    text-transform: uppercase;
+  }
+  .glow {
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px $primary-color, 0 0 20px $primary-color, 0 0 25px $primary-color, 0 0 30px $primary-color, 0 0 35px $primary-color;
+    }
+    to {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px $primary-color, 0 0 40px $primary-color, 0 0 50px $primary-color, 0 0 60px $primary-color, 0 0 70px $primary-color;
+    }
+  }
+
+  .subtitle {
+    font-size: 1.6rem; // Увеличен размер шрифта
+    color: $text-color-light;
+    margin-top: 0;
+    font-weight: 500;
+  }
+}
+
+/* Аутентификация */
+#auth-container {
+  display: flex;
+  align-items: center;
+  z-index: 3;
+
+  .auth-button {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    color: #000;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    margin-left: 15px;
 
     &:hover {
-        background-color: var(--secondary-color);
-        box-shadow: 0 0 15px var(--primary-color);
+      background: $primary-color;
+      transform: translateY(-2px);
+      box-shadow: $button-hover;
     }
-
-    &:disabled {
-        background-color: #696969;
-        color: #000;
-        cursor: default;
-        box-shadow: none;
-    }
-
-    i {
-        margin-right: 10px;
-        font-size: 1.2em;
-    }
+  }
+  #sign-in-button{
+    margin-left: 0;
+  }
 }
 
-/*  -- Анимации -- */
-@keyframes title-glow {
-    from {
-      text-shadow: 0 0 10px var(--primary-color);
-    }
-    to {
-      text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
-    }
+#user-info {
+  display: flex;
+  align-items: center;
+  color: $primary-color;
+
+  p {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  #user-name {
+    font-weight: 600;
+  }
 }
 
-@keyframes fade-in {
-    from {
+/* Основной контейнер */
+main.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 30px auto;
+  z-index: 3;
+  position: relative;
+    form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-gap: 30px;
+  }
+
+  .nomination {
+    background: $container-bg;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: $basic-shadow;
+    @include transition-all;
+    overflow: hidden;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $hover-shadow;
+
+      label {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 8px $primary-color; // Отрегулировано для тонкости
+        }
+      }
+    }
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0) 50%); // Отрегулировано для тонкости
+        transform: rotate(45deg);
         opacity: 0;
-        transform: translateY(30px) scale(0.8);
-    }
-    to {
+        transition: opacity 0.4s ease, transform 0.4s ease; // Сделано более плавным
+      }
+      &:hover .glare-inner {
         opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-@for $i from 1 through 10 {
-    .nomination:nth-child(#{$i}) {
-        animation-delay: #{$i * 0.15}s;
-    }
-}
-
-/* -- Медиа-запросы -- */
-@media (max-width: 768px) {
-    .container {
-        padding: 30px;
-    }
-
-    .main-title {
-        font-size: 2.5em;
-    }
+        transform: translateX(100%) rotate(45deg);
+      }
 
     .nomination-title {
-        font-size: 1.6em;
+      font-size: 2.2rem; // Увеличен размер шрифта
+      font-family: $header-font;
+      color: $text-color-light;
+      margin-bottom: 25px;
+      font-weight: 700;
+      @include flex-center;
+      .icon {
+        margin-right: 15px;
+        color: $primary-color;
+        font-size: 2.4rem; // Увеличен размер шрифта
+      }
+      .text-gold {
+        color: $primary-color;
+        text-shadow: 0 0 8px $primary-color;
+      }
     }
 
-    .candidate-card {
-        flex-basis: calc(50% - 20px);
+    label {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      font-size: 1.4rem; // Увеличен размер шрифта
+      color: #fff;
+      cursor: pointer;
+      @include transition-all;
+      .candidate-name{
+        margin-left: 5px;
+      }
+      &:hover {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 8px $primary-color; // Отрегулировано для тонкости
+        }
+      }
+      .candidate-name{
+        transition: text-shadow 0.3s ease;
+      }
     }
+  }
+  @for $i from 1 through 8 { // Изменено на 8 для корректного количества номинаций
+    .nomination:nth-child(#{$i}) {
+        animation-delay: 0.1s * $i; // Отрегулирована задержка анимации
+    }
+  }
+}
+
+/* Радиокнопки */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $primary-color;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+  @include transition-all;
+
+  &:hover {
+    box-shadow: 0 0 5px $primary-color;
+    transform: scale(1.1);
+  }
+
+  &:checked {
+    background-color: $primary-color;
+    box-shadow: 0 0 5px $primary-color;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background-color: #000;
+      border-radius: 50%;
+    }
+    &:hover {
+        box-shadow: 0 0 10px $primary-color;
+      }
+  }
+}
+
+/* Кнопка голосования */
+button.vote-button {
+  background: linear-gradient(to right, #ffcc00, $primary-color);
+  border: none;
+  padding: 20px 50px;
+  margin-top: 40px;
+  font-size: 1.7rem;
+  color: #000;
+  border-radius: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  @include transition-all;
+  box-shadow: $button-shadow;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 3;
+  overflow: hidden;
+  position: relative;
+}
+
+.glow-on-hover {
+    &:hover {
+      color: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 5px 15px $primary-color;
+      }
+    &:before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left:-2px;
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(5px);
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      animation: glowing 20s linear infinite;
+      opacity: 0;
+      transition: opacity .3s ease-in-out;
+      border-radius: 40px;
+    }
+    &:active:after {
+      background: transparent;
+    }
+    &:hover:before {
+      opacity: 1;
+    }
+    &:after {
+      z-index: -1;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #ffcc00, $primary-color);
+      left: 0;
+      top: 0;
+      border-radius: 40px;
+    }
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      &:hover .glare-inner {
+        opacity: 1;
+        transform: translateX(100%) rotate(45deg);
+      }
+  }
+
+  @keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+/* Футер */
+footer {
+  margin-top: 60px;
+  color: $text-color-light;
+  font-size: 1.2rem;
+  @include transition-all;
+  background: none;
+  box-shadow: none;
+  z-index: 3;
+  padding: 20px;
+
+  p {
+    font-weight: 500;
+  }
+}
+
+/* Анимации появления */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out;
+}
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+  display: none;
+
+  &.success {
+    background-color: #4CAF50;
+  }
+
+  &.error {
+    background-color: #f44336;
+  }
+
+  &.info {
+    background-color: #2196F3;
+  }
+}
+
+/* Медиа-запросы */
+@media (max-width: 768px) {
+  header {
+    h1 {
+      font-size: 2.8rem; // Adjusted font size
+      letter-spacing: 3px; // Adjusted letter spacing
+    }
+
+    .subtitle {
+      font-size: 1.3rem; // Adjusted font size
+    }
+  }
+  main.container{
+    form{
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .nomination {
+      padding: 20px;
+      .nomination-title {
+        font-size: 1.8rem; // Adjusted font size
+        margin-bottom: 20px;
+        .icon {
+          font-size: 2rem; // Adjusted font size
+        }
+      }
+      label {
+        font-size: 1.2rem; // Adjusted font size
+        margin: 12px 0;
+      }
+    }
+  }
+
+  button.vote-button {
+    font-size: 1.5rem; // Adjusted font size
+    padding: 15px 40px; // Adjusted padding
+  }
 }
 
 @media (max-width: 480px) {
-    .main-title {
-        font-size: 2em;
+  header {
+    h1 {
+      font-size: 2.2rem; // Adjusted font size
+      letter-spacing: 2px; // Adjusted letter spacing
     }
 
-    .nomination-title {
-        font-size: 1.4em;
+    .subtitle {
+      font-size: 1.1rem; // Adjusted font size
     }
+  }
 
-    .candidate-card {
-        flex-basis: 100%;
+  main.container {
+    .nomination {
+      .nomination-title {
+        font-size: 1.6rem; // Adjusted font size
+        .icon {
+          font-size: 1.8rem; // Adjusted font size
+        }
+      }
+      label {
+        font-size: 1.1rem; // Adjusted font size
+      }
     }
+  }
+
+  button.vote-button {
+    font-size: 1.4rem; // Adjusted font size
+    padding: 15px 30px; // Adjusted padding
+  }
+  #auth-container {
+    flex-direction: column;
+    .auth-button{
+        margin-left: 0;
+    }
+  }
+  #user-info{
+    flex-direction: column;
+    p{
+        margin-right: 0;
+    }
+  }
 }
