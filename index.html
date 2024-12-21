@@ -20,15 +20,12 @@
             <h1 class="glow">Номинации 8Б Класса</h1>
             <div id="auth-container">
                 <div id="auth-buttons">
-                    <!-- Кнопка для ручного входа, теперь запускает Google Sign-In -->
-                    <button id="sign-in-button" class="auth-button">Войти</button>
-
-                    <div id="g_id_onload"
+                     <div id="g_id_onload"
                          data-context="signin"
                          data-ux_mode="popup"
                          data-callback="handleCredentialResponse"
                          data-auto_prompt="false"
-                         data-itp_support="true" style="display: none;"> <!-- Скрываем div -->
+                         data-itp_support="true">
                     </div>
 
                     <div class="g_id_signin"
@@ -37,7 +34,7 @@
                          data-theme="outline"
                          data-text="signin_with"
                          data-size="large"
-                         data-logo_alignment="left" style="display: none;"> <!-- Скрываем div -->
+                         data-logo_alignment="left">
                     </div>
                 </div>
                 <div id="user-info" style="display: none;">

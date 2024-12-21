@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const authButtons = document.getElementById('auth-buttons');
   const notification = document.getElementById('notification');
   const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com";
-  const signInButton = document.getElementById('sign-in-button'); // Находим кнопку входа
+  // const signInButton = document.getElementById('sign-in-button'); // Удалили
 
   // Initialize Google API
   function initializeGoogleSignIn() {
@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ux_mode: "popup",
         itp_support: true
       });
-        // google.accounts.id.prompt(); // Убрали автоматический вызов
-
+        google.accounts.id.prompt(); // Возвращаем автоматический вызов
     } else {
       console.error("Google API is not initialized.");
     }
@@ -29,10 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   initializeGoogleSignIn();
 
-    signInButton.addEventListener('click', () => {
-        google.accounts.id.prompt(); // Вызываем окно входа при клике на "Войти"
-    });
-
+  // signInButton.addEventListener('click', () => {
+  //     google.accounts.id.prompt(); // Вызываем окно входа при клике на "Войти"
+  // }); //Удалили
 
   const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
   elementsToAnimate.forEach(element => {
