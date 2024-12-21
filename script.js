@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const voteButton = document.querySelector('.vote-button');
     const authButtons = document.getElementById('auth-buttons');
     const notification = document.getElementById('notification');
-    // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
+   // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
 
     // Initialize Google API
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ux_mode: "popup", // Use popup mode for a cleaner UX
                 itp_support: true // Enable Intelligent Tracking Prevention support
             });
-          //  google.accounts.id.prompt(); // Let it auto prompt now
+            //google.accounts.id.prompt();
         } else {
             console.error("Google API is not initialized.");
         }
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     initializeGoogleSignIn();
-
 
     // Add animate-fade-in class for animation
     const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
@@ -52,23 +51,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    window.handleCredentialResponse = (response) => {
+
+     window.handleCredentialResponse = async (response) => {
         try {
           const responsePayload = jwt_decode(response.credential);
-          console.log("ID: " + responsePayload.sub);
-          console.log('Full Name: ' + responsePayload.name);
-          console.log("Image URL: " + responsePayload.picture);
-          console.log("Email: " + responsePayload.email);
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
 
             localStorage.setItem('userName', responsePayload.name);
             localStorage.setItem('userEmail', responsePayload.email);
             checkAuthentication();
             showNotification('success', 'Вы успешно авторизовались!');
+
         } catch (error) {
-            console.error("Error decoding or storing credentials:", error);
-            showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
+           console.error("Error decoding or storing credentials:", error);
+          showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
         }
     }
+
 
     signOutButton.addEventListener('click', function () {
         localStorage.clear();
@@ -90,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-      function submitForm() {
+       function submitForm() {
     voteButton.textContent = 'Отправка...';
     voteButton.disabled = true;
     let formSubmitted = false;
