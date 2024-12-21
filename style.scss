@@ -1,16 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap');
+/*  --  Переменные  --  */
+:root {
+    --primary-color: #fd7e14;
+    --secondary-color: #ff9138;
+    --background-color: #000;
+    --font-family-main: 'Roboto Slab', serif;
+    --font-family-secondary: 'Roboto Condensed', sans-serif;
+    --shadow-color: rgba(253, 126, 20, 0.7);
+    --transition-duration: 0.3s;
+}
 
+/*  --  Общие стили  --  */
 body {
-    font-family: 'Roboto Condensed', sans-serif;
-    background-image: url('images/4ef1578676dbf9b85df906d2a54c9992.gif');
-    background-size: cover;
-    background-position: center;
-    color: #fd7e14;
+    font-family: var(--font-family-secondary);
+    background-color: var(--background-color);
+    color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    background-image: url('images/4ef1578676dbf9b85df906d2a54c9992.gif'); /* Замени на свой путь к картинке */
+    background-size: cover;
+    background-position: center;
     position: relative;
     overflow-x: hidden;
 
@@ -33,7 +44,7 @@ body {
     text-align: center;
     max-width: 900px;
     width: 90%;
-    box-shadow: 0 0 20px rgba(253, 126, 20, 0.7);
+    box-shadow: 0 0 20px var(--shadow-color);
     position: relative;
     z-index: 1;
 }
@@ -43,22 +54,13 @@ header {
 }
 
 .main-title {
-    font-family: 'Roboto Slab', serif;
-    color: #fd7e14;
+    font-family: var(--font-family-main);
+    color: var(--primary-color);
     font-size: 3.5em;
-    text-shadow: 0 0 15px #fd7e14;
+    text-shadow: 0 0 15px var(--primary-color);
     margin: 0;
     letter-spacing: 3px;
     animation: title-glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes title-glow {
-    from {
-        text-shadow: 0 0 10px #fd7e14;
-    }
-    to {
-        text-shadow: 0 0 20px #fd7e14, 0 0 30px #fd7e14;
-    }
 }
 
 .nomination {
@@ -68,7 +70,7 @@ header {
     animation: fade-in 1s ease forwards;
 
     .nomination-title {
-        background-color: #fd7e14;
+        background-color: var(--primary-color);
         color: #000;
         font-size: 2em;
         margin-bottom: 20px;
@@ -77,13 +79,13 @@ header {
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 0 10px rgba(253, 126, 20, 0.7);
+        box-shadow: 0 0 10px var(--shadow-color);
 
         .icon {
             margin-right: 15px;
             font-size: 1.3em;
             color: #000;
-            transition: transform 0.3s ease, color 0.3s ease;
+            transition: transform var(--transition-duration) ease, color var(--transition-duration) ease;
         }
 
         .text-orange {
@@ -105,79 +107,59 @@ header {
 
 .candidate-card {
     background-color: rgba(0, 0, 0, 0.5);
-    border: 2px solid #fd7e14;
+    border: 2px solid var(--primary-color);
     padding: 10px 15px;
     margin: 10px;
     border-radius: 5px;
     cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--transition-duration) ease, background-color var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
     flex-basis: calc(25% - 20px);
     box-sizing: border-box;
 
     &:hover {
-        transform: translateY(-3px);
-        background-color: #fd7e14;
-        .candidate-name{
+        transform: translateY(-5px) scale(1.05);
+        background-color: var(--primary-color);
+        box-shadow: 0 0 20px var(--primary-color);
+
+        .candidate-name {
             color: #000;
         }
-        box-shadow: 0 5px 15px rgba(253, 126, 20, 0.8);
     }
 
     input[type="radio"] {
         display: none;
 
         &:checked + .candidate-name {
-            color: #fd7e14;
-            font-weight: bold;
-        }
-        &:checked  {
-            background-color: #fd7e14;
             color: #000;
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--primary-color);
         }
     }
 
     .candidate-name {
         font-size: 1.1em;
-        color: #fd7e14;
-        transition: color 0.3s ease;
-    }
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-// Анимация появления номинаций
-@for $i from 1 through 10 {
-    .nomination:nth-child(#{$i}) {
-        animation-delay: #{$i * 0.15}s;
+        color: var(--primary-color);
+        transition: color var(--transition-duration) ease;
     }
 }
 
 button[type="submit"] {
-    background-color: #fd7e14;
+    background-color: var(--primary-color);
     color: #000;
     border: none;
     padding: 15px 30px;
     font-size: 1.4em;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
 
     &:hover {
-        background-color: #ff9138;
-        box-shadow: 0 0 15px #fd7e14;
+        background-color: var(--secondary-color);
+        box-shadow: 0 0 15px var(--primary-color);
     }
 
     &:disabled {
@@ -193,6 +175,34 @@ button[type="submit"] {
     }
 }
 
+/*  -- Анимации -- */
+@keyframes title-glow {
+    from {
+      text-shadow: 0 0 10px var(--primary-color);
+    }
+    to {
+      text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@for $i from 1 through 10 {
+    .nomination:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.15}s;
+    }
+}
+
+/* -- Медиа-запросы -- */
 @media (max-width: 768px) {
     .container {
         padding: 30px;

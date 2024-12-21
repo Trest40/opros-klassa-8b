@@ -27,9 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         google.accounts.id.renderButton(
             document.getElementById("g_id_onload"),
-            { theme: "dark", size: "large" }  // customization attributes
+            { theme: "dark", size: "large" }
         );
-        google.accounts.id.prompt(); // also display the One Tap dialog
     }
 
     form.addEventListener('submit', function(event) {

@@ -6,23 +6,11 @@
     <title>Slay Award 2024</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://accounts.google.com/gsi/client" async></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <div class="container">
-        <div id="g_id_onload"
-             data-client_id="847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"
-             data-login_uri="https://your-server.com/your-login-endpoint"
-             data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin"
-             data-type="standard"
-             data-size="large"
-             data-theme="dark"
-             data-text="sign_in_with"
-             data-shape="rectangular"
-             data-logo_alignment="left">
-        </div>
+        <div id="g_id_onload" data-client_id="847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
 
         <header>
             <h1 class="main-title">Slay Award 2024</h1>
