@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ux_mode: "popup", // Use popup mode for a cleaner UX
                 itp_support: true // Enable Intelligent Tracking Prevention support
             });
-            //google.accounts.id.prompt();
+           // google.accounts.id.prompt();
         } else {
             console.error("Google API is not initialized.");
         }
@@ -36,37 +36,41 @@ document.addEventListener('DOMContentLoaded', function () {
       element.classList.add('animate-fade-in');
     });
 
-
-    function checkAuthentication() {
+   function checkAuthentication() {
         const userName = localStorage.getItem('userName');
 
         if (userName) {
             authButtons.style.display = 'none';
-             userNameElement.textContent = userName; // Устанавливаем имя пользователя
-             userInfo.style.display = 'flex';  // Показываем приветствие и кнопку
-            voteButton.disabled = false; // Разблокируем кнопку голосовать
+            userNameElement.textContent = userName;
+            userInfo.style.display = 'flex';
+            voteButton.disabled = false;
         } else {
             authButtons.style.display = 'block';
-            voteButton.disabled = true; // Блокируем кнопку голосовать
-            userInfo.style.display = 'none'; // Скрываем приветствие
-             userNameElement.textContent = ''; // Очищаем имя пользователя
+            voteButton.disabled = true;
+            userInfo.style.display = 'none';
+            userNameElement.textContent = '';
         }
     }
 
 
-   window.handleCredentialResponse = (response) => {
-       if (response && response.credential) {
-           const responsePayload = jwt_decode(response.credential);
-            console.log("ID: " + responsePayload.sub);
+
+    window.handleCredentialResponse = (response) => {
+        if (response && response.credential) {
+             try {
+            const responsePayload = jwt_decode(response.credential);
+           console.log("ID: " + responsePayload.sub);
              console.log('Full Name: ' + responsePayload.name);
-              console.log("Image URL: " + responsePayload.picture);
-             console.log("Email: " + responsePayload.email);
-
-            localStorage.setItem('userName', responsePayload.name);
+            console.log("Image URL: " + responsePayload.picture);
+              console.log("Email: " + responsePayload.email);
+              localStorage.setItem('userName', responsePayload.name);
             localStorage.setItem('userEmail', responsePayload.email);
-            checkAuthentication(); //Обновляем состояние
-              showNotification('success', 'Вы успешно авторизовались!');
+            checkAuthentication();
+            showNotification('success', 'Вы успешно авторизовались!'); // show success
 
+        } catch (error) {
+                 console.error("Error decoding or storing credentials:", error);
+
+            }
         }
     }
 
@@ -76,13 +80,13 @@ document.addEventListener('DOMContentLoaded', function () {
         checkAuthentication();
         voteButton.disabled = true;
         voteButton.textContent = 'Голосовать';
-          userNameElement.textContent = '';
+        userNameElement.textContent = '';
         showNotification('info', 'Вы успешно вышли из аккаунта.');
     });
 
-      voteButton.addEventListener('click', function (event) {
+    voteButton.addEventListener('click', function (event) {
         event.preventDefault();
-           if (localStorage.getItem('userName')) {
+            if (localStorage.getItem('userName')) {
             submitForm();
         } else {
             showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
@@ -91,7 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-     function submitForm() {
+
+    function submitForm() {
         voteButton.textContent = 'Отправка...';
         voteButton.disabled = true;
          let formSubmitted = false;
@@ -112,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Отправляемые данные:', JSON.stringify(formData));
 
 
-         fetch(votingForm.action, {
+        fetch(votingForm.action, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -140,12 +145,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-
     function showNotification(type, message) {
         notification.textContent = message;
         notification.className = `notification ${type}`;
         notification.style.display = 'block';
-
 
         setTimeout(() => {
             notification.style.display = 'none';
