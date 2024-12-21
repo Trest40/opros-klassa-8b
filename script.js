@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const signOutButton = document.getElementById('sign-out-button');
-    const userInfo = document.getElementById('user-info');
-    const userNameElement = document.getElementById('user-name');
-    const votingForm = document.getElementById('voting-form');
-    const voteButton = document.querySelector('.vote-button');
-    const authButtons = document.getElementById('auth-buttons');
-    const notification = document.getElementById('notification');
+  const signOutButton = document.getElementById('sign-out-button');
+  const userInfo = document.getElementById('user-info');
+  const userNameElement = document.getElementById('user-name');
+  const votingForm = document.getElementById('voting-form');
+  const voteButton = document.querySelector('.vote-button');
+  const authButtons = document.getElementById('auth-buttons');
+  const notification = document.getElementById('notification');
     // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
     // Initialize Google API
@@ -51,20 +51,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.handleCredentialResponse = (response) => {
         if (response && response.credential) {
-            try {
-                const responsePayload = jwt_decode(response.credential);
-                console.log("ID: " + responsePayload.sub);
-                console.log('Full Name: ' + responsePayload.name);
-                console.log("Image URL: " + responsePayload.picture);
-                console.log("Email: " + responsePayload.email);
+            const responsePayload = jwt_decode(response.credential);
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
 
-                localStorage.setItem('userName', responsePayload.name);
-                localStorage.setItem('userEmail', responsePayload.email);
-                showNotification('success', 'Вы успешно авторизовались!');
-                checkAuthentication();
-            } catch (error) {
-                console.error("Error decoding or storing credentials:", error);
-            }
+            localStorage.setItem('userName', responsePayload.name);
+            localStorage.setItem('userEmail', responsePayload.email);
+            showNotification('success', 'Вы успешно авторизовались!');
+            checkAuthentication();
         }
     }
 
