@@ -30,7 +30,7 @@ $header-font: 'Cormorant Garamond', serif; /* Or 'Fraunces', 'Young Serif', 'Man
 body {
   margin: 0;
   font-family: $main-font;
-  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") center/cover no-repeat;
+  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") center/cover no-repeat fixed;
   color: $text-color-light;
   @include center;
   padding-bottom: 50px;
