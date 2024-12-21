@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(response => {
       if (response.ok) {
         console.log('Форма успешно отправлена!');
-        alert('Спасибо за ваш голос!');
+        alert('Спасибо за ваш голос! Ваш голос учтен.'); // Изменено сообщение
         votingForm.reset();
       } else {
         console.error('Ошибка при отправке формы:', response.statusText);
