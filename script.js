@@ -11,20 +11,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Инициализация Google API
   function initializeGoogleSignIn() {
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        callback: handleCredentialResponse,
-        auto_prompt: true, // Включение авто-подсказки
-        context: 'signin',
-        ux_mode: 'popup',
-        itp_support: true,
-      });
-      // google.accounts.id.prompt(); // Можно раскомментировать, чтобы показать кнопку сразу
-    } else {
-      console.error('Google API не инициализировано.');
-      showNotification('error', 'Google API не инициализировано! Попробуйте перезагрузить страницу.');
-    }
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    google.accounts.id.initialize({
+      client_id: "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com", // Ваш клиентский ID
+      callback: handleCredentialResponse,
+      auto_prompt: true, // Включение авто-подсказки
+      context: 'signin',
+      ux_mode: 'popup',
+      itp_support: true,
+    });
+    // google.accounts.id.prompt(); // Можно раскомментировать, чтобы показать кнопку сразу
+  } else {
+    console.error('Google API не инициализировано.');
+    showNotification('error', 'Google API не инициализировано! Попробуйте перезагрузить страницу.');
   }
+}
 
   // Инициализация при загрузке
   initializeGoogleSignIn();
