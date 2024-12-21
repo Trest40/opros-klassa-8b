@@ -8,7 +8,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const notification = document.getElementById('notification');
   const notificationMessage = document.getElementById('notification-message');
   const closeButton = document.getElementById('close-notification');
-  // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
+
+  // Проверка наличия функции jwt_decode
+  if (typeof jwt_decode !== 'function') {
+    console.error(
+      'jwt_decode is not a function. Please make sure the library is properly loaded.'
+    );
+    showNotification(
+      'error',
+      'Ошибка: библиотека jwt_decode не найдена. Пожалуйста, перезагрузите страницу.'
+    );
+    return; // Прерываем выполнение скрипта, если jwt_decode не найдена
+  }
 
   // Initialize Google API
   function initializeGoogleSignIn() {
@@ -19,14 +30,13 @@ document.addEventListener('DOMContentLoaded', function () {
       if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
         console.log('Google API is defined. Initializing.');
         google.accounts.id.initialize({
-          // client_id: googleClientId, //No need for client_id here
           callback: handleCredentialResponse,
           auto_prompt: true, // Enable auto prompt
           context: 'signin', // Set the context for the sign-in prompt
           ux_mode: 'popup', // Use popup mode for a cleaner UX
           itp_support: true, // Enable Intelligent Tracking Prevention support
         });
-        // google.accounts.id.prompt();
+        // google.accounts.id.prompt(); // Автоматический показ диалога входа
       } else {
         console.error('Google API is not initialized.');
         showNotification(
@@ -37,74 +47,64 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  initializeGoogleSignIn();
-
-  // Add animate-fade-in class for animation
+  // Add animate-slide-in class for animation
   const elementsToAnimate = document.querySelectorAll(
-    'header, .nomination, .vote-button, footer'
+    'header, .nomination, .vote-button'
   );
   elementsToAnimate.forEach((element) => {
-    element.classList.add('animate-fade-in');
+    element.classList.add('animate-slide-in');
   });
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
-    console.log('checkAuthentication called. userName:', userName); // Логируем
+    console.log('checkAuthentication called. userName:', userName);
 
     if (userName) {
-      console.log('Updating UI - logged in'); // Логируем
-      authButtons.style.display = 'none';
-      userInfo.style.display = 'flex';
+      console.log('Updating UI - logged in');
+      authButtons.style.display = 'none'; // Скрываем кнопки входа
+      userInfo.style.display = 'flex'; // Показываем инфо о пользователе
       userNameElement.textContent = userName;
       voteButton.disabled = false;
     } else {
-      console.log('Updating UI - logged out'); // Логируем
-      authButtons.style.display = 'block';
-      userInfo.style.display = 'none';
+      console.log('Updating UI - logged out');
+      authButtons.style.display = 'block'; // Показываем кнопки входа
+      userInfo.style.display = 'none'; // Скрываем инфо о пользователе
       voteButton.disabled = true;
       userNameElement.textContent = '';
     }
   }
 
   function handleCredentialResponse(response) {
-    console.log('handleCredentialResponse called. response:', response); // Логируем
+    console.log('handleCredentialResponse called. response:', response);
 
     if (response && response.credential) {
       try {
-        console.log('jwt_decode:', jwt_decode); // Проверяем, что jwt_decode - это функция
         const responsePayload = jwt_decode(response.credential);
-        console.log('responsePayload:', responsePayload); // Логируем декодированный токен
+        console.log('responsePayload:', responsePayload);
 
         localStorage.setItem('userName', responsePayload.name);
         localStorage.setItem('userEmail', responsePayload.email);
 
-        console.log('localStorage userName:', localStorage.getItem('userName')); // Проверяем, сохранилось ли имя
+        console.log('localStorage userName:', localStorage.getItem('userName'));
 
-        // ПРОВЕРКА НА НАЛИЧИЕ ИМЕНИ В localstorage
         if (localStorage.getItem('userName')) {
-          console.log('User is logged in. Updating UI.'); // Логируем
+          console.log('User is logged in. Updating UI.');
           checkAuthentication();
           showNotification('success', 'Вы успешно авторизовались!');
         } else {
           console.error('User name not found in local storage after login.');
-          showNotification(
-            'error',
-            'Ошибка авторизации. Имя пользователя не найдено.'
-          );
+          showNotification('error', 'Ошибка авторизации. Имя пользователя не найдено.');
         }
       } catch (error) {
         console.error('Error decoding or storing credentials:', error);
         showNotification(
           'error',
-          'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
+          'Ошибка авторизации: ' + error.message + '. Пожалуйста, попробуйте еще раз.'
         );
       }
     } else {
       console.error('Credential response is invalid or missing.');
-      showNotification(
-        'error',
-        'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
-      );
+      showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
     }
   }
 
@@ -121,17 +121,33 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
 
     if (localStorage.getItem('userName')) {
-      submitForm();
+      // Проверяем, заполнены ли все поля формы
+      if (validateForm()) {
+        submitForm();
+      } else {
+        showNotification('error', 'Пожалуйста, выберите вариант в каждой номинации.');
+      }
     } else {
       showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
       document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
     }
   });
 
+  // Функция валидации формы
+  function validateForm() {
+    const nominations = document.querySelectorAll('.nomination');
+    for (const nomination of nominations) {
+      const selected = nomination.querySelector('input[type="radio"]:checked');
+      if (!selected) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   function submitForm() {
     voteButton.textContent = 'Отправка...';
     voteButton.disabled = true;
-    let formSubmitted = false;
 
     const formData = {};
     for (const element of votingForm.elements) {
@@ -162,18 +178,14 @@ document.addEventListener('DOMContentLoaded', function () {
           votingForm.reset();
         } else {
           console.error('Ошибка при отправке формы:', response.statusText);
-          showNotification(
-            'error',
-            'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-          );
+          return response.json().then(data => {
+            throw new Error('Formspree Error: ' + response.status + ' - ' + JSON.stringify(data));
+          });
         }
       })
       .catch((error) => {
         console.error('Ошибка при отправке формы:', error);
-        showNotification(
-          'error',
-          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-        );
+        showNotification('error', 'Произошла ошибка при отправке формы: ' + error.message);
       })
       .finally(() => {
         voteButton.textContent = 'Голосовать';
@@ -204,5 +216,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 3000);
   }
 
+  initializeGoogleSignIn();
   checkAuthentication();
 });
