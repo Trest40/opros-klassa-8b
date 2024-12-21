@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const signOutButton = document.getElementById('sign-out-button');
-  const userInfo = document.getElementById('user-info');
-  const userNameElement = document.getElementById('user-name');
-  const votingForm = document.getElementById('voting-form');
-  const voteButton = document.querySelector('.vote-button');
-  const authButtons = document.getElementById('auth-buttons');
-  const notification = document.getElementById('notification');
+    const signOutButton = document.getElementById('sign-out-button');
+    const userInfo = document.getElementById('user-info');
+    const userNameElement = document.getElementById('user-name');
+    const votingForm = document.getElementById('voting-form');
+    const voteButton = document.querySelector('.vote-button');
+    const authButtons = document.getElementById('auth-buttons');
+    const notification = document.getElementById('notification');
     // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
     // Initialize Google API
@@ -48,19 +48,32 @@ document.addEventListener('DOMContentLoaded', function () {
             userNameElement.textContent = '';
         }
     }
+    // Временно определи функцию jwt_decode, если она не найдена
+    if (typeof jwt_decode === "undefined") {
+        console.warn("jwt_decode is not defined. Using a placeholder function.");
+        window.jwt_decode = function(token) {
+            console.warn("This is a placeholder jwt_decode function. Decoding is NOT performed.");
+            return {}; // Возвращаем пустой объект, чтобы не было ошибок
+        };
+    }
 
     window.handleCredentialResponse = (response) => {
+        console.log("JWT Decode Type:", typeof jwt_decode);
         if (response && response.credential) {
-            const responsePayload = jwt_decode(response.credential);
-            console.log("ID: " + responsePayload.sub);
-            console.log('Full Name: ' + responsePayload.name);
-            console.log("Image URL: " + responsePayload.picture);
-            console.log("Email: " + responsePayload.email);
+            try {
+                const responsePayload = jwt_decode(response.credential);
+                console.log("ID: " + responsePayload.sub);
+                console.log('Full Name: ' + responsePayload.name);
+                console.log("Image URL: " + responsePayload.picture);
+                console.log("Email: " + responsePayload.email);
 
-            localStorage.setItem('userName', responsePayload.name);
-            localStorage.setItem('userEmail', responsePayload.email);
-            showNotification('success', 'Вы успешно авторизовались!');
-            checkAuthentication();
+                localStorage.setItem('userName', responsePayload.name);
+                localStorage.setItem('userEmail', responsePayload.email);
+                showNotification('success', 'Вы успешно авторизовались!');
+                checkAuthentication();
+            } catch (error) {
+                console.error("Error decoding or storing credentials:", error);
+            }
         }
     }
 
