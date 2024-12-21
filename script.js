@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const signOutButton = document.getElementById('sign-out-button');
-    const userInfo = document.getElementById('user-info');
-    const userNameElement = document.getElementById('user-name');
-    const votingForm = document.getElementById('voting-form');
-    const voteButton = document.querySelector('.vote-button');
-    const authButtons = document.getElementById('auth-buttons');
-    const notification = document.getElementById('notification');
+  const signOutButton = document.getElementById('sign-out-button');
+  const userInfo = document.getElementById('user-info');
+  const userNameElement = document.getElementById('user-name');
+  const votingForm = document.getElementById('voting-form');
+  const voteButton = document.querySelector('.vote-button');
+  const authButtons = document.getElementById('auth-buttons');
+  const notification = document.getElementById('notification');
     // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
-
 
     // Initialize Google API
     function initializeGoogleSignIn() {
@@ -20,73 +19,74 @@ document.addEventListener('DOMContentLoaded', function () {
                 ux_mode: "popup", // Use popup mode for a cleaner UX
                 itp_support: true // Enable Intelligent Tracking Prevention support
             });
-           // google.accounts.id.prompt();
+          //  google.accounts.id.prompt();
         } else {
             console.error("Google API is not initialized.");
         }
     }
 
 
-    initializeGoogleSignIn();
+  initializeGoogleSignIn();
+
+  // Add animate-fade-in class for animation
+  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
+  elementsToAnimate.forEach(element => {
+    element.classList.add('animate-fade-in');
+  });
 
 
-    // Add animate-fade-in class for animation
-    const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
-    elementsToAnimate.forEach(element => {
-      element.classList.add('animate-fade-in');
-    });
+  function checkAuthentication(bypass = false) {
+    const userName = localStorage.getItem('userName');
 
-   function checkAuthentication() {
-        const userName = localStorage.getItem('userName');
+    if (userName || bypass) {
+        authButtons.style.display = 'none';
+        userInfo.style.display = 'flex';
+        userNameElement.textContent = userName || '';
+         voteButton.disabled = false;
 
-        if (userName) {
-            authButtons.style.display = 'none';
-            userNameElement.textContent = userName;
-            userInfo.style.display = 'flex';
-            voteButton.disabled = false;
-        } else {
-            authButtons.style.display = 'block';
-            voteButton.disabled = true;
-            userInfo.style.display = 'none';
-            userNameElement.textContent = '';
-        }
+      } else {
+      authButtons.style.display = 'block';
+      userInfo.style.display = 'none';
+      voteButton.disabled = true;
+      userNameElement.textContent = '';
+
     }
+  }
 
 
-
-    window.handleCredentialResponse = (response) => {
-        if (response && response.credential) {
-             try {
+  window.handleCredentialResponse = (response) => {
+    if (response && response.credential) {
+        try {
             const responsePayload = jwt_decode(response.credential);
-           console.log("ID: " + responsePayload.sub);
+            console.log("ID: " + responsePayload.sub);
              console.log('Full Name: ' + responsePayload.name);
-            console.log("Image URL: " + responsePayload.picture);
-              console.log("Email: " + responsePayload.email);
-              localStorage.setItem('userName', responsePayload.name);
+             console.log("Image URL: " + responsePayload.picture);
+             console.log("Email: " + responsePayload.email);
+           localStorage.setItem('userName', responsePayload.name);
             localStorage.setItem('userEmail', responsePayload.email);
-            checkAuthentication();
-            showNotification('success', 'Вы успешно авторизовались!'); // show success
-
-        } catch (error) {
-                 console.error("Error decoding or storing credentials:", error);
-
-            }
+             checkAuthentication(true);
+              showNotification('success', 'Вы успешно авторизовались!');
+          } catch (error) {
+                  console.error("Error decoding or storing credentials:", error);
+           }
         }
-    }
+
+    };
 
 
-    signOutButton.addEventListener('click', function () {
-        localStorage.clear();
-        checkAuthentication();
-        voteButton.disabled = true;
-        voteButton.textContent = 'Голосовать';
-        userNameElement.textContent = '';
-        showNotification('info', 'Вы успешно вышли из аккаунта.');
-    });
+  signOutButton.addEventListener('click', function () {
+    localStorage.clear();
+     checkAuthentication();
+    voteButton.disabled = true;
+    voteButton.textContent = 'Голосовать';
+    userNameElement.textContent = '';
+    showNotification('info', 'Вы успешно вышли из аккаунта.');
+  });
 
     voteButton.addEventListener('click', function (event) {
         event.preventDefault();
-            if (localStorage.getItem('userName')) {
+
+        if (localStorage.getItem('userName')) {
             submitForm();
         } else {
             showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
@@ -95,8 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-
-    function submitForm() {
+   function submitForm() {
         voteButton.textContent = 'Отправка...';
         voteButton.disabled = true;
          let formSubmitted = false;
@@ -145,15 +144,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-    function showNotification(type, message) {
-        notification.textContent = message;
-        notification.className = `notification ${type}`;
-        notification.style.display = 'block';
 
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000);
-    }
+  function showNotification(type, message) {
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.style.display = 'block';
 
-    checkAuthentication();
+    setTimeout(() => {
+      notification.style.display = 'none';
+    }, 3000);
+  }
+
+  checkAuthentication();
 });
