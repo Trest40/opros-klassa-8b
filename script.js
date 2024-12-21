@@ -6,8 +6,29 @@ document.addEventListener('DOMContentLoaded', function () {
   const voteButton = document.querySelector('.vote-button');
   const authButtons = document.getElementById('auth-buttons');
   const notification = document.getElementById('notification');
+  const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here
 
-  // Добавляем класс animate-fade-in для анимации появления
+  // Initialize Google API
+  function initializeGoogleSignIn() {
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: handleCredentialResponse,
+            auto_prompt: false, // Disable automatic prompting for a cleaner UX
+            context: "signin", // Set the context for the sign-in prompt
+            ux_mode: "popup", // Use popup mode for a cleaner UX
+            itp_support: true // Enable Intelligent Tracking Prevention support
+        });
+        google.accounts.id.prompt();
+    } else {
+        console.error("Google API is not initialized.");
+        showNotification('error', 'Ошибка инициализации Google API.');
+    }
+  }
+
+  initializeGoogleSignIn();
+
+  // Add animate-fade-in class for animation
   const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
   elementsToAnimate.forEach(element => {
     element.classList.add('animate-fade-in');
@@ -32,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       const responsePayload = jwt_decode(response.credential);
       console.log("ID: " + responsePayload.sub);
-      console.log('Full Name: " + responsePayload.name);
+      console.log('Full Name: ' + responsePayload.name);
       console.log("Image URL: " + responsePayload.picture);
       console.log("Email: " + responsePayload.email);
 
@@ -42,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
       showNotification('success', 'Вы успешно авторизовались!');
     } catch (error) {
       console.error("Error decoding or storing credentials:", error);
-      showNotification('error', 'Ошибка авторизации.');
+      showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
     }
   }
 
@@ -61,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem('userName')) {
       submitForm();
     } else {
-      showNotification('error', 'Войдите прежде чем голосовать');
+      showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
       document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
     }
   });
@@ -93,24 +114,24 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       body: JSON.stringify(formData),
     })
-      .then(response => {
-        if (response.ok) {
-          console.log('Форма успешно отправлена!');
-          showNotification('success', 'Спасибо за ваш голос!');
-          votingForm.reset();
-        } else {
-          console.error('Ошибка при отправке формы:', response.statusText);
-          showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-        }
-      })
-      .catch(error => {
-        console.error('Ошибка при отправке формы:', error);
+    .then(response => {
+      if (response.ok) {
+        console.log('Форма успешно отправлена!');
+        showNotification('success', 'Спасибо за ваш голос!');
+        votingForm.reset();
+      } else {
+        console.error('Ошибка при отправке формы:', response.statusText);
         showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-      })
-      .finally(() => {
-        voteButton.textContent = 'Голосовать';
-        voteButton.disabled = false;
-      });
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке формы:', error);
+      showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+    })
+    .finally(() => {
+      voteButton.textContent = 'Голосовать';
+      voteButton.disabled = false;
+    });
   }
 
   function showNotification(type, message) {
