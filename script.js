@@ -15,12 +15,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
+      //signInButton.style.display = 'none';
       userNameElement.textContent = userName;
-      userInfo.style.display = 'flex'; // Показываем блок с информацией о пользователе и кнопкой выхода
-      voteButton.disabled = false; // Разблокируем кнопку голосования
+      userInfo.style.display = 'flex';
+      voteButton.disabled = false;
     } else {
       voteButton.disabled = true;
-      userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
+      //signInButton.style.display = 'block'; // Показывать кнопку, если не авторизован
+      userInfo.style.display = 'none';
     }
   }
 
@@ -96,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(response => {
       if (response.ok) {
         console.log('Форма успешно отправлена!');
-        alert('Спасибо за ваш голос! Ваш голос учтен.'); // Изменено сообщение
+        alert('Спасибо за ваш голос!');
         votingForm.reset();
       } else {
         console.error('Ошибка при отправке формы:', response.statusText);
