@@ -62,35 +62,38 @@ header {
 }
 
 .nomination {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     position: relative;
     opacity: 0;
     animation: fade-in 1s ease forwards;
 
     .nomination-title {
-        color: #fd7e14;
+        background-color: #fd7e14;
+        color: #000;
         font-size: 2em;
         margin-bottom: 20px;
+        padding: 10px 20px;
+        border-radius: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 0 10px rgba(253, 126, 20, 0.7);
 
         .icon {
             margin-right: 15px;
             font-size: 1.3em;
-            color: #fd7e14;
+            color: #000;
             transition: transform 0.3s ease, color 0.3s ease;
         }
 
         .text-orange {
-            color: #fd7e14;
-            text-shadow: 0 0 10px #fd7e14;
+            color: #000;
+            text-shadow: none;
         }
     }
 
     &:hover .nomination-title .icon {
         transform: scale(1.2) rotate(10deg);
-        color: #fd7e14;
     }
 }
 
@@ -101,9 +104,9 @@ header {
 }
 
 .candidate-card {
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.5);
     border: 2px solid #fd7e14;
-    padding: 15px 25px;
+    padding: 10px 15px;
     margin: 10px;
     border-radius: 5px;
     cursor: pointer;
@@ -134,7 +137,7 @@ header {
     }
 
     .candidate-name {
-        font-size: 1.3em;
+        font-size: 1.1em;
         color: #fd7e14;
         transition: color 0.3s ease;
     }
