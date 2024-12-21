@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function handleCredentialResponse(response) {
+  window.handleCredentialResponse = (response) => {
     if (response && response.credential) {
       try {
         const responsePayload = jwt_decode(response.credential);
@@ -70,3 +70,93 @@ document.addEventListener('DOMContentLoaded', function () {
           'error',
           'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
         );
+      }
+    }
+  };
+
+  signOutButton.addEventListener('click', function () {
+    localStorage.clear();
+    checkAuthentication();
+    voteButton.disabled = true;
+    voteButton.textContent = 'Голосовать';
+    userNameElement.textContent = '';
+    showNotification('info', 'Вы успешно вышли из аккаунта.');
+  });
+
+  voteButton.addEventListener('click', function (event) {
+    event.preventDefault();
+
+    if (localStorage.getItem('userName')) {
+      submitForm();
+    } else {
+      showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
+      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  function submitForm() {
+    voteButton.textContent = 'Отправка...';
+    voteButton.disabled = true;
+    let formSubmitted = false;
+
+    const formData = {};
+    for (const element of votingForm.elements) {
+      if (element.name && element.type !== 'submit') {
+        if (element.type === 'radio' && element.checked) {
+          formData[element.name] = element.value;
+        } else if (element.type !== 'radio') {
+          formData[element.name] = element.value;
+        }
+      }
+    }
+    formData['email'] = localStorage.getItem('userEmail');
+
+    console.log('Отправляемые данные:', JSON.stringify(formData));
+
+    fetch(votingForm.action, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('Форма успешно отправлена!');
+          showNotification('success', 'Спасибо за ваш голос!');
+          votingForm.reset();
+        } else {
+          console.error('Ошибка при отправке формы:', response.statusText);
+          showNotification(
+            'error',
+            'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+          );
+        }
+      })
+      .catch((error) => {
+        console.error('Ошибка при отправке формы:', error);
+        showNotification(
+          'error',
+          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
+        );
+      })
+      .finally(() => {
+        voteButton.textContent = 'Голосовать';
+        voteButton.disabled = false;
+      });
+  }
+
+  function showNotification(type, message) {
+    notificationMessage.textContent = message;
+    notification.classList.remove('hidden');
+    notification.classList.add('show', type);
+
+    setTimeout(() => {
+      notification.classList.remove('show');
+      notification.classList.add('hidden');
+    }, 3000);
+  }
+
+  checkAuthentication();
+});
