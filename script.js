@@ -8,41 +8,37 @@ document.addEventListener('DOMContentLoaded', function () {
   const notification = document.getElementById('notification');
   const notificationMessage = document.getElementById('notification-message');
   const closeButton = document.getElementById('close-notification');
-  // const googleClientId = "847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"; // Client ID moved here - not required
 
-  // Initialize Google API
+  // Инициализация Google API
   function initializeGoogleSignIn() {
     if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
       google.accounts.id.initialize({
-        // client_id: googleClientId, //No need for client_id here
         callback: handleCredentialResponse,
-        auto_prompt: true, // Enable auto prompt
-        context: 'signin', // Set the context for the sign-in prompt
-        ux_mode: 'popup', // Use popup mode for a cleaner UX
-        itp_support: true, // Enable Intelligent Tracking Prevention support
+        auto_prompt: true, // Включение авто-подсказки
+        context: 'signin',
+        ux_mode: 'popup',
+        itp_support: true,
       });
-      //  google.accounts.id.prompt();
+      // google.accounts.id.prompt(); // Можно раскомментировать, чтобы показать кнопку сразу
     } else {
-      console.error('Google API is not initialized.');
-      showNotification(
-        'error',
-        'Google API не инициализировано! Попробуйте перезагрузить страницу.'
-      );
+      console.error('Google API не инициализировано.');
+      showNotification('error', 'Google API не инициализировано! Попробуйте перезагрузить страницу.');
     }
   }
 
+  // Инициализация при загрузке
   initializeGoogleSignIn();
 
-  // Add animate-fade-in class for animation
-  const elementsToAnimate = document.querySelectorAll(
-    'header, .nomination, .vote-button, footer'
-  );
+  // Добавляем анимацию появления
+  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
   elementsToAnimate.forEach((element) => {
     element.classList.add('animate-fade-in');
   });
 
+  // Проверка состояния авторизации
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
+    console.log('Пользователь авторизован:', userName); // Для отладки
     if (userName) {
       authButtons.style.display = 'none';
       userInfo.style.display = 'flex';
@@ -56,13 +52,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // Обработка ответа после авторизации
   function handleCredentialResponse(response) {
     if (response && response.credential) {
       try {
         const responsePayload = jwt_decode(response.credential);
         console.log('ID: ' + responsePayload.sub);
         console.log('Full Name: ' + responsePayload.name);
-        console.log('Image URL: ' + responsePayload.picture);
         console.log('Email: ' + responsePayload.email);
 
         localStorage.setItem('userName', responsePayload.name);
@@ -70,27 +66,24 @@ document.addEventListener('DOMContentLoaded', function () {
         checkAuthentication();
         showNotification('success', 'Вы успешно авторизовались!');
       } catch (error) {
-        console.error('Error decoding or storing credentials:', error);
-        showNotification(
-          'error',
-          'Ошибка авторизации. Пожалуйста, попробуйте еще раз.'
-        );
+        console.error('Ошибка при обработке данных:', error);
+        showNotification('error', 'Ошибка авторизации. Пожалуйста, попробуйте еще раз.');
       }
     }
   }
 
+  // Обработчик выхода из аккаунта
   signOutButton.addEventListener('click', function () {
-    localStorage.clear();
-    checkAuthentication();
-    voteButton.disabled = true;
-    voteButton.textContent = 'Голосовать';
-    userNameElement.textContent = '';
+    localStorage.clear(); // Очистка данных
+    checkAuthentication(); // Обновление интерфейса
+    voteButton.disabled = true; // Отключение кнопки голосования
+    userNameElement.textContent = ''; // Очистка имени пользователя
     showNotification('info', 'Вы успешно вышли из аккаунта.');
   });
 
+  // Обработчик нажатия кнопки голосования
   voteButton.addEventListener('click', function (event) {
     event.preventDefault();
-
     if (localStorage.getItem('userName')) {
       submitForm();
     } else {
@@ -99,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+  // Отправка формы
   function submitForm() {
     voteButton.textContent = 'Отправка...';
     voteButton.disabled = true;
@@ -133,18 +127,12 @@ document.addEventListener('DOMContentLoaded', function () {
           votingForm.reset();
         } else {
           console.error('Ошибка при отправке формы:', response.statusText);
-          showNotification(
-            'error',
-            'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-          );
+          showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
         }
       })
       .catch((error) => {
         console.error('Ошибка при отправке формы:', error);
-        showNotification(
-          'error',
-          'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.'
-        );
+        showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
       })
       .finally(() => {
         voteButton.textContent = 'Голосовать';
@@ -152,18 +140,18 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   }
 
+  // Функция отображения уведомлений
   function showNotification(type, message) {
     notificationMessage.textContent = message;
     notification.className = `notification ${type} show`;
     notification.style.display = 'block';
 
-    // Добавляем обработчик события для закрытия уведомления по клику на кнопку
     closeButton.onclick = () => {
       notification.classList.remove('show');
       notification.classList.add('hidden');
       setTimeout(() => {
         notification.style.display = 'none';
-      }, 300); // Скрываем после завершения анимации
+      }, 300); // Скрытие уведомления после завершения анимации
     };
 
     setTimeout(() => {
@@ -171,9 +159,10 @@ document.addEventListener('DOMContentLoaded', function () {
       notification.classList.add('hidden');
       setTimeout(() => {
         notification.style.display = 'none';
-      }, 300); // Скрываем после завершения анимации
+      }, 300); // Скрытие уведомления после завершения анимации
     }, 3000);
   }
 
+  // Инициализация состояния страницы
   checkAuthentication();
 });
