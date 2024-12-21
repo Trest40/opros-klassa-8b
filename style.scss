@@ -405,39 +405,40 @@ footer {
   animation: fadeInUp 0.8s ease-out;
 }
 .notification {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #2c2c2c;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  top: 0; // Изменили top на 0
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2c2c2c;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  //opacity: 0; убрали
+  transition: opacity 0.3s ease-in-out;
+  width: fit-content; //Добавили
 
-    &.show {
-        opacity: 1;
-    }
-
-    &.hidden {
-        opacity: 0;
-    }
-
-    &.success {
-      background-color: #4CAF50;
-    }
-
-    &.error {
-      background-color: #f44336;
-    }
-
-    &.info {
-      background-color: #2196F3;
-    }
+  &.show {
+    //opacity: 1; убрали
   }
+
+  &.hidden {
+    display: none; // добавили
+  }
+
+  &.success {
+    background-color: #4caf50;
+  }
+
+  &.error {
+    background-color: #f44336;
+  }
+
+  &.info {
+    background-color: #2196f3;
+  }
+}
   #notification-message{
     color: #fff;
   }

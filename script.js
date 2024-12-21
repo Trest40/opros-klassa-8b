@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
       //  google.accounts.id.prompt();
     } else {
       console.error('Google API is not initialized.');
+       showNotification(
+         'error',
+         'Google API не инициализировано! Попробуйте перезагрузить страницу.'
+       );
     }
   }
 
@@ -149,12 +153,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function showNotification(type, message) {
     notificationMessage.textContent = message;
-    notification.classList.remove('hidden');
-    notification.classList.add('show', type);
+    notification.className = `notification ${type}`;
+    notification.classList.add('show');
 
     setTimeout(() => {
       notification.classList.remove('show');
-      notification.classList.add('hidden');
     }, 3000);
   }
 
