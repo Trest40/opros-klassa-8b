@@ -154,22 +154,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function showNotification(type, message) {
     notificationMessage.textContent = message;
-    notification.className = `notification ${type} show`; // Changed line
+    notification.className = `notification ${type} show`;
     notification.style.display = 'block';
 
-    setTimeout(() => {
-        notification.classList.remove('show');
-        notification.classList.add('hidden');
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 300); // Ensure the notification is hidden after the transition
-    }, 3000);
-}
+    // Добавляем обработчик события для закрытия уведомления по клику на кнопку
+    closeButton.onclick = () => {
+      notification.classList.remove('show');
+      notification.classList.add('hidden');
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 300); // Скрываем после завершения анимации
+    };
 
-  closeButton.addEventListener('click', () => {
-    notification.classList.remove('show');
-    notification.classList.add('hidden');
-  });
+    setTimeout(() => {
+      notification.classList.remove('show');
+      notification.classList.add('hidden');
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 300); // Скрываем после завершения анимации
+    }, 3000);
+  }
 
   checkAuthentication();
 });

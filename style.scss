@@ -405,65 +405,66 @@ footer {
   animation: fadeInUp 0.8s ease-out;
 }
 .notification {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #2c2c2c;
-    color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2c2c2c;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+
+  &.show {
+    opacity: 1;
+  }
+
+  &.hidden {
     opacity: 0;
+     display: none;
+  }
 
-    &.show {
-      opacity: 1;
-    }
+  &.success {
+    background-color: #4caf50;
+  }
 
-    &.hidden {
-      opacity: 0;
-    }
+  &.error {
+    background-color: #f44336;
+  }
 
-    &.success {
-      background-color: #4caf50;
-    }
+  &.info {
+    background-color: #2196f3;
+  }
 
-    &.error {
-      background-color: #f44336;
-    }
+  #notification-message {
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 
-    &.info {
-      background-color: #2196f3;
-    }
+  #close-notification {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 5px 15px;
+    font-size: 1rem;
+    color: #000;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    margin: 5px;
 
-    #notification-message {
-      color: #fff;
-      padding: 10px 20px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    #close-notification {
-      background: linear-gradient(to right, #ffcc00, $primary-color);
-      border: none;
-      padding: 5px 15px;
-      font-size: 1rem;
-      color: #000;
-      border-radius: 25px;
-      font-weight: 600;
-      cursor: pointer;
-      @include transition-all;
-      box-shadow: $button-shadow;
-      margin-left: 0;
-
-      &:hover {
-        background: $primary-color;
-        transform: translateY(-2px);
-        box-shadow: $button-hover;
-      }
+    &:hover {
+      background: $primary-color;
+      transform: translateY(-2px);
+      box-shadow: $button-hover;
     }
   }
+}
 /* Медиа-запросы */
 @media (max-width: 768px) {
   header {
