@@ -4,24 +4,26 @@ document.addEventListener('DOMContentLoaded', function () {
   const userNameElement = document.getElementById('user-name');
   const votingForm = document.getElementById('voting-form');
   const voteButton = document.querySelector('.vote-button');
+  const authButtons = document.getElementById('auth-buttons');
+  const notification = document.getElementById('notification');
 
-  // Добавляем класс animate-fade-in для анимации появления
-  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
-  elementsToAnimate.forEach(element => {
-    element.classList.add('animate-fade-in');
-  });
+    // Добавляем класс animate-fade-in для анимации появления
+    const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
+    elementsToAnimate.forEach(element => {
+      element.classList.add('animate-fade-in');
+    });
 
   function checkAuthentication() {
     const userName = localStorage.getItem('userName');
 
     if (userName) {
-      //signInButton.style.display = 'none';
+      authButtons.style.display = 'none';
       userNameElement.textContent = userName;
       userInfo.style.display = 'flex';
       voteButton.disabled = false;
     } else {
+      authButtons.style.display = 'block';
       voteButton.disabled = true;
-      //signInButton.style.display = 'block'; // Показывать кнопку, если не авторизован
       userInfo.style.display = 'none';
     }
   }
@@ -37,8 +39,10 @@ document.addEventListener('DOMContentLoaded', function () {
       localStorage.setItem('userName', responsePayload.name);
       localStorage.setItem('userEmail', responsePayload.email);
       checkAuthentication();
+      showNotification('success', 'Вы успешно авторизовались!');
     } catch (error) {
       console.error("Error decoding or storing credentials:", error);
+      showNotification('error', 'Ошибка авторизации.');
     }
   }
 
@@ -51,10 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
   signOutButton.addEventListener('click', function () {
     localStorage.clear();
     checkAuthentication();
-    voteButton.disabled = false;
+    voteButton.disabled = true;
     voteButton.textContent = 'Голосовать';
     userNameElement.textContent = '';
-    alert('Вы успешно вышли из аккаунта.');
+    showNotification('info', 'Вы успешно вышли из аккаунта.');
   });
 
   voteButton.addEventListener('click', function (event) {
@@ -63,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem('userName')) {
       submitForm();
     } else {
-      alert('Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
-      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
+        showNotification('error', 'Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
+        document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
     }
   });
 
@@ -98,20 +102,32 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(response => {
       if (response.ok) {
         console.log('Форма успешно отправлена!');
-        alert('Спасибо за ваш голос!');
+        showNotification('success', 'Спасибо за ваш голос!');
         votingForm.reset();
       } else {
         console.error('Ошибка при отправке формы:', response.statusText);
-        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+        showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
       }
     })
     .catch(error => {
       console.error('Ошибка при отправке формы:', error);
-      alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+      showNotification('error', 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
     })
     .finally(() => {
       voteButton.textContent = 'Голосовать';
       voteButton.disabled = false;
     });
   }
+
+    function showNotification(type, message) {
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.style.display = 'block';
+
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    }
+
+  checkAuthentication();
 });

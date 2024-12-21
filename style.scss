@@ -1,115 +1,456 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const signOutButton = document.getElementById('sign-out-button');
-  const userInfo = document.getElementById('user-info');
-  const userNameElement = document.getElementById('user-name');
-  const votingForm = document.getElementById('voting-form');
-  const voteButton = document.querySelector('.vote-button');
+/* Variables */
+$primary-color: #ffd700;
+$accent-color: #6C4675; /* Or #00FFFF for a futuristic vibe */
+$background-dark: #0F0F0F;
+$text-color-light: #F5F5F5;
+$container-bg: rgba(20, 20, 20, 0.7);
+$hover-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+$basic-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+$button-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+$button-hover: 0 0 15px $primary-color;
+$main-font: 'Inter', sans-serif;
+$header-font: 'Cormorant Garamond', serif; /* Or 'Fraunces', 'Young Serif', 'Manrope' */
 
-  // Добавляем класс animate-fade-in для анимации появления
-  const elementsToAnimate = document.querySelectorAll('header, .nomination, .vote-button, footer');
-  elementsToAnimate.forEach(element => {
-    element.classList.add('animate-fade-in');
-  });
+/* Mixins */
+@mixin transition-all {
+  transition: all 0.3s ease;
+}
 
-  function checkAuthentication() {
-    const userName = localStorage.getItem('userName');
+@mixin center {
+  text-align: center;
+}
 
-    if (userName) {
-      userNameElement.textContent = userName;
-      userInfo.style.display = 'flex'; // Показываем блок с информацией о пользователе и кнопкой выхода
-      voteButton.disabled = false; // Разблокируем кнопку голосования
-    } else {
-      voteButton.disabled = true;
-      userInfo.style.display = 'none'; // Скрываем блок с информацией о пользователе
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Base Styles */
+body {
+  margin: 0;
+  font-family: $main-font;
+  background: url("4ef1578676dbf9b85df906d2a54c9992.gif") center/cover no-repeat;
+  color: $text-color-light;
+  @include center;
+  padding-bottom: 50px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#tsparticles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Header */
+header {
+  @include center;
+  @include transition-all;
+  z-index: 3;
+  padding: 20px;
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    font-family: $header-font;
+    text-shadow: 3px 3px 10px $primary-color;
+    color: $primary-color;
+    margin-top: 0;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .glow {
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px $primary-color, 0 0 20px $primary-color, 0 0 25px $primary-color, 0 0 30px $primary-color, 0 0 35px $primary-color;
+    }
+    to {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px $primary-color, 0 0 40px $primary-color, 0 0 50px $primary-color, 0 0 60px $primary-color, 0 0 70px $primary-color;
     }
   }
 
-  window.handleCredentialResponse = (response) => {
-    try {
-      const responsePayload = jwt_decode(response.credential);
-      console.log("ID: " + responsePayload.sub);
-      console.log('Full Name: " + responsePayload.name);
-      console.log("Image URL: " + responsePayload.picture);
-      console.log("Email: " + responsePayload.email);
+  .subtitle {
+    font-size: 1.4rem;
+    color: $text-color-light;
+    margin-top: 0;
+    font-weight: 500;
+  }
+}
 
-      localStorage.setItem('userName', responsePayload.name);
-      localStorage.setItem('userEmail', responsePayload.email);
-      checkAuthentication();
-    } catch (error) {
-      console.error("Error decoding or storing credentials:", error);
+/* Authentication */
+#auth-container {
+  display: flex;
+  align-items: center;
+  z-index: 3;
+
+  .auth-button {
+    background: linear-gradient(to right, #ffcc00, $primary-color);
+    border: none;
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    color: #000;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition-all;
+    box-shadow: $button-shadow;
+    margin-left: 15px;
+
+    &:hover {
+      background: $primary-color;
+      transform: translateY(-2px);
+      box-shadow: $button-hover;
     }
   }
+}
 
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.prompt();
-    } else {
-      console.error("Google API is not initialized.");
-    }
+#user-info {
+  display: flex;
+  align-items: center;
+  color: $primary-color;
 
-  signOutButton.addEventListener('click', function () {
-    localStorage.clear();
-    checkAuthentication();
-    voteButton.disabled = false;
-    voteButton.textContent = 'Голосовать';
-    userNameElement.textContent = '';
-    alert('Вы успешно вышли из аккаунта.');
-  });
+  p {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
 
-  voteButton.addEventListener('click', function (event) {
-    event.preventDefault();
+  #user-name {
+    font-weight: 600;
+  }
+}
 
-    if (localStorage.getItem('userName')) {
-      submitForm();
-    } else {
-      alert('Пожалуйста, войдите в аккаунт, чтобы проголосовать.');
-      document.getElementById('auth-container').scrollIntoView({ behavior: 'smooth' });
-    }
-  });
+/* Main Container */
+main.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 30px auto;
+  z-index: 3;
+  position: relative;
+    form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-gap: 30px;
+  }
 
-  function submitForm() {
-    voteButton.textContent = 'Отправка...';
-    voteButton.disabled = true;
-    let formSubmitted = false;
+  .nomination {
+    background: $container-bg;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: $basic-shadow;
+    @include transition-all;
+    overflow: hidden;
+    position: relative;
 
-    const formData = {};
-    for (const element of votingForm.elements) {
-      if (element.name && element.type !== 'submit') {
-        if (element.type === 'radio' && element.checked) {
-          formData[element.name] = element.value;
-        } else if (element.type !== 'radio') {
-          formData[element.name] = element.value;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
+
+      label {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 10px $primary-color;
         }
       }
     }
-    formData['email'] = localStorage.getItem('userEmail');
-
-    console.log('Отправляемые данные:', JSON.stringify(formData));
-
-    fetch(votingForm.action, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-    .then(response => {
-      if (response.ok) {
-        console.log('Форма успешно отправлена!');
-        alert('Спасибо за ваш голос! Ваш голос учтен.'); // Изменено сообщение
-        votingForm.reset();
-      } else {
-        console.error('Ошибка при отправке формы:', response.statusText);
-        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
       }
-    })
-    .catch(error => {
-      console.error('Ошибка при отправке формы:', error);
-      alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
-    })
-    .finally(() => {
-      voteButton.textContent = 'Голосовать';
-      voteButton.disabled = false;
-    });
+
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      &:hover .glare-inner {
+        opacity: 1;
+        transform: translateX(100%) rotate(45deg);
+      }
+
+    .nomination-title {
+      font-size: 2rem;
+      font-family: $header-font;
+      color: $text-color-light;
+      margin-bottom: 25px;
+      font-weight: 700;
+      @include flex-center;
+      .icon {
+        margin-right: 15px;
+        color: $primary-color;
+        font-size: 2.2rem;
+      }
+      .text-gold {
+        color: $primary-color;
+        text-shadow: 0 0 8px $primary-color;
+      }
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      font-size: 1.3rem;
+      color: #fff;
+      cursor: pointer;
+      @include transition-all;
+      .candidate-name{
+        margin-left: 5px;
+      }
+      &:hover {
+        color: $primary-color;
+        .candidate-name{
+          text-shadow: 0 0 10px $primary-color;
+        }
+      }
+      .candidate-name{
+        transition: text-shadow 0.3s ease;
+      }
+    }
   }
-});
+  @for $i from 1 through 10 {
+    .nomination:nth-child(#{$i}) {
+        animation-delay: 0.2s * $i;
+    }
+  }
+}
+
+/* Radio Buttons */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $primary-color;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+  @include transition-all;
+
+  &:hover {
+    box-shadow: 0 0 5px $primary-color;
+    transform: scale(1.1);
+  }
+
+  &:checked {
+    background-color: $primary-color;
+    box-shadow: 0 0 5px $primary-color;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background-color: #000;
+      border-radius: 50%;
+    }
+    &:hover {
+        box-shadow: 0 0 10px $primary-color;
+      }
+  }
+}
+
+/* Vote Button */
+button.vote-button {
+  background: linear-gradient(to right, #ffcc00, $primary-color);
+  border: none;
+  padding: 20px 50px;
+  margin-top: 40px;
+  font-size: 1.7rem;
+  color: #000;
+  border-radius: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  @include transition-all;
+  box-shadow: $button-shadow;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 3;
+  overflow: hidden;
+  position: relative;
+}
+
+.glow-on-hover {
+    &:hover {
+      color: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 5px 15px $primary-color;
+      }
+    &:before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left:-2px;
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(5px);
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      animation: glowing 20s linear infinite;
+      opacity: 0;
+      transition: opacity .3s ease-in-out;
+      border-radius: 40px;
+    }
+    &:active:after {
+      background: transparent;
+    }
+    &:hover:before {
+      opacity: 1;
+    }
+    &:after {
+      z-index: -1;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #ffcc00, $primary-color);
+      left: 0;
+      top: 0;
+      border-radius: 40px;
+    }
+    .glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .glare-inner {
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 60%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      &:hover .glare-inner {
+        opacity: 1;
+        transform: translateX(100%) rotate(45deg);
+      }
+  }
+
+  @keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+/* Footer */
+footer {
+  margin-top: 60px;
+  color: $text-color-light;
+  font-size: 1.2rem;
+  @include transition-all;
+  background: none;
+  box-shadow: none;
+  z-index: 3;
+  padding: 20px;
+
+  p {
+    font-weight: 500;
+  }
+}
+
+/* Анимации появления */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out;
+}
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+  display: none;
+
+  &.success {
+    background-color: #4CAF50;
+  }
+
+  &.error {
+    background-color: #f44336;
+  }
+
+  &.info {
+    background-color: #2196F3;
+  }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  header {
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+    }
+  }
+  main.container{
+    form{
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .nomination {
+      padding: 20px;
+      .nomination-title {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+        .icon {
+          font-size: 1.8rem;
+        }
+      }
+      label {
+        font-size: 1.1rem;
+        margin: 12px 0;
+      }

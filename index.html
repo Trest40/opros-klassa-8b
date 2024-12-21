@@ -18,24 +18,25 @@
         <div class="header-container">
             <h1 class="glow">Номинации 8Б Класса</h1>
             <div id="auth-container">
-                <div id="g_id_onload"
-                     data-client_id="847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"
-                     data-context="signin"
-                     data-ux_mode="popup"
-                     data-callback="handleCredentialResponse"
-                     data-auto_prompt="false"
-                     data-itp_support="true">
-                </div>
+                <div id="auth-buttons">
+                    <div id="g_id_onload"
+                         data-client_id="847429882483-05f9mev63nq15t1ccilrjbnb27vrem42.apps.googleusercontent.com"
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false"
+                         data-itp_support="true">
+                    </div>
 
-                <div class="g_id_signin"
-                     data-type="standard"
-                     data-shape="rectangular"
-                     data-theme="outline"
-                     data-text="signin_with"
-                     data-size="large"
-                     data-logo_alignment="left">
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-shape="rectangular"
+                         data-theme="outline"
+                         data-text="signin_with"
+                         data-size="large"
+                         data-logo_alignment="left">
+                    </div>
                 </div>
-
                 <div id="user-info" style="display: none;">
                     <p>Привет, <span id="user-name"></span>!</p>
                     <button id="sign-out-button" class="auth-button">Выйти</button>
@@ -46,6 +47,7 @@
     </header>
 
     <main class="container">
+        <div id="notification" class="notification"></div>
       <form id="voting-form" action="https://formspree.io/f/myzyrkrv" method="POST">
         <section class="nomination animate-fade-in" id="golden-ball">
             <div class="glare">
